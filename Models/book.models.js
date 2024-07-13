@@ -21,7 +21,7 @@ const BooksSchema = new mongoose.Schema({
         type:Number,
         MaxLength:4
     }
-})
+},{timestamps:true})
 
 
 module.exports = mongoose.model('Book',BooksSchema)
