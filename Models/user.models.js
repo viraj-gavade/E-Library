@@ -38,7 +38,7 @@ const UserSchema = new mongoose.Schema(
                 ref:"Books"
             }
         ]
-    }
+    },{timestamps:true}
 )
 
 
