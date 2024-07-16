@@ -24,3 +24,6 @@ BookRouter.route('/books/').post(
 
 
 //Exporting the book router
+
+
+module.exports = BookRouter
