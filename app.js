@@ -5,10 +5,14 @@ const connectDB = require('./DataBase/connection')
 const HealthcheckRouter = require('./Routes/healthcheck.routers')
 const app = express()
 const {connect} = require('mongoose')
+const BookRouter = require('./Routes/books.router')
 // app.use(express.static()) Static files to be serverd here!
 app.use(express.json())
 
+
+//All the main routers 
 app.use('/',HealthcheckRouter)
+app.use('/api/v1/library',BookRouter)
 
 
 

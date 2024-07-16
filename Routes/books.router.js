@@ -1,4 +1,12 @@
 const express = require('express')
+const 
+{
+    GetAllBooks,
+    GetSingleBook,
+    UpdateBook,
+    UploadBook,
+    DeleteBook
+} = require('../Controllers/book.controllers')
 
 const upload = require('../Middlewares/multer.middleware')
 
