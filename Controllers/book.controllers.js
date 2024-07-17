@@ -29,12 +29,35 @@ const GetSingleBook =asyncHandlers(  async(req,res)=>{
         )
     )
 })
+
+
 const GetAllBooks = asyncHandlers( async (req,res)=>{
-    res.send('This is get all book router')
+    const book = await  Book.find({})
+    if(book.length<1){
+        return res.status(200).json(
+            new customApiResponse(
+                200,
+                `No books found !`
+            )
+        )
+    }
+    return res.status(200).json(
+        new customApiResponse(
+            200,
+            `All books fetched successfully!`,
+            book
+        )
+    )
 })
+
+
+
 const UpdateBook =asyncHandlers(  async (req,res)=>{
-    res.send('This is get update book router')
+    const { bookId } = req.params
+    
 })
+
+
 const UploadBook =asyncHandlers(   async(req,res)=>{
     res.send('This is get upload book router')
 })
