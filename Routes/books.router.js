@@ -5,7 +5,9 @@ const
     GetSingleBook,
     UpdateBook,
     UploadBook,
-    DeleteBook
+    DeleteBook,
+    updatecoverImage,
+    updatepdfLink
 } = require('../Controllers/book.controllers')
 
 const upload = require('../Middlewares/multer.middleware')
@@ -24,6 +26,11 @@ BookRouter.route('/books/:bookId').get(GetSingleBook)
 BookRouter.route('/books/:bookId').patch(UpdateBook)
 
 BookRouter.route('/books/:bookId').delete(DeleteBook)
+
+BookRouter.route('/books/coverImage/:bookId').patch(updatecoverImage)
+
+BookRouter.route('/books/pdfLink/:bookId').patch(updatepdfLink)
+
 
 BookRouter.route('/books').post(
     upload.fields([
