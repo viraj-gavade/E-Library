@@ -200,7 +200,8 @@ const updatecoverImage = asyncHandlers(async(req,res)=>{
             `   Invalid book Id : ${bookId}`
         )
     }
-    const coverImageLocalPath = req.files.CoverImage[0].path
+    console.log(req.file)
+    const coverImageLocalPath = req.file.path
     const CoverImage = await uploadFile(coverImageLocalPath)
     if(!CoverImage.url){
         throw new CustomApiError(
@@ -209,7 +210,7 @@ const updatecoverImage = asyncHandlers(async(req,res)=>{
         )
     }
 
-    const book = await Book.findOneAndUpdate(bookId,{
+    const book = await Book.findByIdAndUpdate(bookId,{
         CoverImage:CoverImage.url
     },
 {
@@ -240,7 +241,7 @@ const updatepdfLink = asyncHandlers(async(req,res)=>{
             `   Invalid book Id : ${bookId}`
         )
     }
-    const BookPdfLocalPath = req.files.pdfLink[0].path
+    const BookPdfLocalPath = req.file.path
     const pdfLink = await uploadFile(BookPdfLocalPath)
     if(!pdfLink.url){
         throw new CustomApiError(
@@ -249,7 +250,7 @@ const updatepdfLink = asyncHandlers(async(req,res)=>{
         )
     }
 
-    const book = await Book.findOneAndUpdate(bookId,{
+    const book = await Book.findByIdAndUpdate(bookId,{
         pdfLink:pdfLink.url
     },
 {

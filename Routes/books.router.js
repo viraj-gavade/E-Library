@@ -27,7 +27,8 @@ BookRouter.route('/books/:bookId').patch(UpdateBook)
 
 BookRouter.route('/books/:bookId').delete(DeleteBook)
 
-BookRouter.route('/books/coverImage/:bookId').patch(updatecoverImage)
+BookRouter.route('/books/coverImage/:bookId').patch(
+    upload.single('CoverImage'),updatecoverImage)
 
 BookRouter.route('/books/pdfLink/:bookId').patch(updatepdfLink)
 
