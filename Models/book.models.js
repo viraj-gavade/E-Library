@@ -8,7 +8,7 @@ const BooksSchema = new mongoose.Schema({
     available:{
         type:Boolean,
         default:true
-    },
+    }, //TODO:Create a seprate toggle fucntion to toggle this easily for any book
     copies:{
         type:Number,
         default:3
