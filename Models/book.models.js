@@ -29,8 +29,6 @@ const BooksSchema = new mongoose.Schema({
         type:String,
         required:[true,'CoverImage must be provided!']
     }
-    //TODO:Add a cover iamge field which will be string of link of image from cloduinary and admin can change the cover iamge
-
 },{timestamps:true})
 
 

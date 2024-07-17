@@ -26,7 +26,16 @@ BookRouter.route('/books/:bookId').patch(UpdateBook)
 BookRouter.route('/books/:bookId').delete(DeleteBook)
 
 BookRouter.route('/books').post(
-    upload.single('Book'),UploadBook
+    upload.fields([
+        {
+            name:'pdfLink',
+            maxCount:1
+        },
+        {
+            name:'CoverImage',
+            maxCount:1
+        }
+    ])
 ) ///Middleware to upload book with the help of cloudinary
 
 
