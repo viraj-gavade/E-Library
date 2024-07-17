@@ -192,11 +192,93 @@ const DeleteBook = asyncHandlers( async(req,res)=>{
     )
 })
 
+const updatecoverImage = asyncHandlers(async(req,res)=>{
+    const { bookId } = req.params
+    if(!bookId){
+        throw new CustomApiError(
+            401,
+            `   Invalid book Id : ${bookId}`
+        )
+    }
+    const coverImageLocalPath = req.files.CoverImage[0].path
+    const CoverImage = await uploadFile(coverImageLocalPath)
+    if(!CoverImage.url){
+        throw new CustomApiError(
+            500,
+            `Something went wrong while uploading the file on cloudinary`
+        )
+    }
+
+    const book = await Book.findOneAndUpdate(bookId,{
+        CoverImage:CoverImage.url
+    },
+{
+    new:true
+}
+)
+if(!book){
+    throw new CustomApiError(
+        501,
+        `Something went wrong unable to find the book to update`
+    )
+}
+
+return res.status(200).json(
+    new customApiResponse(
+        200,
+        `Book coverImage Updated successfully!`,
+        book
+    )
+)
+})
+
+const updatepdfLink = asyncHandlers(async(req,res)=>{
+    const { bookId } = req.params
+    if(!bookId){
+        throw new CustomApiError(
+            401,
+            `   Invalid book Id : ${bookId}`
+        )
+    }
+    const BookPdfLocalPath = req.files.pdfLink[0].path
+    const pdfLink = await uploadFile(BookPdfLocalPath)
+    if(!pdfLink.url){
+        throw new CustomApiError(
+            500,
+            `Something went wrong while uploading the file on cloudinary`
+        )
+    }
+
+    const book = await Book.findOneAndUpdate(bookId,{
+        pdfLink:pdfLink.url
+    },
+{
+    new:true
+}
+)
+if(!book){
+    throw new CustomApiError(
+        501,
+        `Something went wrong unable to find the book to update`
+    )
+}
+
+return res.status(200).json(
+    new customApiResponse(
+        200,
+        `Book pdf link Updated successfully!`,
+        book
+    )
+)
+})
+
 module.exports =
 {
     GetAllBooks,
     GetSingleBook,
     UpdateBook,
     UploadBook,
-    DeleteBook
+    DeleteBook,
+    updatecoverImage,
+    updatepdfLink
 }
