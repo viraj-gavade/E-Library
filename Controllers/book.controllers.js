@@ -106,7 +106,7 @@ const UpdateBook =asyncHandlers(  async (req,res)=>{
 
 
 const UploadBook =asyncHandlers(   async(req,res)=>{
-
+    console.log(req.files)
     const {author , title ,copies , publishedInYear , available  }  = req.body
     if(!author ||! title ||!copies ||! publishedInYear ||! available  ){
         throw new CustomApiError(
@@ -123,10 +123,9 @@ const UploadBook =asyncHandlers(   async(req,res)=>{
             'NO PDF file and coverImage local path was provided please try again later!'
         )
     }
-    const response = await uploadFile(BookPdfLocalPath)
-    const BookUrl = pdfLink?.url
-    const coverImageUrl = coverImage?.url
-    if(!BookUrl || !coverImageUrl){
+    const pdfLink = await uploadFile(BookPdfLocalPath)
+    const CoverImage = await uploadFile(coverImageLocalPath)
+    if(!pdfLink.url || !CoverImage.url){
         throw new  CustomApiError(
             500,
             'Something went wrong while uploading the file on cloudinary!'
@@ -139,9 +138,9 @@ const UploadBook =asyncHandlers(   async(req,res)=>{
             title:title,
             publishedInYear:publishedInYear,
             available:available,
-            link:BookUrl,
+            pdfLink:pdfLink.url,
             copies:copies,
-            coverImage:coverImageUrl
+            CoverImage:CoverImage.url
         }
     )
 

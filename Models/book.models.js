@@ -21,11 +21,11 @@ const BooksSchema = new mongoose.Schema({
         type:Number,
         MaxLength:4
     },
-    link:{
+    pdfLink:{
         type:String,
         reuired:true
     },
-    coverImage:{
+    CoverImage:{
         type:String,
         required:[true,'CoverImage must be provided!']
     }

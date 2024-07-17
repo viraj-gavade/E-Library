@@ -35,7 +35,7 @@ BookRouter.route('/books').post(
             name:'CoverImage',
             maxCount:1
         }
-    ])
+    ]),UploadBook
 ) ///Middleware to upload book with the help of cloudinary
 
 
