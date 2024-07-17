@@ -13,9 +13,10 @@ const uploadFile = async (Filepath)=>{
          return null
      }
      const response = await v2.uploader.upload(Filepath,{
-         resource_type:'auto'
+         resource_type:'raw'
      })
      fs.unlinkSync(Filepath)
+     return response
    } catch (error) {
     console.log(error)
     fs.unlinkSync(Filepath)

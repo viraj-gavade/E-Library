@@ -2,6 +2,7 @@ const Book = require('../Models/book.models')
 const asyncHandlers = require('../utils/asyncHandler')
 const CustomApiError = require('../utils/customApiError')
 const customApiResponse = require('../utils/customApiResponse')
+const uploadFile = require('../utils/cloudinary')
 
 // Get all books of the library and them by alphabetical order by deafult and some additional sorting fucntionalities
 // Like sorty by year , author in alphabetical odrder
@@ -105,7 +106,56 @@ const UpdateBook =asyncHandlers(  async (req,res)=>{
 
 
 const UploadBook =asyncHandlers(   async(req,res)=>{
-    res.send('This is get upload book router')
+
+    const {author , title ,copies , publishedInYear , available  }  = req.body
+    if(!author ||! title ||!copies ||! publishedInYear ||! available  ){
+        throw new CustomApiError(
+            401,
+            `All fields are required!`
+        )
+    }
+    const BookPdfLocalPath = req.file?.path
+    if(!BookPdfLocalPath){
+        throw new CustomApiError(
+            401,
+            'NO PDF local path was provided please try again later!'
+        )
+    }
+    const response = await uploadFile(BookPdfLocalPath)
+    const BookUrl = response?.url
+    if(!BookUrl){
+        throw new  CustomApiError(
+            500,
+            'Something went wrong while uploading the file on cloudinary!'
+        )
+    }
+
+    const OGbook = await Book.create(
+        {
+            author:author,
+            title:title,
+            publishedInYear:publishedInYear,
+            available:available,
+            link:BookUrl,
+            copies:copies
+        }
+    )
+
+    const book = await Book.findById(OGbook?._id)
+    if(!book){
+        throw new CustomApiError(
+            501,
+            `Soemthing went wrong unable to find the uploaded book!`
+        )
+    }
+    return res.status(200).json(
+        new customApiResponse(
+            200,
+            'Book uploaded successfully!',
+            book
+        )
+    )
+
 })
 const DeleteBook = asyncHandlers( async(req,res)=>{
     res.send('This is get delete book router')
