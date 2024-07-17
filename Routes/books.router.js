@@ -30,7 +30,8 @@ BookRouter.route('/books/:bookId').delete(DeleteBook)
 BookRouter.route('/books/coverImage/:bookId').patch(
     upload.single('CoverImage'),updatecoverImage)
 
-BookRouter.route('/books/pdfLink/:bookId').patch(updatepdfLink)
+
+BookRouter.route('/books/pdfLink/:bookId').patch(upload.single('pdfLink'),updatepdfLink)
 
 
 BookRouter.route('/books').post(
