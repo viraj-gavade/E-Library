@@ -157,8 +157,36 @@ const UploadBook =asyncHandlers(   async(req,res)=>{
     )
 
 })
+
+
 const DeleteBook = asyncHandlers( async(req,res)=>{
-    res.send('This is get delete book router')
+    const { bookId } = req.params
+    if(!bookId){
+        return res.status(200).json(
+            new customApiResponse(
+                200,
+                `Invalid Book Id : ${bookId}`
+            )
+        )
+    }
+    const book = await Book.findByIdAndDelete(bookId)
+    if(!book){
+        return res.status(200).json(
+            new customApiResponse(
+                501,
+                `No book found please check the book id again`
+            )
+
+        )
+    }
+    return res.status(200).json(
+        new customApiResponse(
+            200,
+            `Book details updated successfully!`,
+            book
+        )
+
+    )
 })
 
 module.exports =
