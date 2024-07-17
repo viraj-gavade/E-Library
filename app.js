@@ -1,6 +1,7 @@
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
+const bodyParser = require('body-parser')
 const connectDB = require('./DataBase/connection')
 const HealthcheckRouter = require('./Routes/healthcheck.routers')
 const app = express()
@@ -8,6 +9,7 @@ const {connect} = require('mongoose')
 const BookRouter = require('./Routes/books.router')
 // app.use(express.static()) Static files to be serverd here!
 app.use(express.json())
+app.use(bodyParser.json())
 
 
 //All the main routers 
