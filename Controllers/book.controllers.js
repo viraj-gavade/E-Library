@@ -114,16 +114,19 @@ const UploadBook =asyncHandlers(   async(req,res)=>{
             `All fields are required!`
         )
     }
-    const BookPdfLocalPath = req.file?.path
-    if(!BookPdfLocalPath){
+
+    const coverImageLocalPath = req.files.CoverImage[0].path
+    const BookPdfLocalPath = req.files.pdfLink[0].path
+    if(!BookPdfLocalPath || ! coverImageLocalPath){
         throw new CustomApiError(
             401,
-            'NO PDF local path was provided please try again later!'
+            'NO PDF file and coverImage local path was provided please try again later!'
         )
     }
     const response = await uploadFile(BookPdfLocalPath)
-    const BookUrl = response?.url
-    if(!BookUrl){
+    const BookUrl = pdfLink?.url
+    const coverImageUrl = coverImage?.url
+    if(!BookUrl || !coverImageUrl){
         throw new  CustomApiError(
             500,
             'Something went wrong while uploading the file on cloudinary!'
@@ -137,7 +140,8 @@ const UploadBook =asyncHandlers(   async(req,res)=>{
             publishedInYear:publishedInYear,
             available:available,
             link:BookUrl,
-            copies:copies
+            copies:copies,
+            coverImage:coverImageUrl
         }
     )
 
