@@ -20,7 +20,13 @@ const BooksSchema = new mongoose.Schema({
     publishedInYear:{
         type:Number,
         MaxLength:4
+    },
+    link:{
+        type:String,
+        reuired:true
     }
+    //TODO:Add a cover iamge field which will be string of link of image from cloduinary and admin can change the cover iamge
+
 },{timestamps:true})
 
 
