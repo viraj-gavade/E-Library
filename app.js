@@ -7,6 +7,7 @@ const HealthcheckRouter = require('./Routes/healthcheck.routers')
 const app = express()
 const {connect} = require('mongoose')
 const BookRouter = require('./Routes/books.router')
+const UserRouter = require('./Routes/users.routers')
 // app.use(express.static()) Static files to be serverd here!
 app.use(express.json())
 app.use(bodyParser.json())
@@ -15,6 +16,7 @@ app.use(bodyParser.json())
 //All the main routers 
 app.use('/',HealthcheckRouter)
 app.use('/api/v1/library',BookRouter)
+app.use('/api/v1/library/user',UserRouter)
 
 
 
