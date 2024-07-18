@@ -33,6 +33,9 @@ const GetSingleBook =asyncHandlers(  async(req,res)=>{
 
 
 const GetAllBooks = asyncHandlers( async (req,res)=>{
+
+    
+    const { page , sort } = req.params
     const book = await  Book.find({})
     if(book.length<1){
         return res.status(200).json(
@@ -50,6 +53,8 @@ const GetAllBooks = asyncHandlers( async (req,res)=>{
         )
     )
 })
+
+
 
 
 
