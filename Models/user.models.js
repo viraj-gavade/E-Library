@@ -30,7 +30,12 @@ const UserSchema = new mongoose.Schema(
             kMaxLength:16,
             required:[true,'Please provide the username'],
             lowercase:true,
-            match:[emailRegex,'Please enter the valid username']
+            match:[emailRegex,'Please enter the valid username'],
+            unique:true
+        },
+        profileImg:{
+            type:String,
+            required:false
         },
         books:[
             {
