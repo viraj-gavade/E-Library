@@ -5,7 +5,6 @@ const customApiResponse = require('../utils/customApiResponse')
 const uploadFile = require('../utils/cloudinary')
 
 
-
 const registerUser = asyncHandlers(async(req,res)=>{
    const { username , password , email } = req.body
 //    console.log(req.file)

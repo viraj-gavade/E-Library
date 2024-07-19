@@ -6,6 +6,7 @@ const bcryptjs = require('bcryptjs')
 const usernameRegex = /^(?!.*[-_]{2,})(?![-_])[A-Za-z0-9_-]{3,20}(?<![-_])$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,32}$/;
 const emailRegex =  /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const jwt = require('jsonwebtoken')
 
 const UserSchema = new mongoose.Schema(
     {
@@ -55,5 +56,11 @@ UserSchema.pre('save',async function(next){
     next()
 })
 
+UserSchema.methods.generateRefreshToken = async function() {
+    const accessToken = await jwt.sign({
+        _id:this._id
+    },process.env.ACCESS_TOKEN_SECRETE,{expiresIn:ACCESS_TOKEN_EXPIRY})
+    return accessToken
+}
 
 module.exports = mongoose.model('User',UserSchema)
