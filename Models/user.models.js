@@ -56,11 +56,12 @@ UserSchema.pre('save',async function(next){
     next()
 })
 
-UserSchema.methods.generateRefreshToken = async function() {
+UserSchema.methods.generateAccessToken = async function() {
     const accessToken = await jwt.sign({
         _id:this._id
     },process.env.ACCESS_TOKEN_SECRETE,{expiresIn:ACCESS_TOKEN_EXPIRY})
     return accessToken
 }
+
 
 module.exports = mongoose.model('User',UserSchema)
