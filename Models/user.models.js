@@ -2,7 +2,7 @@ const { match } = require('assert');
 const { kMaxLength } = require('buffer')
 const mongoose = require('mongoose')
 const { type } = require('os')
-
+const bcryptjs = require('bcryptjs')
 const usernameRegex = /^(?!.*[-_]{2,})(?![-_])[A-Za-z0-9_-]{3,20}(?<![-_])$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,32}$/;
 const emailRegex =  /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -45,6 +45,15 @@ const UserSchema = new mongoose.Schema(
         ]
     },{timestamps:true}
 )
+
+UserSchema.pre('save',async function(next){
+    if(!this.isModified('password')){
+        return next()
+    }
+    const salt = await bcryptjs.genSalt(10)
+    const password = await bcryptjs.hash(this.password,salt)
+    next()
+})
 
 
 module.exports = mongoose.model('User',UserSchema)

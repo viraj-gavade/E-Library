@@ -32,13 +32,10 @@ const registerUser = asyncHandlers(async(req,res)=>{
         'Something went wrong while uploading the file on cloudinary!'
     )
    }
-
-//TODO:Add password hashing algorithm before moving to next route
-
    const user = await User.create({
     username:username,
-    password:password,
-    email:email,
+    password,
+    email,
     profileImg:profileImg?.url
    })
 
