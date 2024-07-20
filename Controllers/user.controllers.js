@@ -5,6 +5,23 @@ const customApiResponse = require('../utils/customApiResponse')
 const uploadFile = require('../utils/cloudinary')
 
 
+
+const generateAccessTokenAndRefreshToken = async(userId)=>{
+    try {
+        const user =  await User.findById(userId)
+        const accessToken = user.generateAccessToken()
+        const refreshToken = user.generateRefreshToken()
+        user.refreshToken=refreshToken
+        user.save({validateBeforeSave:false})
+        return {accessToken,refreshToken}
+    } catch (error) {
+        throw new CustomApiError(
+            501,
+            'Something went wrong while generating the access and refersh token!'
+        )
+    }
+}
+
 const registerUser = asyncHandlers(async(req,res)=>{
    const { username , password , email } = req.body
 //    console.log(req.file)
@@ -45,6 +62,9 @@ if(!checkuser){
         'Unable to create the user please try agian later!'
     )
 }
+
+    const asccessToken = generateAccessToken()
+    const refreshToken = generateRefreshToken()
 return res.status(200).json(
     new customApiResponse(
         200,
