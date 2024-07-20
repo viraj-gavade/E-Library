@@ -24,6 +24,8 @@ const generateAccessTokenAndRefreshToken = async(userId)=>{
 
 const registerUser = asyncHandlers(async(req,res)=>{
    const { username , password , email } = req.body
+
+
 //    console.log(req.file)
    if(!username || !password ||!email ){
     throw new CustomApiError(
@@ -48,6 +50,18 @@ const registerUser = asyncHandlers(async(req,res)=>{
         'Something went wrong while uploading the file on cloudinary!'
     )
    }
+
+   const exstinguser = await User.findOne({
+    $or:[{username},{email}]
+   })
+   if(!exstinguser){
+    throw new CustomApiError(
+        402,
+        'User already exists with this username or email'
+    )
+   }
+
+   
    const user = await User.create({
     username:username,
     password,
@@ -55,7 +69,7 @@ const registerUser = asyncHandlers(async(req,res)=>{
     profileImg:profileImg?.url
    })
 
-const checkuser = await User.findById(user._id).select('-password')
+const checkuser = await User.findById(user._id).select('-password refreshToken')
 if(!checkuser){
     throw new CustomApiError(
         501,
@@ -63,8 +77,6 @@ if(!checkuser){
     )
 }
 
-    const asccessToken = generateAccessToken()
-    const refreshToken = generateRefreshToken()
 return res.status(200).json(
     new customApiResponse(
         200,
