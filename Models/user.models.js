@@ -43,8 +43,13 @@ const UserSchema = new mongoose.Schema(
                 type:mongoose.Schema.Types.ObjectId,
                 ref:"Books"
             }
-        ]
-    },{timestamps:true}
+        ],
+        refreshToken:{
+            type:String,
+            required:false
+        }
+    },
+    {timestamps:true}
 )
 
 UserSchema.pre('save',async function(next){
