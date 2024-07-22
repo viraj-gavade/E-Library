@@ -130,8 +130,22 @@ const loginUser = asyncHandlers(async(req,res)=>{
 })
 
 const logoutUser = asyncHandlers(async(req,res)=>{
-    res.send('This is a  logout User Route')
+    await User.findByIdAndUpdate(req.user?._id,{
+        $set:{
+            refreshToken:null
+        }
+    },
+{
+    new:true
 })
+res.status(200).clearCookie('refreshToken',refreshToken,options).clearCookie('accessToken',accessToken,options).json(
+    new customApiResponse(
+        200,
+        'User Logged Out Successfully!'
+    )
+)
+})
+
 
 
 const refreshAccessTokenandRefreshToken = asyncHandlers(async(req,res)=>{
