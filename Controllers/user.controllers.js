@@ -88,7 +88,28 @@ return res.status(200).json(
 })
 
 const loginUser = asyncHandlers(async(req,res)=>{
-    res.send('This is a  login User Route')
+    const {username,email,password} = req.body
+    if(!username || ! email){
+        throw new CustomApiError(
+            401,
+            'All fields must be provided!'
+        )
+    }
+    const user = await User.findOne({$or:[{username},{password}]}).select('-password')
+    const isPasswordCorrect = user.checkpassword(password)
+    if(!isPasswordCorrect){
+        throw new CustomApiError(
+            401,
+            'Inncorrect username or password please try again later!'
+        )
+    }
+    return res.status(200).json(
+        new customApiResponse(
+            200,
+            'User Logged In Successfully!',
+            user
+        )
+    )
 })
 
 const logoutUser = asyncHandlers(async(req,res)=>{
