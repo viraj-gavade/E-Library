@@ -3,7 +3,10 @@ const asyncHandlers = require('../utils/asyncHandler')
 const CustomApiError = require('../utils/customApiError')
 const customApiResponse = require('../utils/customApiResponse')
 const uploadFile = require('../utils/cloudinary')
-
+const options ={
+    httpOnly:true,
+     secure:true
+}
 
 
 const generateAccessTokenAndRefreshToken = async(userId)=>{
@@ -89,13 +92,20 @@ return res.status(200).json(
 
 const loginUser = asyncHandlers(async(req,res)=>{
     const {username,email,password} = req.body
-    if(!username || ! email){
+    if(!username || ! email || !password){
         throw new CustomApiError(
             401,
             'All fields must be provided!'
         )
     }
-    const user = await User.findOne({$or:[{username},{password}]}).select('-password')
+    const user = await User.findOne(
+        {
+            $or:[
+                {username},
+                {password}
+        ]
+        }
+    )
     const isPasswordCorrect = user.checkpassword(password)
     if(!isPasswordCorrect){
         throw new CustomApiError(
@@ -103,11 +113,18 @@ const loginUser = asyncHandlers(async(req,res)=>{
             'Inncorrect username or password please try again later!'
         )
     }
-    return res.status(200).json(
+    const {accessToken,refreshToken}= await generateAccessTokenAndRefreshToken(user._id)
+    const loggedInUser = await User.findById(user._id).select('-password -refreshToken')
+
+    return res.status(200).cookie('refreshToken',refreshToken,options).cookie('accessToken',accessToken,options).json(
         new customApiResponse(
             200,
             'User Logged In Successfully!',
-            user
+           {
+            
+            user:loggedInUser,accessToken,refreshToken
+
+           }
         )
     )
 })
