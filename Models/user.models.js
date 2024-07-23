@@ -21,9 +21,9 @@ const UserSchema = new mongoose.Schema(
         },
         password:{
             type:String,
-            kMaxLength:16,
+            // kMaxLength:16,
             required:[true,'Please provide the username'],
-            match:[passwordRegex,'Please enter the valid username']
+            match:[passwordRegex,'Please enter the valid password combination your password is too weak!']
 
         },
         email:{
@@ -52,12 +52,12 @@ const UserSchema = new mongoose.Schema(
     {timestamps:true}
 )
 
-UserSchema.pre('save',async function(next){
+UserSchema.pre('save',async function (next){
     if(!this.isModified('password')){
         return next()
     }
     const salt = await bcryptjs.genSalt(10)
-    const password = await bcryptjs.hash(this.password,salt)
+    this.password = await bcryptjs.hash(this.password,salt)
     next()
 })
 
