@@ -5,10 +5,9 @@ const customApiResponse = require('../utils/customApiResponse')
 const asyncHandlers = require('../utils/asyncHandler')
 
 
-
 const verifyJwt = asyncHandlers(async(req,res,next)=>{
     try {
-        const token =  req.cookies?.accessToken || req.header('Authorization')?.replace('Bearer ','')
+        const token = req.cookies?.accessToken || req.header('Authorization')?.replace('Bearer ','')
         if(!token){
             throw new CustomApiError(
                 401,

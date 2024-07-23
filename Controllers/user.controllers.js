@@ -14,6 +14,7 @@ const generateAccessTokenAndRefreshToken = async(userId)=>{
         const user =  await User.findById(userId)
         const accessToken = await user.generateAccessToken()
         const refreshToken = await user.generateRefreshToken()
+        console.log(accessToken,refreshToken)
         user.refreshToken=refreshToken
         await user.save({validateBeforeSave:false})
         return {accessToken,refreshToken}
@@ -159,7 +160,41 @@ const changeUserPassword = asyncHandlers(async(req,res)=>{
 
 
 const changeUserProfilePicture = asyncHandlers(async(req,res)=>{
-    res.send('This is user change profile picture route')
+
+    const ProfilePictureLocalPath = req.file?.path
+    if(!ProfilePictureLocalPath){
+        throw new CustomApiError(
+            400,
+            'Profile picture local path not found make sure you have uploaded your profile picture correctly!'
+        )
+    }
+    const New_Profile_Picture= await uploadFile(ProfilePictureLocalPath)
+    if(!New_Profile_Picture?.url){
+        throw new CustomApiError(
+            500,
+            `Something went wrong while uploading the file on cloudinary please try again later!`
+        )
+    }
+    const user = await User.findByIdAndUpdate(req.user?._id,{
+        profileImg:New_Profile_Picture?.url || "Unable to get the url of the profile picture!"
+    },
+{
+    new:true
+})
+if(!user){
+    throw new CustomApiError(
+        403,
+        'Unable to find and upate the profile picture of the user!'
+    )
+}
+return res.status(200).json(
+    new customApiResponse(
+        200,
+        'Profile picture updated successfully!',
+        user
+    )
+)
+
 })
 
 module.exports ={
