@@ -38,15 +38,16 @@ const UserSchema = new mongoose.Schema(
             type:String,
             required:false
         },
+        refreshToken:{
+            type:String,
+        },
         books:[
             {
                 type:mongoose.Schema.Types.ObjectId,
                 ref:"Books"
             }
         ],
-        refreshToken:{
-            type:String,
-        }
+       
     },
     {timestamps:true}
 )
