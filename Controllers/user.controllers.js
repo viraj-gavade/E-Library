@@ -104,7 +104,7 @@ const loginUser = asyncHandlers(async(req,res)=>{
         ]
         }
     )
-    const isPasswordCorrect = user.checkpassword(password)
+    const isPasswordCorrect = user.isPasswordCorrect(password)
     if(!isPasswordCorrect){
         throw new CustomApiError(
             401,
