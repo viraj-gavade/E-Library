@@ -12,10 +12,10 @@ const options ={
 const generateAccessTokenAndRefreshToken = async(userId)=>{
     try {
         const user =  await User.findById(userId)
-        const accessToken = user.generateAccessToken()
-        const refreshToken = user.generateRefreshToken()
+        const accessToken = await user.generateAccessToken()
+        const refreshToken = await user.generateRefreshToken()
         user.refreshToken=refreshToken
-        user.save({validateBeforeSave:false})
+        await user.save({validateBeforeSave:false})
         return {accessToken,refreshToken}
     } catch (error) {
         throw new CustomApiError(
@@ -67,7 +67,7 @@ const registerUser = asyncHandlers(async(req,res)=>{
     username:username,
     password:password,
     email:email,
-    profileImg:profileImg?.url
+    profileImg:profileImg?.url,
    })
 
 const checkuser = await User.findById(user._id).select('-password -refreshToken')
@@ -112,6 +112,8 @@ const loginUser = asyncHandlers(async(req,res)=>{
         )
     }
     const {accessToken,refreshToken}= await generateAccessTokenAndRefreshToken(user._id)
+    console.log()
+
     const loggedInUser = await User.findById(user._id).select('-password -refreshToken')
 
     return res.status(200).cookie('refreshToken',refreshToken,options).cookie('accessToken',accessToken,options).json(
