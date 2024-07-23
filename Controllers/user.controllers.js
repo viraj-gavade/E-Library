@@ -63,16 +63,14 @@ const registerUser = asyncHandlers(async(req,res)=>{
         'User already exists with this username or email'
     )
    }
-
-   
    const user = await User.create({
     username:username,
-    password,
-    email,
+    password:password,
+    email:email,
     profileImg:profileImg?.url
    })
 
-const checkuser = await User.findById(user._id).select('-password refreshToken')
+const checkuser = await User.findById(user._id).select('-password -refreshToken')
 if(!checkuser){
     throw new CustomApiError(
         501,
