@@ -57,7 +57,7 @@ const registerUser = asyncHandlers(async(req,res)=>{
    const exstinguser = await User.findOne({
     $or:[{username},{email}]
    })
-   if(!exstinguser){
+   if(exstinguser){
     throw new CustomApiError(
         402,
         'User already exists with this username or email'
