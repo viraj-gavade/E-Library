@@ -11,7 +11,7 @@ UserRouter.route('/login').post(loginUser)
 UserRouter.route('/logout').get(logoutUser)
 UserRouter.route('/change-password').patch(verifyJwt,changeUserPassword)
 UserRouter.route('/change-profile-picture').patch(verifyJwt,upload.single('profileImg'),changeUserProfilePicture)
-// UserRouter.route('/change-profile-picture').get(refreshAccessTokenandRefreshToken)
+UserRouter.route('/refresh').get(refreshAccessTokenandRefreshToken)
 
 
 

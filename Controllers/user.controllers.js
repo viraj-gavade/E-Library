@@ -158,7 +158,7 @@ const refreshAccessTokenandRefreshToken = asyncHandlers(async(req,res)=>{
             'Unauthorized Request!'
         )
     }
-    const decodedToken = await jwt.verify(incomingRefreshToken,process.env.REFRESH_TOKEN_SECRETE)
+    const decodedToken =  await jwt.verify(incomingRefreshToken,process.env.REFRESH_TOKEN_SECRETE)
      const user = await User.findById(decodedToken._id)
      if(!user){
         throw new CustomApiError(
@@ -173,15 +173,15 @@ const refreshAccessTokenandRefreshToken = asyncHandlers(async(req,res)=>{
         )
      }
 
-     const { NewrefreshToken , NewaccessToken } = await generateAccessTokenAndRefreshToken(user?._id)
+     const { refreshToken , accessToken } = await generateAccessTokenAndRefreshToken(user?._id)
 
-     return res.status(200).cookie('accessToken',NewaccessToken,options).cookie('refreshToken',NewrefreshToken,options).json(
+     return res.status(200).cookie('accessToken',refreshToken).cookie('refreshToken',accessToken).json(
         new customApiResponse(
             200,
             'Token refreshed successfully!',
             {
-                accessToken:NewaccessToken,
-                refreshToken:NewrefreshToken
+                accessToken:accessToken,
+                refreshToken:refreshToken
             }
         )
      )
