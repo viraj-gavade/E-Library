@@ -156,29 +156,17 @@ const refreshAccessTokenandRefreshToken = asyncHandlers(async(req,res)=>{
 
 const changeUserPassword = asyncHandlers(async(req,res)=>{
     try {
-        const {old_password,new_password,confirm_password} = req.body
-        const user  = await User.findById(req.user?._id)
-        const isPasswordCorrect  = await isPasswordCorrect(old_password)
-        if(!isPasswordCorrect){
-            throw new CustomApiError(
-                401,
-                'The password you have entered does not the exsting password please check the entered password again!'
-            )
-        }
-        if(!new_password===confirm_password){
-            throw new CustomApiError(
-            402,
-            `New password does not matches with  confirmed password please enter the valid password!`
-               )
-        }
-        user.password = new_password
-        await user.save({validateBeforeSave:false})
-        return res.status(200).json(
-            new customApiResponse(
-                200,
-                'Password Changed successfully!'
-            )
-        )
+        const {oldPassword,newPassword} = req.body
+        const user = await User.findById(req.user._id)
+        const isPasswordCorrect = await user.isPasswordCorrect(oldPassword)
+         if (!isPasswordCorrect) {
+             throw new CustomApiError(401,'The old password you have entered is not correct!')
+         }
+         user.password = newPassword
+        await user.save({validateBeforeSave:true})
+         return res.status(200).json(
+             new ApiResponse(200,'Password changed successfully!',{})
+         )
     } catch (error) {
         console.log(error)
     }
