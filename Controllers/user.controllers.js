@@ -3,6 +3,7 @@ const asyncHandlers = require('../utils/asyncHandler')
 const CustomApiError = require('../utils/customApiError')
 const customApiResponse = require('../utils/customApiResponse')
 const uploadFile = require('../utils/cloudinary')
+const jwt = require('jsonwebtoken')
 const options ={
     httpOnly:true,
      secure:true
@@ -150,7 +151,41 @@ res.status(200).clearCookie('refreshToken',options).clearCookie('accessToken',op
 
 
 const refreshAccessTokenandRefreshToken = asyncHandlers(async(req,res)=>{
-    res.send('This is  refresh access refersh and access token route!')
+    const incomingRefreshToken = req.cookies?.refreshToken || req.body.refreshToken
+    if(!incomingRefreshToken){
+        throw new CustomApiError(
+            401,
+            'Unauthorized Request!'
+        )
+    }
+    const decodedToken = await jwt.verify(incomingRefreshToken,process.env.REFRESH_TOKEN_SECRETE)
+     const user = await User.findById(decodedToken._id)
+     if(!user){
+        throw new CustomApiError(
+            403,
+            'Invalid refresh token'
+        )
+     }
+     if(incomingRefreshToken!==user.refreshToken){
+        throw new CustomApiError(
+            401,
+            'Refersh token is invalid or used!'
+        )
+     }
+
+     const { NewrefreshToken , NewaccessToken } = await generateAccessTokenAndRefreshToken(user?._id)
+
+     return res.status(200).cookie('accessToken',NewaccessToken,options).cookie('refreshToken',NewrefreshToken,options).json(
+        new customApiResponse(
+            200,
+            'Token refreshed successfully!',
+            {
+                accessToken:NewaccessToken,
+                refreshToken:NewrefreshToken
+            }
+        )
+     )
+
 })
 
 
