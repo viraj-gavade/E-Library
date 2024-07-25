@@ -9,9 +9,12 @@ UserRouter.route('/register').post(
     upload.single('profileImg'),registerUser)
 UserRouter.route('/login').post(loginUser)
 UserRouter.route('/logout').get(logoutUser)
-UserRouter.route('/change-password').patch(verifyJwt,changeUserPassword)
-UserRouter.route('/change-profile-picture').patch(verifyJwt,upload.single('profileImg'),changeUserProfilePicture)
-UserRouter.route('/refresh').get(refreshAccessTokenandRefreshToken)
+UserRouter.route('/change-password').patch(verifyJwt,changeUserPassword) 
+UserRouter.route('/change-username').patch(verifyJwt,changeUserPassword) 
+UserRouter.route('/change-email').patch(verifyJwt,changeUserPassword) 
+UserRouter.route('/change-profile-picture').patch(verifyJwt,upload.single('profileImg'),changeUserProfilePicture)    
+
+UserRouter.route('/refresh').get(verifyJwt,refreshAccessTokenandRefreshToken)
 
 
 
