@@ -9,6 +9,7 @@ const {connect} = require('mongoose')
 const BookRouter = require('./Routes/books.router')
 const UserRouter = require('./Routes/users.routers')
 const cookieParser = require('cookie-parser')
+const AdminRouter = require('./Routes/admin.routers')
 // app.use(express.static()) Static files to be serverd here!
 app.use(express.json())
 app.use(bodyParser.json())
@@ -19,6 +20,7 @@ app.use(cookieParser())
 app.use('/',HealthcheckRouter)
 app.use('/api/v1/library',BookRouter)
 app.use('/api/v1/library/user',UserRouter)
+app.use('/api/v1/library/admin',AdminRouter)
 
 
 
