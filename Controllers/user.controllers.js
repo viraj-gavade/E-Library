@@ -295,6 +295,48 @@ const changeUserEmail = asyncHandlers(async(req,res)=>{
 
 })
 
+const changeUserUsername = asyncHandlers(async(req,res)=>{
+    const UserId = req.user?._id
+    if(!UserId){
+        throw new CustomApiError(
+            401,
+            ' user id not found! maybe an unauthorized request'
+        )
+    }
+    const {username}=req.body
+    if(!username){
+        throw new CustomApiError(
+            402,
+            'Please provide the username to change the username!'
+        )
+    }
+
+    const existinguser = await User.findOne(username)  
+    if(existinguser){
+        throw new CustomApiError(
+            402,
+            'username is already taken please try another username'
+        )
+    }  
+    const user = await User.findById(UserId)
+    if(!user){
+        throw new CustomApiError(
+            402,
+            'Unable to find the user please check the user id again!'
+        )
+    }
+
+    user.username=username
+    await user.save({validateBeforeSave:true})
+    return res.status(200).json(
+        new customApiResponse(
+            200,
+            'Username changed successfully',
+            user.username
+        )
+    )
+})
+
 module.exports ={
     registerUser,  
     loginUser,
