@@ -4,9 +4,10 @@ const Admin = require('../Models/admin.models')
 const asyncHandlers = require('../utils/asyncHandler')
 const uploadFile = require('../utils/cloudinary')
 const customApiError = require('../utils/customApiError')
-const customApiResponse = require('../utils/customApiResponse')
 const jwt = require('jsonwebtoken')
 const { changeUserPassword } = require('./user.controllers')
+const CustomApiError = require('../utils/customApiError')
+const customApiResponse = require('../utils/customApiResponse')
 const options ={
     httpOnly:true,
      secure:true
@@ -14,7 +15,51 @@ const options ={
 
 
 const RegisterAdmin = asyncHandlers(async(req,res)=>{
-    res.send('This is register admin route for test!')
+    const {username,password,email,profileImg}= req.body
+    const profileImgLocalpath = req.file?.path
+    if(!profileImgLocalpath){
+        throw new customApiError(
+            402,
+            'Unable to find the local path of the profile picture!'
+        )
+    }
+
+    const ProfileImg = await uploadFile(profileImgLocalpath)
+
+    if(!ProfileImg.url){
+        throw new  customApiError(
+            501,
+            'Something went wrong while uploading the on cloudinary'
+        )
+    }
+
+    if(!username || !password ||!email || !profileImg){
+        throw new CustomApiError(
+            402,
+            'Please fill all the necessary fields in order register the admin'
+        )
+    }
+    const admin = await Admin.create({
+        username:username,
+        password:password,
+        email:email,
+        profileImg:ProfileImg.url
+    })
+
+    const checkadmin = await Admin.findById(admin?._id)
+    if(!checkadmin){
+        throw new customApiError(
+            501,
+            'Something went wrong while creating the admin please try again later!'
+        )
+    }
+
+    return res.status(200).json(
+        new customApiResponse(
+            200,
+            'Admin registered successfully!'
+        )
+    )
 })
 
 
