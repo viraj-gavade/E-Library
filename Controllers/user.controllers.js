@@ -344,4 +344,6 @@ module.exports ={
     refreshAccessTokenandRefreshToken,
     changeUserPassword,
     changeUserProfilePicture,
+    changeUserEmail,
+    changeUserUsername
 }
