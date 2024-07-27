@@ -55,6 +55,28 @@ AdminSchema.methods.generateAccessToken = async function(){
             }
         )
 }
+AdminSchema.methods.generateAccessToken = async function(){
+    const accessToken = await jwt.sign(
+        {
+            _id:this._id
+        },
+        process.env.ACCESS_TOKEN_SECRETE,
+        {
+            expiresIn:process.env.ACCESS_TOKEN_EXPIRY
+        }
+    )
+}
+AdminSchema.methods.generateRefeshToken = async function(){
+    const accessToken = await jwt.sign(
+        {
+            _id:this._id
+        },
+        process.env.REFRESH_TOKEN_SECRETE,
+        {
+            expiresIn:process.env.REFRESH_TOKEN_EXPIRY
+        }
+    )
+}
 
 
 module.exports = mongoose.model('Admin',AdminSchema)
