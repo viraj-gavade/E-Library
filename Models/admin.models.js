@@ -44,4 +44,17 @@ AdminSchema.pre('save',async function(next){
 AdminSchema.methods.isPasswordCorrect = async function(AdminPassword){
     return await bcryptjs.compare(AdminPassword,this.password)
 }
+AdminSchema.methods.generateAccessToken = async function(){
+        const accessToken = await jwt.sign(
+            {
+                _id:this._id
+            },
+            process.env.ACCESS_TOKEN_SECRETE,
+            {
+                expiresIn:process.env.REFRESH_TOKEN_EXPIRY
+            }
+        )
+}
+
+
 module.exports = mongoose.model('Admin',AdminSchema)
