@@ -41,4 +41,7 @@ AdminSchema.pre('save',async function(next){
     this.password = await bcryptjs.hash(this.password,salt)
     next()
 })
+AdminSchema.methods.isPasswordCorrect = async function(AdminPassword){
+    return await bcryptjs.compare(AdminPassword,this.password)
+}
 module.exports = mongoose.model('Admin',AdminSchema)
