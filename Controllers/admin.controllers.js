@@ -13,6 +13,22 @@ const options ={
      secure:true
 }
 
+const generateAccessTokenAndRefreshToken = async(userId)=>{
+    try {
+        const admin =  await Admin.findById(userId)
+        const accessToken = await admin.generateAccessToken()
+        const refreshToken = await admin.generateRefreshToken()
+        console.log(accessToken,refreshToken)
+        user.refreshToken=refreshToken
+        await admin.save({validateBeforeSave:false})
+        return {accessToken,refreshToken}
+    } catch (error) {
+        throw new CustomApiError(
+            501,
+            'Something went wrong while generating the access and refersh token!'
+        )
+    }
+}
 
 const RegisterAdmin = asyncHandlers(async(req,res)=>{
     const {username,password,email,profileImg}= req.body
@@ -97,5 +113,6 @@ LogoutAdmin,
 RegisterAdmin,
 ChangeAdminEmail,
 ChangeAdminUsername,
-changeUserPassword
+changeUserPassword,
+generateAccessTokenAndRefreshToken
 }
