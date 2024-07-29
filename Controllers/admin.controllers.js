@@ -113,6 +113,6 @@ LogoutAdmin,
 RegisterAdmin,
 ChangeAdminEmail,
 ChangeAdminUsername,
-changeUserPassword,
+ChangeAdminPassword
 generateAccessTokenAndRefreshToken
 }
