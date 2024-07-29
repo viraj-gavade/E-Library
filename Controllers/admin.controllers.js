@@ -81,7 +81,45 @@ const RegisterAdmin = asyncHandlers(async(req,res)=>{
 
 
 const LoginAdmin = asyncHandlers(async(req,res)=>{
-    res.send('This is login admin route for test!')
+    const {email,password,username} = req.body
+    if(!email || !password || !username){
+        throw new customApiError(
+            401,
+            'Please provide email password and username!',
+        )
+    }
+    const admin = await Admin.find({
+        $or:[
+            {username},
+            {email}
+        ]
+    })
+    if(!admin){
+        throw new customApiError(
+            401,
+            'Unable to find the user'
+        )
+    }
+    const isPasswordCorrect = admin.isPasswordCorrect()
+    const {accessToken,refreshToken} = await generateAccessTokenAndRefreshToken(admin?._id)
+    const loggedInAdmin = await Admin.findById(admin?._id)
+    if(!loggedInAdmin){
+        throw new CustomApiError(
+            501,
+            'Unable to log in at this time please try again'
+        )
+    }
+    return res.status(200).cookie('refreshToken',refreshToken,options).cookie('accessToken',accessToken,options).json(
+        new customApiResponse(
+            200,
+            'Admin Logged In Successfully!',
+           {
+            
+            admin:loggedInAdmin,accessToken,refreshToken
+
+           }
+        )
+    )
 })
 
 
@@ -113,6 +151,6 @@ LogoutAdmin,
 RegisterAdmin,
 ChangeAdminEmail,
 ChangeAdminUsername,
-ChangeAdminPassword
+ChangeAdminPassword,
 generateAccessTokenAndRefreshToken
 }
