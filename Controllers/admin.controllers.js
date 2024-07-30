@@ -180,7 +180,30 @@ const ChangeAdminPassword = asyncHandlers(async(req,res)=>{
 
 
 const ChangeAdminUsername = asyncHandlers(async(req,res)=>{
-    res.send('This is change  admin username route for test!')
+    const { new_username }=req.body
+    const { adminId } = req.user?._id
+    const admin = await Admin.findById(adminId)
+    if(!admin){
+        throw new customApiError(
+            401,
+            `There is no such admin with the id :${adminId}`
+        )
+    }
+    const checkUsernameAvailability = await Admin.find(new_username)
+    if(checkUsernameAvailability){
+        throw new customApiError(
+            402,
+            'Username already taken!'
+        )
+    }
+    admin.username == new_username
+    await admin.save({validateBeforeSave:true})
+    return res.status(200).json(
+        new customApiResponse(
+            200,
+            `username changed successfully!`
+        )
+    )
 })
 
 
