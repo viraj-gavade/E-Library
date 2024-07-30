@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken')
 const { changeUserPassword } = require('./user.controllers')
 const CustomApiError = require('../utils/customApiError')
 const customApiResponse = require('../utils/customApiResponse')
+
 const options ={
     httpOnly:true,
      secure:true
@@ -144,7 +145,37 @@ json(
 
 
 const ChangeAdminPassword = asyncHandlers(async(req,res)=>{
-    res.send('This is change admin password route for test!')
+    const {oldPassword,newPassword,confirmPassword} = req.body
+    const {adminId} = req.user?._id
+    const admin  = await Admin.findById(adminId)
+    if(!admin){
+        throw new customApiError(
+            401,
+            `There is no such admin with ${adminId}`
+        )
+    }
+    const isPasswordCorrect = await isPasswordCorrect(oldPassword)
+    if(!isPasswordCorrect){
+        throw new customApiError(
+            401,
+            'Unauthorized request incorrect password combination'
+        )
+    }
+    if(newPassword!==confirmPassword){
+        throw new CustomApiError(
+            402,
+            `New password does not matches with  confirmed password please enter the valid password!`
+               )
+    }
+    
+    admin.password == newPassword
+    await admin.save({validateBeforeSave:true})
+    return res.status(200).json(
+        new customApiResponse(
+            200,
+            'Password Changed Successfully!'
+        )
+    )
 })
 
 
