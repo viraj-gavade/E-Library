@@ -194,6 +194,12 @@ const changeUserPassword = asyncHandlers(async(req,res)=>{
         const {old_password,new_password,confirm_password} = req.body
         console.log(old_password)
         const user  = await User.findById(req.user?._id)
+        if(!user){
+            throw new CustomApiError(
+                401,
+                `   There is no such user with the id:-${req.user?._id}`
+            )
+        }
         const isPasswordCorrect  = await user.isPasswordCorrect(old_password)
         if(!isPasswordCorrect){
             throw new CustomApiError(
