@@ -208,7 +208,30 @@ const ChangeAdminUsername = asyncHandlers(async(req,res)=>{
 
 
 const ChangeAdminEmail = asyncHandlers(async(req,res)=>{
-    res.send('This is change  admin  email route for test!')
+    const { new_email }=req.body
+    const { adminId } = req.user?._id
+    const admin = await Admin.findById(adminId)
+    if(!admin){
+        throw new customApiError(
+            401,
+            `There is no such admin with the id :${adminId}`
+        )
+    }
+    const checkEmailAvailability = await Admin.find(new_email)
+    if(checkEmailAvailability){
+        throw new customApiError(
+            402,
+            'Username already taken!'
+        )
+    }
+    admin.email == new_email
+    await admin.save({validateBeforeSave:true})
+    return res.status(200).json(
+        new customApiResponse(
+            200,
+            `username changed successfully!`
+        )
+    )
 })
 
 
