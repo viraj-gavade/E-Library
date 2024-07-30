@@ -207,7 +207,7 @@ const changeUserPassword = asyncHandlers(async(req,res)=>{
                 'The password you have entered does not the exsting password please check the entered password again!'
             )
         }
-        if(!new_password===confirm_password){
+        if(!new_password!==confirm_password){
             throw new CustomApiError(
             402,
             `New password does not matches with  confirmed password please enter the valid password!`
