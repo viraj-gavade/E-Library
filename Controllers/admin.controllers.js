@@ -102,7 +102,7 @@ const LoginAdmin = asyncHandlers(async(req,res)=>{
     }
     const isPasswordCorrect = admin.isPasswordCorrect()
     const {accessToken,refreshToken} = await generateAccessTokenAndRefreshToken(admin?._id)
-    const loggedInAdmin = await Admin.findById(admin?._id)
+    const loggedInAdmin = await Admin.findById(admin?._id).select('-password')
     if(!loggedInAdmin){
         throw new CustomApiError(
             501,
@@ -125,7 +125,21 @@ const LoginAdmin = asyncHandlers(async(req,res)=>{
 
 
 const LogoutAdmin = asyncHandlers(async(req,res)=>{
-    res.send('This is logout admin route for test!')
+    await Admin.findByIdAndUpdate(req?._id,{
+        $set:{
+            refreshToken:null
+        }
+    },
+{
+    new:true
+})
+return res.status(200).clearCookie('refreshToken',refreshToken).clearCookie('accessToken',accessToken).
+json(
+    new customApiResponse(
+        200,
+        'Logged Out Successfully!'
+    )
+)
 })
 
 
