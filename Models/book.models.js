@@ -28,7 +28,11 @@ const BooksSchema = new mongoose.Schema({
     CoverImage:{
         type:String,
         required:[true,'CoverImage must be provided!']
-    }
+    },
+    users:[
+       { type:mongoose.Schema.Types.ObjectId,
+        ref:'User'}
+    ]
 },{timestamps:true})
 
 
