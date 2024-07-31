@@ -15,7 +15,7 @@ const GetSingleBook =asyncHandlers(  async(req,res)=>{
             `There is no such book with Id : ${bookId}`
         )
     }
-    const book = await Book.findById(bookId)
+    const book = await Book.findById(bookId).select('-users')
     if(!book){
         return res.status(200).json( new customApiResponse(
             200,)
@@ -36,7 +36,8 @@ const GetAllBooks = asyncHandlers( async (req,res)=>{
 
     
     const { page , sort } = req.params
-    const book = await  Book.find({})
+    //Add the pagaination functionality
+    const book = await Book.find({}).select('-users')
     if(book.length<1){
         return res.status(200).json(
             new customApiResponse(
@@ -53,10 +54,6 @@ const GetAllBooks = asyncHandlers( async (req,res)=>{
         )
     )
 })
-
-
-
-
 
 const UpdateBook =asyncHandlers(  async (req,res)=>{
     const { bookId } = req.params
@@ -278,6 +275,9 @@ return res.status(200).json(
 )
 })
 
+const RentBook =asyncHandlers(  async(req,res)=>{
+  res.send("This is rent book controller")
+})
 module.exports =
 {
     GetAllBooks,
