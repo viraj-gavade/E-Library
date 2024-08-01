@@ -67,12 +67,18 @@ const UpdateBook =asyncHandlers(  async (req,res)=>{
     try {
         const { bookId } = req.params
         const { author , copies , title , publishedInYear } = req.body
-        if(!author && !copies && !title , !publishedInYear ){
-            throw new customApiResponse(
-                401,
-                `All fields must be provided!`
-            )
-        }
+
+        //TEMPORARY BLOACKED THIS CHECKPOINT IN ORDER TO CHECK IF WE CAN UPDATE ONLY THE THINGS WE WANT //
+
+
+        // if(!author && !copies && !title , !publishedInYear ){
+        //     throw new customApiResponse(
+        //         401,
+        //         `All fields must be provided!`
+        //     )
+        // }
+
+
         if(!bookId){
             return res.status(200).json(
                 new customApiResponse(
@@ -81,15 +87,46 @@ const UpdateBook =asyncHandlers(  async (req,res)=>{
                 )
             )
         }
-    
-        //TODO:Write an functionality to change the link of the pdf uploaded and cover photo of book
-    
+        
+        const BookPdfLocalPath = req.file.path
+        if(!BookPdfLocalPath){
+            throw new CustomApiError(
+                402,
+                'Something went wrong!Unable to find the local path of the pdf link!'
+            )
+        }
+
+        const pdfLink = await uploadFile(BookPdfLocalPath)
+        if(!pdfLink.url){
+            throw new CustomApiError(
+                501,
+                'Something went wrong while uploading the file cloudinary!'
+            )
+        }
+
+        const coverImageLocalPath = req.file.path
+        if(!coverImageLocalPath){
+            throw new CustomApiError(
+                402,
+                'Something went wrong!Unable to find the local path of the pdf link!'
+            )
+        }
+
+        const coverImage = await uploadFile(coverImageLocalPath)
+        if(!coverImage.url){
+            throw new CustomApiError(
+                501,
+                'Something went wrong while uploading the file cloudinary!'
+            )
+        }    
     
         const book = await Book.findByIdAndUpdate(bookId,{
             author:author,
             copies:copies,
             title:title,
-            publishedInYear:publishedInYear
+            publishedInYear:publishedInYear,
+            pdfLink:pdfLink?.url, //Optionally unwrapping this might cause error double check with postman
+            coverImage:coverImage.url
         },
         {
             new:true
