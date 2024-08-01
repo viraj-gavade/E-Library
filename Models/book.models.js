@@ -1,39 +1,46 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
-const BooksSchema = new mongoose.Schema({
-    author:{
-        type:String,
-        required:[true,'Please provide the author name']
-    },
-    available:{
-        type:Boolean,
-        default:true
-    }, //TODO:Create a seprate toggle fucntion to toggle this easily for any book
-    copies:{
-        type:Number,
-        default:3
-    },
-    title:{
-        type:String,
-        required:[true,'Please provide the title of the book']
-    },
-    publishedInYear:{
-        type:Number,
-        MaxLength:4
-    },
-    pdfLink:{
-        type:String,
-        reuired:true
-    },
-    CoverImage:{
-        type:String,
-        required:[true,'CoverImage must be provided!']
-    },
-    users:[
-       { type:mongoose.Schema.Types.ObjectId,
-        ref:'User'}
-    ]
-},{timestamps:true})
+const CopySchema = new mongoose.Schema({
+  available: {
+    type: Boolean,
+    default: true
+  },
+  rentedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    default: null
+  },
+  rentedAt: {
+    type: Date,
+    default: null
+  }
+});
 
+const BookSchema = new mongoose.Schema({
+  author: {
+    type: String,
+    required: [true, 'Please provide the author name']
+  },
+  title: {
+    type: String,
+    required: [true, 'Please provide the title of the book']
+  },
+  publishedInYear: {
+    type: Number,
+    maxLength: 4
+  },
+  pdfLink: {
+    type: String,
+    required: true
+  },
+  coverImage: {
+    type: String,
+    required: [true, 'CoverImage must be provided!']
+  },
+  copies: {
+    type: [CopySchema],
+    default: []
+  }
+}, { timestamps: true });
 
-module.exports = mongoose.model('Book',BooksSchema)
+module.exports = mongoose.model('Book', BookSchema);
