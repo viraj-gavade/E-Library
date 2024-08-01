@@ -3,7 +3,7 @@ const asyncHandlers = require('../utils/asyncHandler')
 const CustomApiError = require('../utils/customApiError')
 const customApiResponse = require('../utils/customApiResponse')
 const uploadFile = require('../utils/cloudinary')
-
+const  User = require('../Models/user.models')
 // Get all books of the library and them by alphabetical order by deafult and some additional sorting fucntionalities
 // Like sorty by year , author in alphabetical odrder
 
@@ -276,7 +276,44 @@ return res.status(200).json(
 })
 
 const RentBook =asyncHandlers(  async(req,res)=>{
-  res.send("This is rent book controller")
+    const {bookId} = req.params
+    const book = await Book.findById(bookId)
+    if(!book){
+        throw new CustomApiError(
+            402,
+            `There is no such book with the book id :${bookId}`
+        )
+    }
+    if(!book.isAvailable()){
+        return res.status(200).json(
+            new customApiResponse(
+                200,
+                'The book is not available right now pleasse try again later!'
+            )
+        )
+    }
+    const availableCopy = book.copies.find(copy => copy.available)
+    const user = await User.findById(req.body.userId)
+    if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      //update the copies status
+
+      availableCopy.available=false     
+      availableCopy.rentedBy=req.user?._id
+      availableCopy.rentedBy = new Date()
+
+      await book.save()
+
+      return res.status(200).json(
+        new customApiResponse(
+            200,
+            'Book reneted sucessfully!',
+            book
+        )
+      )
+    
 })
 module.exports =
 {
