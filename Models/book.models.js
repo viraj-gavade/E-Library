@@ -43,4 +43,8 @@ const BookSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
+BookSchema.methods.isAvailable = function () {
+    return this.copies.some(copy => copy.available);
+  };
+
 module.exports = mongoose.model('Book', BookSchema);
