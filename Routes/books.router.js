@@ -7,7 +7,8 @@ const
     UploadBook,
     DeleteBook,
     updatecoverImage,
-    updatepdfLink
+    updatepdfLink,
+    RentBook
 } = require('../Controllers/book.controllers')
 
 const upload = require('../Middlewares/multer.middleware')
@@ -45,7 +46,9 @@ BookRouter.route('/books').post(
             maxCount:1
         }
     ]),UploadBook
+
 ) ///Middleware to upload book with the help of cloudinary
+BookRouter.route('/rent/:bookId').get(RentBook)
 
 
 

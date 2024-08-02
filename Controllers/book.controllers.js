@@ -392,5 +392,6 @@ module.exports =
     UploadBook,
     DeleteBook,
     updatecoverImage,
-    updatepdfLink
+    updatepdfLink,
+    RentBook
 }
