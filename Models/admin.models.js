@@ -25,7 +25,7 @@ const AdminSchema =  mongoose.Schema({
     },
     refreshToken:{
         type:String,
-        required:[False,'Admin refreshtoken is not compulsory!']
+        required:[false,'Admin refreshtoken is not compulsory!']
     },
     profileImg:{
         type:String,
