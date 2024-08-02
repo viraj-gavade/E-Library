@@ -384,6 +384,41 @@ const RentBook =asyncHandlers(  async(req,res)=>{
         console.log(error)
     }
 })
+
+const Toggleavaialablestatus = asyncHandlers(async(req,res)=>{
+    try {
+        const {bookId} = req.params
+        const book = await Book.findById(bookId)
+    
+        if(!book){
+            throw new CustomApiError(
+                402,
+                `There is no such book with id : ${bookId}`
+            )
+        }
+        book.copies.available = !book.copies.available
+        await book.save()
+         if(book.copies.available==false){
+            return res.status(200).json(
+                new customApiResponse(
+                    200,
+                    'Book is not available !'
+                )
+            )
+         }
+         return res.status(200).json(
+
+            new customApiResponse(
+                200,
+
+                'Book is available!'
+            )
+         )
+    } catch (error) {
+        console.log(error)
+    }
+})
+
 module.exports =
 {
     GetAllBooks,
