@@ -195,8 +195,7 @@ const DeleteBook = asyncHandlers( async(req,res)=>{
      return res.status(200).json(
          new customApiResponse(
              200,
-             `Book details updated successfully!`,
-             book
+             `Book deleted  successfully!`,
          )
  
      )
