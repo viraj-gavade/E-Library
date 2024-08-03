@@ -66,67 +66,18 @@ const GetAllBooks = asyncHandlers( async (req,res)=>{
 const UpdateBook =asyncHandlers(  async (req,res)=>{
     try {
         const { bookId } = req.params
-        const { author , copies , title , publishedInYear } = req.body
-
-        //TEMPORARY BLOACKED THIS CHECKPOINT IN ORDER TO CHECK IF WE CAN UPDATE ONLY THE THINGS WE WANT //
-
-
-        // if(!author && !copies && !title , !publishedInYear ){
-        //     throw new customApiResponse(
-        //         401,
-        //         `All fields must be provided!`
-        //     )
-        // }
-
-
         if(!bookId){
-            return res.status(200).json(
-                new customApiResponse(
-                    200,
-                    `Invalid Book Id : ${bookId}`
-                )
-            )
-        }
-        
-        const BookPdfLocalPath = req.file.path
-        if(!BookPdfLocalPath){
             throw new CustomApiError(
                 402,
-                'Something went wrong!Unable to find the local path of the pdf link!'
+                `There is no such book with id : ${bookId}`
             )
         }
-
-        const pdfLink = await uploadFile(BookPdfLocalPath)
-        if(!pdfLink.url){
-            throw new CustomApiError(
-                501,
-                'Something went wrong while uploading the file cloudinary!'
-            )
-        }
-
-        const coverImageLocalPath = req.file.path
-        if(!coverImageLocalPath){
-            throw new CustomApiError(
-                402,
-                'Something went wrong!Unable to find the local path of the pdf link!'
-            )
-        }
-
-        const coverImage = await uploadFile(coverImageLocalPath)
-        if(!coverImage.url){
-            throw new CustomApiError(
-                501,
-                'Something went wrong while uploading the file cloudinary!'
-            )
-        }    
-    
+        const { author , copies , title , publishedInYear } = req.body
         const book = await Book.findByIdAndUpdate(bookId,{
             author:author,
             copies:copies,
             title:title,
             publishedInYear:publishedInYear,
-            pdfLink:pdfLink?.url, //Optionally unwrapping this might cause error double check with postman
-            coverImage:coverImage.url
         },
         {
             new:true
@@ -169,7 +120,9 @@ const UploadBook =asyncHandlers(   async(req,res)=>{
  
      const coverImageLocalPath = req.files.CoverImage[0].path
      const BookPdfLocalPath = req.files.pdfLink[0].path
-     console.log(coverImageLocalPath,BookPdfLocalPath)
+
+     console.log(coverImageLocalPath,BookPdfLocalPath)//Debugging statements remove this in final  commit
+
      if(!BookPdfLocalPath || ! coverImageLocalPath){
          throw new CustomApiError(
              401,
