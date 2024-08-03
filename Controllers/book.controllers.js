@@ -159,8 +159,8 @@ const UpdateBook =asyncHandlers(  async (req,res)=>{
 const UploadBook =asyncHandlers(   async(req,res)=>{
    try {
      console.log(req.files)
-     const {author , title ,copies , publishedInYear , available  }  = req.body
-     if(!author ||! title ||!copies ||! publishedInYear ||! available  ){
+     const {author , title  , publishedInYear , available  }  = req.body
+     if(!author ||! title  ||! publishedInYear ||! available  ){
          throw new CustomApiError(
              401,
              `All fields are required!`
@@ -169,6 +169,7 @@ const UploadBook =asyncHandlers(   async(req,res)=>{
  
      const coverImageLocalPath = req.files.CoverImage[0].path
      const BookPdfLocalPath = req.files.pdfLink[0].path
+     console.log(coverImageLocalPath,BookPdfLocalPath)
      if(!BookPdfLocalPath || ! coverImageLocalPath){
          throw new CustomApiError(
              401,
@@ -191,7 +192,7 @@ const UploadBook =asyncHandlers(   async(req,res)=>{
              publishedInYear:publishedInYear,
              available:available,
              pdfLink:pdfLink.url,
-             copies:copies,
+             //Work on copies next time by deafault value will not work every time.
              CoverImage:CoverImage.url
          }
      )

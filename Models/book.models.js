@@ -1,21 +1,5 @@
 const mongoose = require('mongoose');
 
-const CopySchema = new mongoose.Schema({
-  available: {
-    type: Boolean,
-    default: true
-  },
-  rentedBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    default: null
-  },
-  rentedAt: {
-    type: Date,
-    default: null
-  }
-});
-
 const BookSchema = new mongoose.Schema({
   author: {
     type: String,
@@ -33,13 +17,13 @@ const BookSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  coverImage: {
+  CoverImage: {
     type: String,
     required: [true, 'CoverImage must be provided!']
   },
   copies: {
-    type: [CopySchema],
-    default: []
+    type: Number,
+    default: 10
   }
 }, { timestamps: true });
 
