@@ -24,7 +24,18 @@ BookRouter.route('/books').get(GetAllBooks)
 
 BookRouter.route('/books/:bookId').get(GetSingleBook)
 
-BookRouter.route('/books/:bookId').patch(UpdateBook)
+BookRouter.route('/books/:bookId').patch(
+    upload.fields([
+        {
+            name:'pdfLink',
+            maxCount:1
+        },
+        {
+            name:'CoverImage',
+            maxCount:1
+        }
+    ]),
+    UpdateBook)
 
 BookRouter.route('/books/:bookId').delete(DeleteBook)
 
