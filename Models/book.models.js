@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 
 const BookSchema = new mongoose.Schema({
   author: {
+    type:String,
+    required: true
+  },
+  CoverImage: {
     type: String,
     required: [true, 'Please provide the author name']
   },
@@ -15,9 +19,6 @@ const BookSchema = new mongoose.Schema({
   },
   pdfLink: {
     type: String,
-    required: true
-  },
-  CoverImage: {
     type: String,
     required: [true, 'CoverImage must be provided!']
   },
@@ -29,6 +30,11 @@ const BookSchema = new mongoose.Schema({
     type:Boolean,
     default:true
     
+  },
+  category:{
+    type:String,
+    required:[true,'Please provide the category'],
+    default:'Book'
   }
 }, { timestamps: true });
 
