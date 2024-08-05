@@ -4,6 +4,7 @@ const CustomApiError = require('../utils/customApiError')
 const customApiResponse = require('../utils/customApiResponse')
 const uploadFile = require('../utils/cloudinary')
 const jwt = require('jsonwebtoken')
+const mongoose = require('mongoose')
 const options ={
     httpOnly:true,
      secure:true
@@ -27,7 +28,7 @@ const generateAccessTokenAndRefreshToken = async(userId)=>{
     }
 }
 
-const registerUser = asyncHandlers(async(req,res)=>{
+const  registerUser = asyncHandlers(async(req,res)=>{
    const { username , password , email } = req.body
 
 
@@ -92,21 +93,17 @@ return res.status(200).json(
 
 const loginUser = asyncHandlers(async(req,res)=>{
     const {username,email,password} = req.body
-    if(!username || ! email || !password){
+    if(!(username || email )|| !password){
         throw new CustomApiError(
             401,
             'All fields must be provided!'
         )
     }
-    const user = await User.findOne(
-        {
-            $or:[
-                {username},
-                {password}
-        ]
-        }
-    )
-    const isPasswordCorrect = user.isPasswordCorrect(password)
+    console.log(username)
+    const user = await User.findOne({
+        $or:[{email},{username}]})
+    console.log(user)
+    const isPasswordCorrect = await user.isPasswordCorrect(password)
     if(!isPasswordCorrect){
         throw new CustomApiError(
             401,
