@@ -8,7 +8,6 @@ const
     DeleteBook,
     updatecoverImage,
     updatepdfLink,
-    RentBook,
     Toggleavaialablestatus
 } = require('../Controllers/book.controllers')
 
@@ -49,7 +48,6 @@ BookRouter.route('/books').post(
     ]),UploadBook
 
 ) ///Middleware to upload book with the help of cloudinary
-BookRouter.route('/rent/:bookId').get(RentBook)
 
 BookRouter.route('/books/status/:bookId').get(Toggleavaialablestatus
     

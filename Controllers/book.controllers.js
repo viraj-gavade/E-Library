@@ -293,51 +293,6 @@ const updatepdfLink = asyncHandlers(async(req,res)=>{
    }
 })
 
-const RentBook =asyncHandlers(  async(req,res)=>{
-    try {
-        const {bookId} = req.params
-        const book = await Book.findById(bookId)
-        if(!book){
-            throw new CustomApiError(
-                402,
-                `There is no such book with the book id :${bookId}`
-            )
-        }
-        if(!book.isAvailable()){
-            return res.status(200).json(
-                new customApiResponse(
-                    200,
-                    'The book is not available right now pleasse try again later!'
-                )
-            )
-        }
-        const availableCopy = book.copies.find(copy => copy.available)
-        const user = await User.findById(req.body.userId)
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-          }
-    
-          //update the copies status
-    
-          availableCopy.available=false     
-          availableCopy.rentedBy=req.user?._id
-          availableCopy.rentedBy = new Date()
-    
-          await book.save()
-    
-          return res.status(200).json(
-            new customApiResponse(
-                200,
-                'Book reneted sucessfully!',
-                book
-            )
-          )
-        
-    } catch (error) {
-        console.log(error)
-    }
-})
-
 const Toggleavaialablestatus = asyncHandlers(async(req,res)=>{
     try {
         const {bookId} = req.params
@@ -381,6 +336,5 @@ module.exports =
     DeleteBook,
     updatecoverImage,
     updatepdfLink,
-    RentBook,
     Toggleavaialablestatus
 }
