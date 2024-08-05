@@ -8,7 +8,8 @@ const
     DeleteBook,
     updatecoverImage,
     updatepdfLink,
-    RentBook
+    RentBook,
+    Toggleavaialablestatus
 } = require('../Controllers/book.controllers')
 
 const upload = require('../Middlewares/multer.middleware')
@@ -49,6 +50,10 @@ BookRouter.route('/books').post(
 
 ) ///Middleware to upload book with the help of cloudinary
 BookRouter.route('/rent/:bookId').get(RentBook)
+
+BookRouter.route('/books/status/:bookId').get(Toggleavaialablestatus
+    
+)
 
 
 

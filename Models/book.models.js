@@ -24,6 +24,11 @@ const BookSchema = new mongoose.Schema({
   copies: {
     type: Number,
     default: 10
+  },
+  available:{
+    type:Boolean,
+    default:true
+    
   }
 }, { timestamps: true });
 
