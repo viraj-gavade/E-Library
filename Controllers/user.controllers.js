@@ -273,7 +273,7 @@ const changeUserEmail = asyncHandlers(async(req,res)=>{
             'Please provide the email inorder to change the email'
         )
     }
-    const existinguser = await User.findOne(email)
+    const existinguser = await User.findOne({email})
     if(existinguser){
         throw new CustomApiError(
             401,
@@ -288,7 +288,7 @@ const changeUserEmail = asyncHandlers(async(req,res)=>{
         )
     }
     user.email=email
-    await user.save({validateBeforeSave:true})
+    await user.save({validateBeforeSave:false})
     return res.status(200).json(
         new customApiResponse(
             200,

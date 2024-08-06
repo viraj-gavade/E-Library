@@ -79,6 +79,7 @@ UserSchema.methods.generateRefreshToken = async function() {
         _id:this._id
     },process.env.REFRESH_TOKEN_SECRETE,{expiresIn:process.env.REFRESH_TOKEN_EXPIRY})
     return accessToken
-}
+},
+
 
 module.exports = mongoose.model('User',UserSchema)
