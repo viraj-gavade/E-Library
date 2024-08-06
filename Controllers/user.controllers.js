@@ -314,7 +314,7 @@ const changeUserUsername = asyncHandlers(async(req,res)=>{
         )
     }
 
-    const existinguser = await User.findOne(username)  
+    const existinguser = await User.findOne({username})  
     if(existinguser){
         throw new CustomApiError(
             402,
@@ -330,7 +330,7 @@ const changeUserUsername = asyncHandlers(async(req,res)=>{
     }
 
     user.username=username
-    await user.save({validateBeforeSave:true})
+    await user.save({validateBeforeSave:false})
     return res.status(200).json(
         new customApiResponse(
             200,
