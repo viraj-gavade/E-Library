@@ -37,49 +37,53 @@ const GetSingleBook =asyncHandlers(  async(req,res)=>{
     }
 })
 
-const searchBook = asyncHandlers(async(req,res)=>{
-    const {search,page,limit,sortBy}=req.query
-    
-    const offset = (page - 1) * limit;
-    const searchCriteria = {
-        $or: [
-          { title: { $regex: query, $options: 'i' } },
-          { author: { $regex: query, $options: 'i' } },
-          { genre: { $regex: query, $options: 'i' } },
-        ],
-      };
-      if(!search){
-        const book = await Book.find({}).sort(sortBy).skip(offset)
-        if(!book){
-            return res.status(200).json(
-                new customApiResponse(
-                    'Unable to find a book please try again later!'
-                )
-            )
-        }
-        return res.status(200).json(
-            new customApiResponse(
-                200,
-                'Book found successfully!'
-            )
-        )
+const searchBook = asyncHandlers(async (req, res) => {
+    try {
+      const { search, page = 1, limit = 10, sortBy = 'title', order = 'asc' } = req.query;
+      const sort = { [sortBy]: order === 'desc' ? -1 : 1 };
+      const offset = (parseInt(page, 10) - 1) * parseInt(limit, 10);
+  
+      let searchCriteria = {};
+      if (search) {
+        searchCriteria = {
+          $or: [
+            { title: { $regex: search, $options: 'i' } },
+            { author: { $regex: search, $options: 'i' } },
+            { genre: { $regex: search, $options: 'i' } },
+          ],
+        };
       }
-      const book = await Book.find(searchCriteria).sort(sortBy).skip(offset)
-      if(!book){
+  
+      const books = await Book.find(searchCriteria).sort(sort).skip(offset).limit(parseInt(limit, 10));
+  
+      if (books.length === 0) {
         return res.status(200).json(
-            new customApiResponse(
-                'Unable to find a book please try again later!'
-            )
-        )
-    }
-    return res.status(200).json(
-        new customApiResponse(
+          new customApiResponse(
             200,
-            'Book found successfully!'
+            'No books found!'
+          )
+        );
+      }
+  
+      return res.status(200).json(
+        new customApiResponse(
+          200,
+          'Books found successfully!',
+          books
         )
-    )
-
-})
+      );
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json(
+        new customApiResponse(
+          500,
+          'An error occurred while searching for books.',
+          error.message
+        )
+      );
+    }
+  });
+  
 
 
 const GetAllBooks = asyncHandlers( async (req,res)=>{
