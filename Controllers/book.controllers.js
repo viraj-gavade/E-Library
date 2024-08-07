@@ -350,24 +350,28 @@ const Toggleavaialablestatus = asyncHandlers(async(req,res)=>{
                 `There is no such book with id : ${bookId}`
             )
         }
-        book.copies.available = !book.copies.available
-        await book.save()
-         if(book.copies.available==false){
+        book.available=!book.available
+        await book.save({validateBeforeSave:false})
+        if(book.available===true){
             return res.status(200).json(
+
                 new customApiResponse(
                     200,
-                    'Book is not available !'
+    
+                    'Book is available!'
                 )
-            )
-         }
-         return res.status(200).json(
+             )
+        }
+        return res.status(200).json(
 
             new customApiResponse(
                 200,
 
-                'Book is available!'
+                'Book is not available!'
             )
          )
+
+        
     } catch (error) {
         console.log(error)
     }
