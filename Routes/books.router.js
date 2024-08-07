@@ -8,7 +8,8 @@ const
     DeleteBook,
     updatecoverImage,
     updatepdfLink,
-    Toggleavaialablestatus
+    Toggleavaialablestatus,
+    searchBook
 } = require('../Controllers/book.controllers')
 
 const upload = require('../Middlewares/multer.middleware')
@@ -21,6 +22,8 @@ const BookRouter = express.Router()
 //Main Routes
 
 BookRouter.route('/books').get(GetAllBooks)
+BookRouter.route('/books/search').get(searchBook)
+
 
 BookRouter.route('/books/:bookId').get(GetSingleBook)
 

@@ -83,8 +83,6 @@ const searchBook = asyncHandlers(async (req, res) => {
       );
     }
   });
-  
-
 
 const GetAllBooks = asyncHandlers( async (req,res)=>{
 
@@ -384,5 +382,6 @@ module.exports =
     DeleteBook,
     updatecoverImage,
     updatepdfLink,
-    Toggleavaialablestatus
+    Toggleavaialablestatus,
+    searchBook
 }
