@@ -7,6 +7,8 @@ const  User = require('../Models/user.models')
 // Get all books of the library and them by alphabetical order by deafult and some additional sorting fucntionalities
 // Like sorty by year , author in alphabetical odrder
 
+
+
 const GetSingleBook =asyncHandlers(  async(req,res)=>{
     try {
         const { bookId } = req.params
@@ -35,14 +37,56 @@ const GetSingleBook =asyncHandlers(  async(req,res)=>{
     }
 })
 
+const searchBook = asyncHandlers(async(req,res)=>{
+    const {search,page,limit,sortBy}=req.query
+    
+    const offset = (page - 1) * limit;
+    const searchCriteria = {
+        $or: [
+          { title: { $regex: query, $options: 'i' } },
+          { author: { $regex: query, $options: 'i' } },
+          { genre: { $regex: query, $options: 'i' } },
+        ],
+      };
+      if(!search){
+        const book = await Book.find({}).sort(sortBy).skip(offset)
+        if(!book){
+            return res.status(200).json(
+                new customApiResponse(
+                    'Unable to find a book please try again later!'
+                )
+            )
+        }
+        return res.status(200).json(
+            new customApiResponse(
+                200,
+                'Book found successfully!'
+            )
+        )
+      }
+      const book = await Book.find(searchCriteria).sort(sortBy).skip(offset)
+      if(!book){
+        return res.status(200).json(
+            new customApiResponse(
+                'Unable to find a book please try again later!'
+            )
+        )
+    }
+    return res.status(200).json(
+        new customApiResponse(
+            200,
+            'Book found successfully!'
+        )
+    )
+
+})
+
 
 const GetAllBooks = asyncHandlers( async (req,res)=>{
 
    try {
-     
-     const { page , sort } = req.params
      //Add the pagaination functionality
-     const book = await Book.find({}).select('-users')
+     const book = await Book.find({}).sort('title')
      if(book.length<1){
          return res.status(200).json(
              new customApiResponse(
