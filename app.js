@@ -21,7 +21,7 @@ app.use(cookieParser())
 app.use('/',HealthcheckRouter)
 app.use('/api/v1/library',BookRouter)
 app.use('/api/v1/library/user',UserRouter)
-app.use('/api/v1/library/admin',AdminRouter)
+
 
 
 
