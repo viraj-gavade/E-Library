@@ -1,0 +1,114 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #fafafa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: #fff;
+    padding: 40px;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 350px;
+    border-radius: 10px;
+}
+
+.logo img {
+    width: 200px;
+    margin-bottom: 20px;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.form {
+    display: none;
+    flex-direction: column;
+}
+
+.form.active {
+    display: flex;
+}
+
+.form input {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.form button {
+    padding: 10px;
+    background-color: #3897f0;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.form button:hover {
+    background-color: #287cc0;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #ddd;
+}
+
+.divider::before {
+    margin-right: .25em;
+}
+
+.divider::after {
+    margin-left: .25em;
+}
+
+.facebook-btn {
+    background-color: #3b5998;
+}
+
+.forgot-password,
+.terms {
+    color: #00376b;
+    font-size: 12px;
+    text-align: center;
+}
+
+.toggle-text p {
+    font-size: 14px;
+    color: #8e8e8e;
+}
+
+.toggle-text span {
+    color: #3897f0;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.toggle-text p.active {
+    display: none;
+}
+
+.terms {
+    margin-top: 10px;
+}
