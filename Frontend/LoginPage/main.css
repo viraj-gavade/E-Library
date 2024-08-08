@@ -1,6 +1,6 @@
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #fafafa;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -10,22 +10,31 @@ body {
 
 .container {
     background-color: #fff;
-    padding: 40px;
-    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    width: 350px;
-    border-radius: 10px;
+    width: 300px;
 }
 
-.logo img {
-    width: 200px;
+.toggle-buttons {
+    display: flex;
+    justify-content: space-between;
     margin-bottom: 20px;
 }
 
-.form-container {
-    display: flex;
-    flex-direction: column;
+.toggle-buttons button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background-color: #ddd;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.toggle-buttons button.active {
+    background-color: #007bff;
+    color: white;
 }
 
 .form {
@@ -37,78 +46,29 @@ body {
     display: flex;
 }
 
+.form h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
 .form input {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
-    font-size: 14px;
 }
 
 .form button {
     padding: 10px;
-    background-color: #3897f0;
-    color: white;
     border: none;
-    border-radius: 5px;
-    font-weight: bold;
+    background-color: #007bff;
+    color: white;
     cursor: pointer;
-    margin-bottom: 10px;
-    font-size: 14px;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
 }
 
 .form button:hover {
-    background-color: #287cc0;
-}
-
-.divider {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    margin: 20px 0;
-}
-
-.divider::before,
-.divider::after {
-    content: '';
-    flex: 1;
-    border-bottom: 1px solid #ddd;
-}
-
-.divider::before {
-    margin-right: .25em;
-}
-
-.divider::after {
-    margin-left: .25em;
-}
-
-.facebook-btn {
-    background-color: #3b5998;
-}
-
-.forgot-password,
-.terms {
-    color: #00376b;
-    font-size: 12px;
-    text-align: center;
-}
-
-.toggle-text p {
-    font-size: 14px;
-    color: #8e8e8e;
-}
-
-.toggle-text span {
-    color: #3897f0;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.toggle-text p.active {
-    display: none;
-}
-
-.terms {
-    margin-top: 10px;
+    background-color: #0056b3;
 }
