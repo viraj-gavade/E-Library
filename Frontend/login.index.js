@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const password = document.getElementById('password').value;
         
       console.log(username,email,password)
-      axios.post('http://localhost:3000/api/v1/auth/signup', {
+      axios.post('http://localhost:5000/api/v1/library/user/login', {
         username: username,
         email: email,
         password: password
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const loginUsername = document.getElementById('loginUsername').value;
       const loginPassword = document.getElementById('loginPassword').value;
       console.log(loginUsername,loginPassword)
-      axios.post('http://localhost:3000/api/v1/auth/login', {
+      axios.post('http://localhost:5000/api/v1/library/user/login', {
         username: loginUsername,
         password: loginPassword
       })
@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         localStorage.setItem('token', response.data.token);
         // Redirect or do something after successful login
-        window.location.href = 'dashboard.html'; // Replace with your desired redirect URL
+        // window.location.href = 'index.html'; // Replace with your desired redirect URL
       })
       .catch(function(error) {
         console.error('Login failed:', error);

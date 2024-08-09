@@ -5,10 +5,12 @@ const customApiResponse = require('../utils/customApiResponse')
 const uploadFile = require('../utils/cloudinary')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
-const options ={
-    httpOnly:true,
-     secure:true
-}
+  // Define cookie options
+  const options = {
+    httpOnly: true,
+    // secure: true, // Set to true in production
+    // sameSite: 'Strict'
+};
 
 
 const generateAccessTokenAndRefreshToken = async(userId)=>{
@@ -91,42 +93,69 @@ return res.status(200).json(
 
 })
 
-const loginUser = asyncHandlers(async(req,res)=>{
-    const {username,email,password} = req.body
-    if(!(username || email )|| !password){
-        throw new CustomApiError(
-            401,
-            'All fields must be provided!'
-        )
+const loginUser = asyncHandlers(async (req, res) => {
+    const { username, email, password } = req.body;
+
+    // Validate input
+    if (!(username || email) || !password) {
+        throw new CustomApiError(401, 'All fields must be provided!');
     }
-    console.log(username)
+
+    console.log('Username or Email:', username || email);
+
+    // Find user by username or email
     const user = await User.findOne({
-        $or:[{email},{username}]})
-    console.log(user)
-    const isPasswordCorrect = await user.isPasswordCorrect(password)
-    if(!isPasswordCorrect){
-        throw new CustomApiError(
-            401,
-            'Inncorrect username or password please try again later!'
-        )
+        $or: [{ email }, { username }]
+    });
+
+    if (!user) {
+        return res.status(401).json(
+            new customApiResponse(
+                401,
+                'User not found with provided credentials!'
+            )
+        );
     }
-    const {accessToken,refreshToken}= await generateAccessTokenAndRefreshToken(user._id)
-    console.log()
 
-    const loggedInUser = await User.findById(user._id).select('-password -refreshToken')
+    console.log('User Found:', user);
 
-    return res.status(200).cookie('refreshToken',refreshToken,options).cookie('accessToken',accessToken,options).json(
-        new customApiResponse(
-            200,
-            'User Logged In Successfully!',
-           {
-            
-            user:loggedInUser,accessToken,refreshToken
+    // Check if password is correct
+    const isPasswordCorrect = await user.isPasswordCorrect(password);
+    if (!isPasswordCorrect) {
+        return res.status(401).json(
+            new customApiResponse(
+                401,
+                'Incorrect username or password!'
+            )
+        );
+    }
 
-           }
-        )
-    )
-})
+    // Generate access and refresh tokens
+    const { accessToken, refreshToken } = await generateAccessTokenAndRefreshToken(user._id);
+
+    console.log('Tokens Generated:', { accessToken, refreshToken });
+
+    // Find logged in user excluding password and refreshToken fields
+    const loggedInUser = await User.findById(user._id).select('-password -refreshToken');
+
+  
+
+    // Respond with user data and tokens
+    return res.status(200)
+        .cookie('refreshToken', refreshToken, options)
+        .cookie('accessToken', accessToken, options)
+        .json(
+            new customApiResponse(
+                200,
+                'User Logged In Successfully!',
+                {
+                    user: loggedInUser,
+                    accessToken,
+                    refreshToken
+                }
+            )
+        );
+});
 
 const logoutUser = asyncHandlers(async(req,res)=>{
     await User.findByIdAndUpdate(req.user?._id,{

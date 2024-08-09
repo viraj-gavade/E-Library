@@ -6,6 +6,7 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
+    background-image: url('https://i.pinimg.com/originals/c8/b0/7e/c8b07e380215edaaa1903769586a61dc.jpg');
   }
   
   .container {
@@ -15,10 +16,11 @@ body {
     flex-wrap: wrap;
     max-width: 800px;
     width: 100%;
+    
   }
   
   .form-container {
-    background-color: #fff;
+    background-color: #dce8ef;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -26,6 +28,8 @@ body {
     margin: 20px;
     transition: opacity 0.3s ease;
     display: none; /* Initially hide all forms */
+    box-shadow: 13px 13px  rgb(14, 14, 14);
+
   }
   
   .form-container.active {
