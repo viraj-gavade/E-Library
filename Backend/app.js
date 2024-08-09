@@ -14,6 +14,7 @@ const { ChangeStream } = require('mongodb')
 app.use(express.json())
 app.use(bodyParser.json())
 app.use(cookieParser())
+app.use(cors())
 
 
 //All the main routers 
