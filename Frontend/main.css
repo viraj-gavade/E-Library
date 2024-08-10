@@ -7,3 +7,28 @@
 body{
     background:rgb(200, 234, 252)
 }
+.navbar{
+    background: whitesmoke;
+    border: 2px solid black  ;
+    display: flex;
+    list-style: none ;
+    justify-content: space-around   ;
+    padding: 0.5rem;
+    margin: 0.5rem  ;
+    border-radius: 10px;    
+}
+nav{
+    box-shadow: 3px 0px 3px black;
+}
+.navbar li:hover{
+    color: blue;
+    cursor: pointer     ;
+    text-decoration: underline  ;
+}
+
+/* Navbar Media Queries */
+@media screen and (max-width: 340px) {
+    .navbar{
+        display: none;
+    }
+  }
