@@ -1,1 +1,3 @@
-console.log("This is a health check statement")
+document.querySelector('.hamburger').addEventListener('click', () => {
+    document.querySelector('.nav-links').classList.toggle('active');
+});
