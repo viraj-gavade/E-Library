@@ -16,6 +16,10 @@ const ContactSchema = mongoose.Schema({
     message:{
         type:String,
         required:[true,'Please provide the name']
+    },
+    user:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User"
     }
 })
 
