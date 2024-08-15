@@ -3,9 +3,7 @@ const { kMaxLength } = require('buffer')
 const mongoose = require('mongoose')
 const { type } = require('os')
 const bcryptjs = require('bcryptjs')
-const usernameRegex = /^(?!.*[-_]{2,})(?![-_])[A-Za-z0-9_-]{3,20}(?<![-_])$/;
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,32}$/;
-const emailRegex =  /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
 const jwt = require('jsonwebtoken')
 
 const UserSchema = new mongoose.Schema(
@@ -16,14 +14,12 @@ const UserSchema = new mongoose.Schema(
             required:[true,'Please provide the username'],
             unique:[true,'Username must be unique'],
             lowercase:true,
-            match:[usernameRegex,'Please enter the valid username']
 
         },
         password:{
             type:String,
             // kMaxLength:16,
-            required:[true,'Please provide the username'],
-            match:[passwordRegex,'Please enter the valid password combination your password is too weak!']
+            required:[true,'Please provide the username']
 
         },
         email:{
@@ -31,7 +27,6 @@ const UserSchema = new mongoose.Schema(
             kMaxLength:16,
             required:[true,'Please provide the username'],
             lowercase:true,
-            match:[emailRegex,'Please enter the valid username'],
             unique:true
         },
         profileImg:{
