@@ -1,3 +1,7 @@
+document.querySelector('.hamburger').addEventListener('click', () => {
+    document.querySelector('.nav-links').classList.toggle('active');
+});
+
 document.getElementById('contactForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
@@ -7,3 +11,9 @@ document.getElementById('contactForm').addEventListener('submit', function(event
     // Optionally, clear the form fields
     document.getElementById('contactForm').reset();
 });
+
+
+
+//Debugging Statements
+
+console.log(name,email,subject,message)

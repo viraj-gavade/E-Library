@@ -41,7 +41,7 @@ const  registerUser = asyncHandlers(async(req,res)=>{
         'All fields are necessary please fill all the required fields'
     )
    }
-
+   console.log(req.file)
    const ProfilePictureLocalPath = req.file?.path
 
    if(!ProfilePictureLocalPath){
@@ -75,19 +75,13 @@ const  registerUser = asyncHandlers(async(req,res)=>{
     profileImg:profileImg?.url,
    })
 
-const checkuser = await User.findById(user._id).select('-password -refreshToken')
-if(!checkuser){
-    throw new CustomApiError(
-        501,
-        'Unable to create the user please try agian later!'
-    )
-}
+// const checkuser = await User.findById(user._id).select('-password')
 
 return res.status(200).json(
     new customApiResponse(
         200,
         'User created successfully',
-        checkuser
+        user
     )
 )
 
