@@ -43,3 +43,36 @@ registerForm.addEventListener('submit', function(event) {
     }
   });
 });
+
+
+
+const loginForm = document.getElementById('login');
+loginForm.addEventListener('submit', function(event) {
+  event.preventDefault();
+
+  const loginData = {
+    username: document.getElementById('loginUsername').value,
+    password: document.getElementById('loginPassword').value
+  };
+
+  axios.post('http://localhost:5000/api/v1/library/user/login', loginData)
+  .then(function(response) {
+    console.log('Login successful:', response.data);
+    const loginMessage = document.getElementById('loginMessage');
+    if (loginMessage) {
+      loginMessage.textContent = 'Login successful!';
+    }
+    // Example: Store token in localStorage
+    // localStorage.setItem('token', response.data.token);
+
+    // Optionally, redirect the user after login
+    // window.location.href = '/dashboard';
+  })
+  .catch(function(error) {
+    console.error('Login failed:', error);
+    const loginMessage = document.getElementById('loginMessage');
+    if (loginMessage) {
+      loginMessage.textContent = 'Login failed. Please check your credentials.';
+    }
+  });
+});

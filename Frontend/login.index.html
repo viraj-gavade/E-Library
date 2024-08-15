@@ -7,16 +7,16 @@
     <link rel="stylesheet" href="login.main.css">
 </head>
 <body>
-    <div class="container">
-        <div class="form-container" id="loginForm">
-            <h2>Login</h2>
-            <form id="login" action="/login" method="POST" enctype="multipart/form-data">
-                <input type="text" name="username" placeholder="Username" required>
-                <input type="password" name="password" placeholder="Password" required>
-                <button type="submit">Login</button>
-            </form>
-            <p>Don't have an account? <a href="#" id="switchToRegister">Register here</a></p>
-        </div>
+  <div class="form-container" id="loginForm">
+    <h2>Login</h2>
+    <form id="login">
+        <input type="text" name="username" placeholder="Username" required id="loginUsername">
+        <input type="password" name="password" placeholder="Password" required id="loginPassword">
+        <button type="submit">Login</button>
+    </form>
+    <p id="loginMessage"></p>
+    <p>Don't have an account? <a href="#" id="switchToRegister">Register here</a></p>
+</div>
         <div class="form-container" id="registerForm" style="display:none;">
           <h2>Register</h2>
           <form id="register" enctype="multipart/form-data">
