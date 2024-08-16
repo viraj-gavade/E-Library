@@ -69,7 +69,7 @@ loginForm.addEventListener('submit', function(event) {
     // localStorage.setItem('token', response.data.token);
 
     // Optionally, redirect the user after login
-    // window.location.href = '/dashboard';
+    window.location.href = 'index.html';
   })
   .catch(function(error) {
     console.error('Login failed:', error);

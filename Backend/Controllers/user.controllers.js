@@ -14,8 +14,6 @@ const mongoose = require('mongoose')
     path: '/'            // Ensures the cookie is available across the entire site
 };
 
-
-
 const generateAccessTokenAndRefreshToken = async(userId)=>{
     try {
         const user =  await User.findById(userId)
