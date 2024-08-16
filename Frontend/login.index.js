@@ -10,7 +10,7 @@ document.getElementById("switchToLogin").addEventListener("click", function() {
 
 
 
-
+//Fuctionality to handle the register of the user
 const registerForm = document.getElementById('register');
 registerForm.addEventListener('submit', function(event) {
   event.preventDefault();
@@ -46,6 +46,9 @@ registerForm.addEventListener('submit', function(event) {
 
 
 
+
+
+//Fuctionality to handle the login of the user
 const loginForm = document.getElementById('login');
 loginForm.addEventListener('submit', function(event) {
   event.preventDefault();
@@ -55,7 +58,7 @@ loginForm.addEventListener('submit', function(event) {
     password: document.getElementById('loginPassword').value
   };
 
-  axios.post('http://localhost:5000/api/v1/library/user/login', loginData)
+  axios.post('http://localhost:5000/api/v1/library/user/login', loginData, { withCredentials: true })
   .then(function(response) {
     console.log('Login successful:', response.data);
     const loginMessage = document.getElementById('loginMessage');

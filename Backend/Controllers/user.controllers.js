@@ -8,10 +8,12 @@ const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
   // Define cookie options
   const options = {
-    httpOnly: true,
-    // secure: true, // Set to true in production
-    // sameSite: 'Strict'
+    httpOnly: true,      // Prevents client-side scripts from accessing the cookie
+    secure:false , // Ensures cookies are sent over HTTPS in production
+    sameSite: 'None',  // Prevents the browser from sending the cookie along with cross-site requests
+    path: '/'            // Ensures the cookie is available across the entire site
 };
+
 
 
 const generateAccessTokenAndRefreshToken = async(userId)=>{
@@ -139,6 +141,10 @@ const loginUser = asyncHandlers(async (req, res) => {
     return res.status(200)
         .cookie('refreshToken', refreshToken, options)
         .cookie('accessToken', accessToken, options)
+        .cookie('testCookie', 'testValue', {
+            httpOnly: true,
+            path: '/',
+          })
         .json(
             new customApiResponse(
                 200,
