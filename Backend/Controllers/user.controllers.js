@@ -397,6 +397,23 @@ const contactForm = asyncHandlers(async(req,res)=>{
     )
 })
 
+const getuserprofile = asyncHandlers(async(req,res)=>{
+    const {userId} = req.user._id
+    if(!userId){
+        throw new CustomApiError(
+            401,
+            'There is no such user with this id'
+        )
+    }
+    const user = await User.findById(userId)
+    return res.status(200).json(
+        new customApiResponse(
+            200,
+            'User feteched Successfully!',
+            user
+        )
+    )
+})
 
 module.exports ={
     registerUser,  
@@ -407,5 +424,6 @@ module.exports ={
     changeUserProfilePicture,
     changeUserEmail,
     changeUserUsername,
-    contactForm
+    contactForm,
+    getuserprofile
 }
