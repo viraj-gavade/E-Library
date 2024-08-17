@@ -398,7 +398,8 @@ const contactForm = asyncHandlers(async(req,res)=>{
 })
 
 const getuserprofile = asyncHandlers(async(req,res)=>{
-    const {userId} = req.user._id
+    const userId = req.user._id
+    console.log(userId)
     if(!userId){
         throw new CustomApiError(
             401,
