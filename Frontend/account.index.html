@@ -3,16 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account Card</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="scripts.js" defer></script>
+    <title>Account Page</title>
+    <link rel="stylesheet" href="account.main.css">
 </head>
 <body>
+    <!-- <div class="container">
+
+        <h2>Account Settings</h2>
+        <form id="accountForm">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="profileImg">Profile Picture:</label>
+                <input type="file" id="profileImg" name="profileImg" accept="image/*">
+                <img id="previewImg" src="#" alt="Profile Preview" style="display: none;">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <button type="submit">Update Account</button>
+        </form>
+    </div> -->
+   <div class="tempcontainer">
     <div class="account-card">
-        <img id="profileImg" src="default-profile.png" alt="Profile Picture" class="profile-img">
-        <h3 id="username">Loading...</h3>
-        <p id="email">Loading...</p>
+        <img id="profileImg" src="./utils/pf.jpg
+        " alt="Profile Picture" class="profile-img">
+        <h3 id="username">_kritika.dev</h3>
+        <h5> 19. <br>Software Engineer<br>Frontend Developer👨‍💻<br>
+        Working at Livingthings.Ai</h6>
+        <p id="email">kritika19@gmail.com</p>
     </div>
+    <br>
+    <div class="account-card">
+        <img id="profileImg" src="./utils/pf-2.jpg" alt="Profile Picture" class="profile-img">
+        <h3 id="username">viraj.js</h3>
+        <h5> 18. <br>CS Undergrad <br>Backend Developer👨‍💻<br>
+        Working at Livingthings.Ai</h6>
+        <p id="email">vrajgavade17@gmail.com</p>
+    </div>
+</div>
+    <script src="scripts.js"></script>
 </body>
 </html>

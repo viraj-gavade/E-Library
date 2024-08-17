@@ -93,3 +93,16 @@ p {
     color: #666;
     margin: 5px 0;
 }
+.tempcontainer{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+@media (max-width: 768px) {
+    .tempcontainer{
+        display:flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
