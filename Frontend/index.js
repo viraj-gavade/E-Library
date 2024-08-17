@@ -1,6 +1,7 @@
 document.querySelector('.hamburger').addEventListener('click', () => {
     document.querySelector('.nav-links').classList.toggle('active');
 });
+
 document.addEventListener('DOMContentLoaded', function() {
     // Define the navigation links
     const navLinks = [
@@ -9,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
         { href: "#about", text: "About" },
         { href: "contact.index.html", text: "Contact" },
         { href: "account.index.html", text: "Account" }
-    ];
+    ];                                 
 
     // Get the nav-links container
     const navLinksContainer = document.getElementById('nav-links');

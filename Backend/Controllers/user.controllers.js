@@ -11,7 +11,7 @@ const mongoose = require('mongoose')
     httpOnly: true,
     // secure: true, // Set to true in production
     // sameSite: 'Strict'
-};
+  }
 
 
 const generateAccessTokenAndRefreshToken = async(userId)=>{
@@ -399,7 +399,7 @@ const contactForm = asyncHandlers(async(req,res)=>{
 
 const getuserprofile = asyncHandlers(async(req,res)=>{
     const userId = req.user._id
-    console.log(userId)
+
     if(!userId){
         throw new CustomApiError(
             401,

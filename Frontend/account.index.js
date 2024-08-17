@@ -86,7 +86,7 @@ function updatePassword() {
 // <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 function getProfileInfo() {
-    axios.get('https://your-api-endpoint.com/get-profile-info')
+    axios.get('http://localhost:5000/api/v1/library/user/my-profile')
         .then(response => {
             // Assuming the API response contains the profile information
             const profileData = response.data;

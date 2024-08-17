@@ -55,7 +55,7 @@ loginForm.addEventListener('submit', function(event) {
     password: document.getElementById('loginPassword').value
   };
 
-  axios.post('http://localhost:5000/api/v1/library/user/login', loginData)
+  axios.post('http://localhost:5000/api/v1/library/user/login', loginData,{ withCredentials: true })
   .then(function(response) {
     console.log('Login successful:', response.data);
     const loginMessage = document.getElementById('loginMessage');
@@ -66,7 +66,7 @@ loginForm.addEventListener('submit', function(event) {
     // localStorage.setItem('token', response.data.token);
 
     // Optionally, redirect the user after login
-    window.location.href = 'index.html';
+    // window.location.href = 'index.html';
   })
   .catch(function(error) {
     console.error('Login failed:', error);
