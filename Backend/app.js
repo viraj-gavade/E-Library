@@ -5,6 +5,10 @@ const bodyParser = require('body-parser')
 const connectDB = require('./DataBase/connection')
 const HealthcheckRouter = require('./Routes/healthcheck.routers')
 const app = express()
+const corsOptions = {
+  origin: 'http://127.0.0.1:5500', // Your frontend URL
+  credentials: true, // Allow cookies and credentials
+};
 const {connect} = require('mongoose')
 const BookRouter = require('./Routes/books.router')
 const UserRouter = require('./Routes/users.routers')
@@ -14,7 +18,7 @@ const { ChangeStream } = require('mongodb')
 app.use(express.json())
 app.use(bodyParser.json())
 app.use(cookieParser())
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(express.urlencoded({extended:false}))
 
 //All the main routers 

@@ -9,10 +9,11 @@ const mongoose = require('mongoose')
   // Define cookie options
   const options = {
     httpOnly: true,
+    expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
     // secure: true, // Set to true in production
     // sameSite: 'Strict'
-  }
-
+    path:'/'
+  };
 
 const generateAccessTokenAndRefreshToken = async(userId)=>{
     try {
