@@ -7,7 +7,8 @@ document.addEventListener('DOMContentLoaded', function() {
         { href: "#home", text: "Home" },
         { href: "#books", text: "Books" },
         { href: "#about", text: "About" },
-        { href: "contact.index.html", text: "Contact" }
+        { href: "contact.index.html", text: "Contact" },
+        { href: "account.index.html", text: "Account" }
     ];
 
     // Get the nav-links container
