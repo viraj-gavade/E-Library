@@ -95,8 +95,8 @@ async function addBook(event) {
     formData.append('publishedInYear', document.getElementById('publishedInYear').value);
     formData.append('genre', document.getElementById('genre').value);
     formData.append('copies', document.getElementById('copies').value);
-    formData.append('coverImage', document.getElementById('coverImage').files[0]);
-    formData.append('bookPdf', document.getElementById('bookPdf').files[0]);
+    formData.append('CoverImage', document.getElementById('CoverImage').files[0]);
+    formData.append('pdfLink', document.getElementById('pdfLink').files[0]);
 
     try {
         const response = await axios.post(`${baseUrl}/books`, formData, {

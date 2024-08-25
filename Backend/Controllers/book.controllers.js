@@ -156,8 +156,8 @@ const UpdateBook =asyncHandlers(  async (req,res)=>{
 const UploadBook =asyncHandlers(   async(req,res)=>{
    try {
      console.log(req.files)
-     const {author , title  , publishedInYear , available  }  = req.body
-     if(!author ||! title  ||! publishedInYear ||! available  ){
+     const {author , title  , publishedInYear}  = req.body
+     if(!author ||! title  ||! publishedInYear ){
          throw new CustomApiError(
              401,
              `All fields are required!`
