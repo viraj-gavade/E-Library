@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management</title>
+    <link rel="stylesheet" href="books.main.css"> <!-- Include your CSS file -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <h1>Library Management System</h1>
+
+    <!-- Section to view and search books -->
+    <div id="viewBooks">
+        <h2>All Books</h2>
+        <input type="text" id="searchQuery" placeholder="Search books...">
+        <button onclick="searchBooks()">Search</button>
+        <div id="booksList"></div>
+    </div>
+
+    <!-- Section to add a new book -->
+    <div id="addBook">
+        <h2>Add New Book</h2>
+        <form id="addBookForm">
+            <input type="text" id="title" placeholder="Title" required>
+            <input type="text" id="author" placeholder="Author" required>
+            <input type="number" id="publishedInYear" placeholder="Published Year" required>
+            <input type="text" id="genre" placeholder="Genre" required>
+            <input type="number" id="copies" placeholder="Copies Available" required><br>
+            <label for="coverImage">CoverImage:-</label>
+            <input type="file" id="coverImage" accept="image/*" required>
+            <label for="coverImage">Book-Pdf:-</label>
+            <input type="file" id="bookPdf" accept="application/pdf" required>
+            <button type="submit">Add Book</button>
+        </form>
+    </div>
+
+    <!-- Section to update and delete books -->
+    <div id="manageBooks">
+        <h2>Manage Books</h2>
+        <div id="selectedBook"></div>
+        <div id="updateBookForm" style="display:none;">
+            <h3>Update Book Details</h3>
+            <input type="text" id="updateTitle" placeholder="Title" required>
+            <input type="text" id="updateAuthor" placeholder="Author" required>
+            <input type="number" id="updatePublishedInYear" placeholder="Published Year" required>
+            <button onclick="updateBook()">Update Book</button>
+            <button onclick="deleteBook()">Delete Book</button>
+        </div>
+    </div>
+
+    <!-- JavaScript file to handle all operations -->
+    <script src="books.index.js"></script>
+</body>
+</html>
