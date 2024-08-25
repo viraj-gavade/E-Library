@@ -189,7 +189,6 @@ const UploadBook =asyncHandlers(   async(req,res)=>{
              author:author,
              title:title,
              publishedInYear:publishedInYear,
-             available:available,
              pdfLink:pdfLink.url,
              //Work on copies next time by deafault value will not work every time.
              CoverImage:CoverImage.url
