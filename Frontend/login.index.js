@@ -10,9 +10,8 @@ document.getElementById("switchToLogin").addEventListener("click", function() {
 
 
 
-
 const registerForm = document.getElementById('register');
-registerForm.addEventListener('submit', function(event) {
+registerForm.addEventListener('submit', async function(event) {
   event.preventDefault();
 
   const formData = new FormData();
@@ -21,28 +20,36 @@ registerForm.addEventListener('submit', function(event) {
   formData.append('password', document.getElementById('password').value);
   formData.append('profileImg', document.getElementById('profileImg').files[0]);
 
-  axios.post('http://localhost:5000/api/v1/library/user/register', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
-  })
-  .then(function(response) {
-    console.log('Signup successful:', response.data);
+  try {
+    const response = await axios.post('http://localhost:5000/api/v1/library/user/register', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+
+    console.log('Signup successful:', response);
+
     const signupMessage = document.getElementById('signupMessage');
     if (signupMessage) {
-      signupMessage.textContent = 'Signup successful!';
+      signupMessage.textContent = 'Signup successful! Redirecting to login...';
     }
-    // Example: Store token in localStorage
-    // localStorage.setItem('token', response.data.token);
-  })
-  .catch(function(error) {
+
+    // Redirect to login page after a short delay (e.g., 2 seconds)
+    setTimeout(function() {
+      window.location.href = '/login'; // Ensure this is the correct URL for your login page
+    }, 2000); // 2000 milliseconds = 2 seconds
+
+  } catch (error) {
     console.error('Signup failed:', error);
+
     const signupMessage = document.getElementById('signupMessage');
     if (signupMessage) {
       signupMessage.textContent = 'Signup failed. Please try again.';
     }
-  });
+  }
 });
+
+
 
 
 

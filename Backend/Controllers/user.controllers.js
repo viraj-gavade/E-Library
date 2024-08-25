@@ -77,13 +77,13 @@ const  registerUser = asyncHandlers(async(req,res)=>{
     profileImg:profileImg?.url,
    })
 
-// const checkuser = await User.findById(user._id).select('-password')
+const checkuser = await User.findById(user._id).select('-password')
 
 return res.status(200).json(
     new customApiResponse(
         200,
         'User created successfully',
-        user
+        checkuser
     )
 )
 
