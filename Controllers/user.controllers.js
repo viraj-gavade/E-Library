@@ -333,7 +333,7 @@ const changeUserUsername = asyncHandlers(async(req,res)=>{
             ' user id not found! maybe an unauthorized request'
         )
     }
-    const {username}=req.body
+    const {username,confirm_username}=req.body
     if(!username){
         throw new CustomApiError(
             402,
@@ -355,7 +355,14 @@ const changeUserUsername = asyncHandlers(async(req,res)=>{
             'Unable to find the user please check the user id again!'
         )
     }
-
+    if(username!==confirm_username){
+        return res.status(403).json(
+            new customApiResponse(
+                402,
+                'Username does not match with confirm username'
+            )
+        )
+    }
     user.username=username
     await user.save({validateBeforeSave:false})
     return res.status(200).json(
