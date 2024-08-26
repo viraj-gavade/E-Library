@@ -33,7 +33,7 @@ const generateAccessTokenAndRefreshToken = async(userId)=>{
 }
 
 const  registerUser = asyncHandlers(async(req,res)=>{
-   const { username , password , email } = req.body
+   const { username , password , email ,bio} = req.body
 
 
 //    console.log(req.file)
@@ -49,7 +49,7 @@ const  registerUser = asyncHandlers(async(req,res)=>{
    if(!ProfilePictureLocalPath){
     throw new CustomApiError(
         401,
-        'Unable to find local path of the file'
+        'Unable to find local path of the file please check if profile image is selected or not'
     )
    }
    const profileImg = await uploadFile(ProfilePictureLocalPath)
@@ -75,6 +75,7 @@ const  registerUser = asyncHandlers(async(req,res)=>{
     password:password,
     email:email,
     profileImg:profileImg?.url,
+    bio:bio || ''
    })
 
 const checkuser = await User.findById(user._id).select('-password')
@@ -224,9 +225,11 @@ const changeUserPassword = asyncHandlers(async(req,res)=>{
         }
         const isPasswordCorrect  = await user.isPasswordCorrect(old_password)
         if(!isPasswordCorrect){
-            throw new CustomApiError(
+            return res.status(401).json( 
+                new customApiResponse(
                 401,
                 'The password you have entered does not the exsting password please check the entered password again!'
+            )  
             )
         }
         if(new_password!==confirm_password){
