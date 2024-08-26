@@ -215,7 +215,6 @@ const refreshAccessTokenandRefreshToken = asyncHandlers(async(req,res)=>{
 const changeUserPassword = asyncHandlers(async(req,res)=>{
     try {
         const {old_password,new_password,confirm_password} = req.body
-        console.log(old_password)
         const user  = await User.findById(req.user?._id)
         if(!user){
             throw new CustomApiError(
@@ -274,7 +273,7 @@ const changeUserProfilePicture = asyncHandlers(async(req,res)=>{
     },
 {
     new:true
-})
+}).select('-password -email -bio -books -createdAt -refreshToken')
 if(!user){
     throw new CustomApiError(
         403,
