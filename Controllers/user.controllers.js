@@ -456,47 +456,37 @@ const getUserAllBooks = asyncHandlers(async(req,res)=>{
     )
 })
 
-const DownloadBook = asyncHandlers(async(req,res)=>{
-    try {
-        const { bookId } = req.params
-        if(!bookId){
-            throw new CustomApiError(
-                401,
-                `There is no such book with Id : ${bookId}`
-            )
+const getUserDownloaded = asyncHandlers(async(req,res)=>{
+    const books = await User.aggregate([
+        {
+            $match:{
+                _id: new mongoose.Types.ObjectId(req.user._id)
+            }
+        },
+        {
+            $lookup:{
+                from:"downloads",
+                localField:'_id',
+                foreignField:'downloadedBy',
+                as:"MyDownloads",
+            }
         }
-        const book = await Book.findById(bookId).select('-author -title -CoverImage -pdfLink')
-        if(!book){
-            return res.status(200).json( new customApiResponse(
-                200,
-                `There is no such book with Id:${bookId}`)
-             )
-        }
-
-        const DownloadBook = await Download.create({
-            bookInfo:book._id,
-            downloadedBy:req.user._id
-        })
-
-        const checkdownload = await Download.findById(DownloadBook._id)
-        if(!checkdownload){
-            return res.status(500).json(
-                new customApiResponse(
-                    500,
-                    'Something went wrong while downloading the book!'
-                )
-            )
-        }
-        return res.status(200).json(
-            new customApiResponse(
-                200,
-                'Book found successfully!',
-            )
+    ])
+    if(!books){
+        throw new CustomApiError(
+            200,'User not found!'
         )
-    } catch (error) {
-        console.log(error)
     }
+
+    return res.status(200).json(
+        new customApiResponse(
+            200,
+            'Downloads Fetched Successfully',
+            books[0].MyDownloads
+        )
+    )
 })
+
 module.exports ={
     registerUser,  
     loginUser,
@@ -509,5 +499,5 @@ module.exports ={
     contactForm,
     getuserprofile,
     getUserAllBooks,
-    DownloadBook
+    getUserDownloaded
 }
