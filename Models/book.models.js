@@ -35,6 +35,10 @@ const BookSchema = new mongoose.Schema({
     type:String,
     required:[true,'Please provide the category'],
     default:'Book'
+  },
+  uploadedBy:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"User"
   }
 }, { timestamps: true });
 
