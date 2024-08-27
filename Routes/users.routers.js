@@ -1,5 +1,5 @@
 const express = require('express')
-const { loginUser, registerUser, logoutUser, changeUserPassword, changeUserProfilePicture, refreshAccessTokenandRefreshToken, changeUserUsername, changeUserEmail,contactForm } = require('../Controllers/user.controllers')
+const { loginUser, registerUser, logoutUser, changeUserPassword, changeUserProfilePicture, refreshAccessTokenandRefreshToken, changeUserUsername, changeUserEmail,getUserAllBooks } = require('../Controllers/user.controllers')
 const upload = require('../Middlewares/multer.middleware')
 const verifyJwt = require('../Middlewares/auth.middleware')
 const UserRouter = express.Router()
@@ -14,6 +14,7 @@ UserRouter.route('/change-email').patch(verifyJwt,changeUserEmail)
 UserRouter.route('/change-username').patch(verifyJwt,changeUserUsername) 
 UserRouter.route('/change-profile-picture').patch(verifyJwt,upload.single('profileImg'),changeUserProfilePicture)    
 UserRouter.route('/refresh').get(verifyJwt,refreshAccessTokenandRefreshToken)
+UserRouter.route('/Books').get(verifyJwt,getUserAllBooks)
 
 
 

@@ -425,6 +425,37 @@ const getuserprofile = asyncHandlers(async(req,res)=>{
     )
 })
 
+const getUserAllBooks = asyncHandlers(async(req,res)=>{
+    const books = await User.aggregate([
+        {
+            $match:{
+                _id: new mongoose.Types.ObjectId(req.user._id)
+            }
+        },
+        {
+            $lookup:{
+                from:"books",
+                localField:'_id',
+                foreignField:'uploadedBy',
+                as:"Mybooks",
+            }
+        }
+    ])
+    if(!books){
+        throw new CustomApiError(
+            200,'User not found!'
+        )
+    }
+
+    return res.status(200).json(
+        new customApiResponse(
+            200,
+            'Watch history fetched',
+            books
+        )
+    )
+})
+
 module.exports ={
     registerUser,  
     loginUser,
@@ -435,5 +466,6 @@ module.exports ={
     changeUserEmail,
     changeUserUsername,
     contactForm,
-    getuserprofile
+    getuserprofile,
+    getUserAllBooks
 }

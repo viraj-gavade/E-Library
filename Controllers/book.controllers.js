@@ -372,7 +372,36 @@ const Toggleavaialablestatus = asyncHandlers(async(req,res)=>{
         console.log(error)
     }
 })
+const getUserAllBooks = asyncHandlers(async(req,res)=>{
+    const books = await User.aggregate([
+        {
+            $match:{
+                _id: new mongoose.Types.ObjectId(req.user._id)
+            }
+        },
+        {
+            $lookup:{
+                from:"books",
+                localField:'_id',
+                foreignField:'uploadedBy',
+                as:"Mybooks",
+            }
+        }
+    ])
+    if(!books){
+        throw new CustomApiError(
+            200,'User not found!'
+        )
+    }
 
+    return res.status(200).json(
+        new customApiResponse(
+            200,
+            'Watch history fetched',
+            books
+        )
+    )
+})
 module.exports =
 {
     GetAllBooks,
