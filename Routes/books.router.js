@@ -13,7 +13,7 @@ const
 } = require('../Controllers/book.controllers')
 
 const upload = require('../Middlewares/multer.middleware')
-
+const verifyJwt = require('../Middlewares/auth.middleware')
 
 const BookRouter = express.Router()
 
@@ -27,18 +27,18 @@ BookRouter.route('/books/search').get(searchBook)
 
 BookRouter.route('/books/:bookId').get(GetSingleBook)
 
-BookRouter.route('/books/:bookId').patch(UpdateBook)
+BookRouter.route('/books/:bookId').patch(verifyJwt,UpdateBook)
 
-BookRouter.route('/books/:bookId').delete(DeleteBook)
+BookRouter.route('/books/:bookId').delete(verifyJwt,DeleteBook)
 
-BookRouter.route('/books/coverImage/:bookId').patch(
+BookRouter.route('/books/coverImage/:bookId').patch(verifyJwt,
     upload.single('CoverImage'),updatecoverImage)
 
 
-BookRouter.route('/books/pdfLink/:bookId').patch(upload.single('pdfLink'),updatepdfLink)
+BookRouter.route('/books/pdfLink/:bookId').patch(verifyJwt,upload.single('pdfLink'),updatepdfLink)
 
 
-BookRouter.route('/books').post(
+BookRouter.route('/books').post(verifyJwt,
     upload.fields([
         {
             name:'pdfLink',
@@ -52,7 +52,7 @@ BookRouter.route('/books').post(
 
 ) ///Middleware to upload book with the help of cloudinary
 
-BookRouter.route('/books/status/:bookId').get(Toggleavaialablestatus
+BookRouter.route('/books/status/:bookId').get(verifyJwt,Toggleavaialablestatus
     
 )
 

@@ -1,5 +1,4 @@
 const User = require('../Models/user.models')
-const ContactForm = require('../Models/contact.models')
 const asyncHandlers = require('../utils/asyncHandler')
 const CustomApiError = require('../utils/customApiError')
 const customApiResponse = require('../utils/customApiResponse')
