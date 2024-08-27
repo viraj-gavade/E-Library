@@ -13,9 +13,8 @@ UserRouter.route('/change-password').patch(verifyJwt,changeUserPassword)
 UserRouter.route('/change-email').patch(verifyJwt,changeUserEmail) 
 UserRouter.route('/change-username').patch(verifyJwt,changeUserUsername) 
 UserRouter.route('/change-profile-picture').patch(verifyJwt,upload.single('profileImg'),changeUserProfilePicture)    
-
 UserRouter.route('/refresh').get(verifyJwt,refreshAccessTokenandRefreshToken)
-UserRouter.route('/contactform').post(verifyJwt,contactForm)
+
 
 
 

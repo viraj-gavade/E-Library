@@ -17,8 +17,8 @@ const GetSingleBook =asyncHandlers(  async(req,res)=>{
         const book = await Book.findById(bookId).select('-users')
         if(!book){
             return res.status(200).json( new customApiResponse(
-                200,)
-                `There is no such book with Id:${book}`
+                200,
+                `There is no such book with Id:${bookId}`)
              )
         }
         return res.status(200).json(
