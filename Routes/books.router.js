@@ -9,7 +9,8 @@ const
     updatecoverImage,
     updatepdfLink,
     Toggleavaialablestatus,
-    searchBook
+    searchBook,
+    DownloadBook
 } = require('../Controllers/book.controllers')
 
 const upload = require('../Middlewares/multer.middleware')
@@ -53,9 +54,9 @@ BookRouter.route('/books').post(verifyJwt,
 ) ///Middleware to upload book with the help of cloudinary
 
 BookRouter.route('/books/status/:bookId').get(verifyJwt,Toggleavaialablestatus
-    
 )
 
+BookRouter.route('/books/download/:bookId').get(verifyJwt,DownloadBook)
 
 
 //Exporting the book router

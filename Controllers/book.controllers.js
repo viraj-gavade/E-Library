@@ -417,6 +417,7 @@ const DownloadBook = asyncHandlers(async(req,res)=>{
 })
 
 
+
 module.exports =
 {
     GetAllBooks,
@@ -428,5 +429,5 @@ module.exports =
     updatepdfLink,
     Toggleavaialablestatus,
     searchBook,
-    DownloadBook
+    DownloadBook,
 }

@@ -1,4 +1,5 @@
 const User = require('../Models/user.models')
+const Book = require('../Models/book.models')
 const asyncHandlers = require('../utils/asyncHandler')
 const CustomApiError = require('../utils/customApiError')
 const customApiResponse = require('../utils/customApiResponse')
@@ -450,42 +451,118 @@ const getUserAllBooks = asyncHandlers(async(req,res)=>{
     return res.status(200).json(
         new customApiResponse(
             200,
-            'Watch history fetched',
-            books
+            'User Books fetched',
+            books[0].Mybooks
         )
     )
 })
 
-const getUserDownloaded = asyncHandlers(async(req,res)=>{
-    const books = await User.aggregate([
+const getUserDownloads = asyncHandlers(async (req, res) => {
+    try {
+        const userId = req.user._id;
+        
+        // Validate the userId is a valid ObjectId
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            throw new CustomApiError(400, 'Invalid user ID format');
+        }
+
+        const books = await User.aggregate([
+            {
+                $match: {
+                    _id: new mongoose.Types.ObjectId(userId)
+                }
+            },
+            {
+                $lookup: {
+                    from: "downloads",
+                    localField: 'downloadedBy',
+                    foreignField: '_id',
+                    as: "Mybooks",
+                }
+            },
+            {
+                $addFields: {
+                    Downloadcount: {
+                        $size: '$Mybooks'
+                    }
+                }
+            }
+        ]);
+
+        if (!books.length) {  
+            throw new CustomApiError(
+                404,
+                'No downloads found for the user!'
+            );
+        }
+
+        return res.status(200).json(
+            new customApiResponse(
+                200,
+                'Downloads fetched successfully',
+                {
+                    downloads: books[0].Mybooks,
+                    downloadCount: books[0].Downloadcount
+                }
+            )
+        );
+    } catch (error) {
+        console.error('Error fetching user downloads:', error);
+        res.status(error.statusCode || 500).json({
+            message: error.message || 'An error occurred while fetching downloads.'
+        });
+    }
+});
+
+
+
+const getBookDownloads = asyncHandlers(async (req, res) => {
+    const { bookId } = req.params;
+    console.log(bookId);
+    const books = await Book.aggregate([
         {
-            $match:{
-                _id: new mongoose.Types.ObjectId(req.user._id)
+            $match: {
+                _id: new mongoose.Types.ObjectId(bookId)
             }
         },
         {
-            $lookup:{
-                from:"downloads",
-                localField:'_id',
-                foreignField:'downloadedBy',
-                as:"MyDownloads",
+            $lookup: {
+                from: "downloads",
+                localField: '_id',
+                foreignField: 'bookInfo',
+                as: "BookDownloads",
+            }
+        },
+        {
+            $addFields: {
+                Downloadcount: {
+                    $size: '$BookDownloads' 
+                }
             }
         }
-    ])
-    if(!books){
+    ]);
+
+    if (!books.length) {  
         throw new CustomApiError(
-            200,'User not found!'
-        )
+            404, 
+            'Book not found!'  
+        );
     }
 
     return res.status(200).json(
         new customApiResponse(
             200,
-            'Downloads Fetched Successfully',
-            books[0].MyDownloads
+            'Downloads fetched successfully',
+            {
+                downloads: books[0].BookDownloads,
+                downloadCount: books[0].Downloadcount
+            }
         )
-    )
-})
+    );
+});
+
+
+
 
 module.exports ={
     registerUser,  
@@ -499,5 +576,6 @@ module.exports ={
     contactForm,
     getuserprofile,
     getUserAllBooks,
-    getUserDownloaded
+    getUserDownloads,
+    getBookDownloads
 }
