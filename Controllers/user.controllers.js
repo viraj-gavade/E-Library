@@ -461,7 +461,7 @@ const getUserDownloads = asyncHandlers(async (req, res) => {
     try {
         const userId = req.user._id;
         
-        // Validate the userId is a valid ObjectId
+        // Validate that userId is a valid ObjectId
         if (!mongoose.Types.ObjectId.isValid(userId)) {
             throw new CustomApiError(400, 'Invalid user ID format');
         }
@@ -469,31 +469,26 @@ const getUserDownloads = asyncHandlers(async (req, res) => {
         const books = await User.aggregate([
             {
                 $match: {
-                    _id: new mongoose.Types.ObjectId(userId)
+                    _id: new mongoose.Types.ObjectId(userId)  // Correcting usage of ObjectId
                 }
             },
             {
                 $lookup: {
                     from: "downloads",
-                    localField: 'downloadedBy',
-                    foreignField: '_id',
+                    localField: '_id',  // Assuming you want to match by the user's _id
+                    foreignField: 'downloadedBy', // Assuming this is the field in 'downloads' that references the user
                     as: "Mybooks",
                 }
             },
             {
                 $addFields: {
-                    Downloadcount: {
-                        $size: '$Mybooks'
-                    }
+                    Downloadcount: { $size: '$Mybooks' }  // Adding download count field
                 }
             }
         ]);
 
-        if (!books.length) {  
-            throw new CustomApiError(
-                404,
-                'No downloads found for the user!'
-            );
+        if (!books.length) {
+            throw new CustomApiError(404, 'No downloads found for the user!');
         }
 
         return res.status(200).json(
@@ -513,7 +508,6 @@ const getUserDownloads = asyncHandlers(async (req, res) => {
         });
     }
 });
-
 
 
 const getBookDownloads = asyncHandlers(async (req, res) => {

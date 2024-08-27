@@ -1,5 +1,17 @@
 const express = require('express')
-const { loginUser, registerUser, logoutUser, changeUserPassword, changeUserProfilePicture, refreshAccessTokenandRefreshToken, changeUserUsername, changeUserEmail,getUserAllBooks, getUserDownloads, getBookDownloads } = require('../Controllers/user.controllers')
+const { 
+    loginUser, 
+    registerUser, 
+    logoutUser, 
+    changeUserPassword, 
+    changeUserProfilePicture, 
+    refreshAccessTokenandRefreshToken, 
+    changeUserUsername, 
+    changeUserEmail,
+    getUserAllBooks, 
+    getUserDownloads, 
+    getBookDownloads
+ } = require('../Controllers/user.controllers')
 const upload = require('../Middlewares/multer.middleware')
 const verifyJwt = require('../Middlewares/auth.middleware')
 const { getBooksUser } = require('../Controllers/book.controllers')
@@ -17,7 +29,7 @@ UserRouter.route('/change-profile-picture').patch(verifyJwt,upload.single('profi
 UserRouter.route('/refresh').get(verifyJwt,refreshAccessTokenandRefreshToken)
 UserRouter.route('/Books').get(verifyJwt,getUserAllBooks)
 UserRouter.route('/Books/downloads').get(verifyJwt,getUserDownloads)
-UserRouter.route('/users/downloads/:bookId').get(verifyJwt,getBookDownloads)
+UserRouter.route('/Books/downloads/:bookId').get(verifyJwt,getBookDownloads)
 
 
 

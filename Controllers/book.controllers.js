@@ -407,7 +407,7 @@ const DownloadBook = asyncHandlers(async(req,res)=>{
         return res.status(200).json(
             new customApiResponse(
                 200,
-                'Book found successfully!',
+                'Book downloaded successfully!',
                 book
             )
         )
