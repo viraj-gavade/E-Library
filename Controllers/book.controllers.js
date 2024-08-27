@@ -373,7 +373,48 @@ const Toggleavaialablestatus = asyncHandlers(async(req,res)=>{
     }
 })
 
+const DownloadBook = asyncHandlers(async(req,res)=>{
+    try {
+        const { bookId } = req.params
+        if(!bookId){
+            throw new CustomApiError(
+                401,
+                `There is no such book with Id : ${bookId}`
+            )
+        }
+        const book = await Book.findById(bookId).select('author title CoverImage pdfLink')
+        if(!book){
+            return res.status(200).json( new customApiResponse(
+                200,
+                `There is no such book with Id:${bookId}`)
+             )
+        }
 
+        const DownloadBook = await Download.create({
+            bookInfo:book._id,
+            downloadedBy:req.user._id
+        })
+
+        const checkdownload = await Download.findById(DownloadBook._id)
+        if(!checkdownload){
+            return res.status(500).json(
+                new customApiResponse(
+                    500,
+                    'Something went wrong while downloading the book!'
+                )
+            )
+        }
+        return res.status(200).json(
+            new customApiResponse(
+                200,
+                'Book found successfully!',
+                book
+            )
+        )
+    } catch (error) {
+        console.log(error)
+    }
+})
 
 
 module.exports =
