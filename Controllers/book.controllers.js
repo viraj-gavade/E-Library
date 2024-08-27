@@ -270,7 +270,7 @@ const updatecoverImage = asyncHandlers(async(req,res)=>{
     {
         new:true
     }
-    )
+    ).select('-publishedInYear -pdfLink -copies -available -category -createdAt')
     if(!book){
         throw new CustomApiError(
             501,
