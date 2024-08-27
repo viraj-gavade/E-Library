@@ -374,38 +374,7 @@ const changeUserUsername = asyncHandlers(async(req,res)=>{
     )
 })
 
-const contactForm = asyncHandlers(async(req,res)=>{
-    const { name , email, subject , message  } = req.body
-    if(!name || !email |!subject |!message){
-        throw new CustomApiError(
-            403,
-            'Please fill the form completely!All fields are neccessary'
-        )
-    }
 
-    const form = await ContactForm.create({
-        name:name,
-        email:email,
-        subject:subject,
-        message:message,
-        user:req.user._id
-    })
-
-    const checkform = await ContactForm.findById(form._id)
-    if(!checkform){
-        throw new CustomApiError(
-            501,
-            'Something went wrong while creating the contact form!'
-        )
-    }
-    return res.status(200).json(
-        new customApiResponse(
-            200,
-            'Form created successfully!',
-            checkform
-        )
-    )
-})
 
 const getuserprofile = asyncHandlers(async(req,res)=>{
     const userId = req.user._id
