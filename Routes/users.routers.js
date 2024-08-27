@@ -27,9 +27,9 @@ UserRouter.route('/change-email').patch(verifyJwt,changeUserEmail)
 UserRouter.route('/change-username').patch(verifyJwt,changeUserUsername) 
 UserRouter.route('/change-profile-picture').patch(verifyJwt,upload.single('profileImg'),changeUserProfilePicture)    
 UserRouter.route('/refresh').get(verifyJwt,refreshAccessTokenandRefreshToken)
-UserRouter.route('/Books').get(verifyJwt,getUserAllBooks)
-UserRouter.route('/Books/downloads').get(verifyJwt,getUserDownloads)
-UserRouter.route('/Books/downloads/:bookId').get(verifyJwt,getBookDownloads)
+UserRouter.route('/mybooks').get(verifyJwt,getUserAllBooks)
+UserRouter.route('/downloads').get(verifyJwt,getUserDownloads)
+UserRouter.route('/downloads/:bookId').get(verifyJwt,getBookDownloads)
 
 
 

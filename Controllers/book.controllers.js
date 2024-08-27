@@ -270,7 +270,7 @@ const updatecoverImage = asyncHandlers(async(req,res)=>{
         },
     {
         new:true
-    }
+    } 
     ).select('-publishedInYear -pdfLink -copies -available -category -createdAt')
     if(!book){
         throw new CustomApiError(
@@ -296,11 +296,21 @@ const updatepdfLink = asyncHandlers(async(req,res)=>{
      const { bookId } = req.params
      if(!bookId){
          throw new CustomApiError(
-             401,
+             401, 
              `   Invalid book Id : ${bookId}`
          )
      }
      const BookPdfLocalPath = req.file.path
+
+     if(!BookPdfLocalPath){
+        return res.status(402).json(
+            customApiResponse(
+
+                402,
+                'Book Pdf Local Path Not Found!'
+            )
+        )
+     }
      const pdfLink = await uploadFile(BookPdfLocalPath)
      if(!pdfLink.url){
          throw new CustomApiError(

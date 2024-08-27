@@ -375,7 +375,6 @@ const changeUserUsername = asyncHandlers(async(req,res)=>{
 })
 
 
-
 const getuserprofile = asyncHandlers(async(req,res)=>{
     const userId = req.user._id
 
@@ -407,7 +406,13 @@ const getUserAllBooks = asyncHandlers(async(req,res)=>{
                 from:"books",
                 localField:'_id',
                 foreignField:'uploadedBy',
-                as:"Mybooks",
+                as:"MyUploads",
+            },
+            
+        },
+        {
+            $addFields: {
+                Downloadcount: { $size: '$MyUploads' }  // Adding download count field
             }
         }
     ])
@@ -420,10 +425,13 @@ const getUserAllBooks = asyncHandlers(async(req,res)=>{
     return res.status(200).json(
         new customApiResponse(
             200,
-            'User Books fetched',
-            books[0].Mybooks
+            'User Uploads  fetched successfully',
+            {
+                downloads: books[0].MyUploads,
+                downloadCount: books[0].Downloadcount
+            }
         )
-    )
+    );
 })
 
 const getUserDownloads = asyncHandlers(async (req, res) => {
@@ -446,12 +454,12 @@ const getUserDownloads = asyncHandlers(async (req, res) => {
                     from: "downloads",
                     localField: '_id',  // Assuming you want to match by the user's _id
                     foreignField: 'downloadedBy', // Assuming this is the field in 'downloads' that references the user
-                    as: "Mybooks",
+                    as: "MyDownloads",
                 }
             },
             {
                 $addFields: {
-                    Downloadcount: { $size: '$Mybooks' }  // Adding download count field
+                    Downloadcount: { $size: '$MyDownloads' }  // Adding download count field
                 }
             }
         ]);
@@ -463,9 +471,9 @@ const getUserDownloads = asyncHandlers(async (req, res) => {
         return res.status(200).json(
             new customApiResponse(
                 200,
-                'Downloads fetched successfully',
+                'User Downloads fetched successfully',
                 {
-                    downloads: books[0].Mybooks,
+                    downloads: books[0].MyDownloads,
                     downloadCount: books[0].Downloadcount
                 }
             )
@@ -515,7 +523,7 @@ const getBookDownloads = asyncHandlers(async (req, res) => {
     return res.status(200).json(
         new customApiResponse(
             200,
-            'Downloads fetched successfully',
+            'Books Downloads fetched successfully',
             {
                 downloads: books[0].BookDownloads,
                 downloadCount: books[0].Downloadcount
@@ -536,7 +544,6 @@ module.exports ={
     changeUserProfilePicture,
     changeUserEmail,
     changeUserUsername,
-    contactForm,
     getuserprofile,
     getUserAllBooks,
     getUserDownloads,
