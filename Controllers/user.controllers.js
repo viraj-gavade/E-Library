@@ -80,13 +80,7 @@ const  registerUser = asyncHandlers(async(req,res)=>{
 
 const checkuser = await User.findById(user._id).select('-password')
 
-return res.status(200).json(
-    new customApiResponse(
-        200,
-        'User created successfully',
-        checkuser
-    )
-)
+return res.render('signin')
 
 })
 

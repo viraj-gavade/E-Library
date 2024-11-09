@@ -105,21 +105,31 @@
     <%- include('./partials/nav') %>
     
   <div class="container">
-    <form class="form" method="post" action="/api/v1/user/signup">
+    <form class="form" method="post" action="/api/v1/library/user/signup" enctype="multipart/form-data">
        <p class="form-title">Create your account</p>
-        <div class="input-container">
-          <input type="email" placeholder="Enter email" name="email" autocomplete="email">
-          <span></span>
-        </div>
-        <div class="input-container">
-          <input type="text" placeholder="Enter fullname" name="fullName" autocomplete="additional-name">
-          <span></span>
-        </div>
-        <div class="input-container">
+       
+       <!-- Email Input -->
+       <div class="input-container">
+          <input type="email" placeholder="Enter email" name="email" autocomplete="email" required>
+       </div>
+       
+       <!-- Username Input -->
+       <div class="input-container">
+          <input type="text" placeholder="Create Username" name="username" autocomplete="additional-name" required>
+       </div>
+       
+       <!-- Password Input -->
+       <div class="input-container">
           <input type="password" name="password" autocomplete="new-password" placeholder="Create a password" required>
+       </div>
 
-        </div>
-         <button type="submit" class="submit">
+       <!-- Profile Image Upload -->
+       <div class="input-container">
+          <input type="file" name="profileImg" accept="image/*" required>
+       </div>
+
+       <!-- Submit Button -->
+       <button type="submit" class="submit">
         Sign up
       </button>
 
@@ -129,6 +139,7 @@
         Sign up with Google
       </a>
 
+      <!-- Sign-in Link -->
       <p class="signup-link">
         Already have an account?
         <a href="/api/v1/user/signin">Sign in</a>
