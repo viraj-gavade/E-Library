@@ -18,9 +18,13 @@ const { getBooksUser } = require('../Controllers/book.controllers')
 const UserRouter = express.Router()
 
 
-UserRouter.route('/register').post(
-    upload.single('profileImg'),registerUser)
-UserRouter.route('/login').post(loginUser)
+UserRouter.route('/signup').post(
+    upload.single('profileImg'),registerUser).get((req,res)=>{
+        res.render('signup')
+    })
+UserRouter.route('/signin').post(loginUser).get((req,res)=>{
+    res.render('signin')
+})
 UserRouter.route('/logout').get(logoutUser)
 UserRouter.route('/change-password').patch(verifyJwt,changeUserPassword) 
 UserRouter.route('/change-email').patch(verifyJwt,changeUserEmail) 
