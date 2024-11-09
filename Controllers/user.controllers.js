@@ -25,6 +25,7 @@ const generateAccessTokenAndRefreshToken = async(userId)=>{
         await user.save({validateBeforeSave:false})
         return {accessToken,refreshToken}
     } catch (error) {
+        console.log(error)
         throw new CustomApiError(
             501,
             'Something went wrong while generating the access and refersh token!'
@@ -132,20 +133,7 @@ const loginUser = asyncHandlers(async (req, res) => {
   
 
     // Respond with user data and tokens
-    return res.status(200)
-        .cookie('refreshToken', refreshToken, options)
-        .cookie('accessToken', accessToken, options)
-        .json(
-            new customApiResponse(
-                200,
-                'User Logged In Successfully!',
-                {
-                    user: loggedInUser,
-                    accessToken,
-                    refreshToken
-                }
-            )
-        );
+    return res.cookie('accessToken',accessToken).cookie('refreshToken',refreshToken).redirect('/home')
 });
 
 const logoutUser = asyncHandlers(async(req,res)=>{
