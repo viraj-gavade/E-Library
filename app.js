@@ -9,6 +9,7 @@ const corsOptions = {
   origin: 'http://127.0.0.1:5500', // Your frontend URL
   credentials: true, // Allow cookies and credentials
 };
+const Book = require('./Models/book.models')
 const {connect} = require('mongoose')
 const BookRouter = require('./Routes/books.router')
 const UserRouter = require('./Routes/users.routers')
@@ -28,11 +29,26 @@ app.set('views', path.resolve('./views'));
 app.use('/',HealthcheckRouter)
 app.use('/api/v1/library',BookRouter)
 app.use('/api/v1/library/user',UserRouter)
-app.use('/home',async (req,res)=>{
-  const books  = await GetAllBooks()
-  res.render('home',{
-    books:books
-  })
+app.use('/home', async (req,res)=>{
+  try {
+    //Add the pagaination functionality
+    const book = await Book.find({}).sort('title')
+    console.log(book)
+    if(book.length<1){
+        return res.status(200).json(
+            new customApiResponse(
+                200,
+                `No books found !`
+            )
+        )
+      }
+      res.render('home',{
+        books:book
+      })
+  
+  } catch (error) {
+   console.log(error)
+  }
 })
 
 

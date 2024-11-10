@@ -84,27 +84,7 @@ const searchBook = asyncHandlers(async (req, res) => {
 
 const GetAllBooks = asyncHandlers( async (req,res)=>{
 
-   try {
-     //Add the pagaination functionality
-     const book = await Book.find({}).sort('title')
-     if(book.length<1){
-         return res.status(200).json(
-             new customApiResponse(
-                 200,
-                 `No books found !`
-             )
-         )
-     }
-     return res.status(200).json(
-         new customApiResponse(
-             200,
-             `All books fetched successfully!`,
-             book
-         )
-     )
-   } catch (error) {
-    console.log(error)
-   }
+  
 })
 
 const UpdateBook =asyncHandlers(  async (req,res)=>{
