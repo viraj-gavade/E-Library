@@ -9,6 +9,7 @@ const corsOptions = {
   origin: 'http://127.0.0.1:5500', // Your frontend URL
   credentials: true, // Allow cookies and credentials
 };
+const verifyJwt = require('./Middlewares/auth.middleware')
 const Book = require('./Models/book.models')
 const {connect} = require('mongoose')
 const BookRouter = require('./Routes/books.router')
@@ -29,11 +30,12 @@ app.set('views', path.resolve('./views'));
 app.use('/',HealthcheckRouter)
 app.use('/api/v1/library',BookRouter)
 app.use('/api/v1/library/user',UserRouter)
-app.use('/home', async (req,res)=>{
+app.use('/home',verifyJwt, async (req,res)=>{
   try {
     //Add the pagaination functionality
     const book = await Book.find({}).sort('title')
     console.log(book)
+    console.log(req.user)
     if(book.length<1){
         return res.status(200).json(
             new customApiResponse(
@@ -43,7 +45,8 @@ app.use('/home', async (req,res)=>{
         )
       }
       res.render('home',{
-        books:book
+        books:book,
+        user:req.user
       })
   
   } catch (error) {

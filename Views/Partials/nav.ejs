@@ -270,17 +270,17 @@
         
         <div class="form-group">
           <label for="publishedYear">Published Year</label>
-          <input type="number" id="publishedYear" name="publishedYear" required>
+          <input type="number" id="publishedYear" name="publishedInYear" required>
         </div>
         
         <div class="form-group">
           <label for="coverImage">Cover Image</label>
-          <input type="file" id="coverImage" name="coverImage" accept="image/*" required>
+          <input type="file" id="coverImage" name="CoverImage" accept="image/*" required>
         </div>
         
         <div class="form-group">
           <label for="bookPdf">Book PDF</label>
-          <input type="file" id="bookPdf" name="bookPdf" accept=".pdf" required>
+          <input type="file" id="bookPdf" name="pdfLink" accept=".pdf" required>
         </div>
         
         <div class="form-actions">
@@ -333,7 +333,7 @@
       const formData = new FormData(addBookForm);
   
       try {
-        const response = await fetch('/api/v1/library/books/add', {
+        const response = await fetch('http://localhost:5000/api/v1/library/books', {
           method: 'POST',
           body: formData
         });
