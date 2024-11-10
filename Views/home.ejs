@@ -112,11 +112,15 @@
     font-weight: 500;
     transition: background-color 0.2s ease;
     flex: 1;
+    text-decoration: none;
   }
 
   .borrow-btn {
     background-color: #3498db;
     color: white;
+  }
+  .borrow-btn a {
+    text-decoration: none;
   }
 
   .borrow-btn:hover {
@@ -165,7 +169,7 @@
           <% books.forEach(book => { %>
             <div class="book-card">
               <img 
-                src="<%= book.coverImage || '/images/default-book-cover.jpg' %>" 
+                src="<%= book.CoverImage || '/images/default-book-cover.jpg' %>" 
                 alt="<%= book.title %>"
                 class="book-cover"
               >
@@ -175,7 +179,7 @@
                 <p class="book-description"><%= book.description %></p>
                 
                 <div class="book-metadata">
-                  <span>ISBN: <%= book.isbn %></span>
+                  <span>Status: <%= book.isbn %></span>
                   <span class="book-status <%= book.isAvailable ? 'status-available' : 'status-borrowed' %>">
                     <%= book.isAvailable ? 'Available' : 'Borrowed' %>
                   </span>
@@ -183,7 +187,10 @@
                 
                 <div class="book-actions">
                   <% if (book.isAvailable) { %>
-                    <button class="borrow-btn">Borrow</button>
+                    <button class="borrow-btn">
+                        <a href="<%- book.pdfLink %>" target="_blank" download class="borrow-btn">
+                            Borrow
+                          </a>
                   <% } %>
                   <button class="details-btn">Details</button>
                 </div>
