@@ -15,6 +15,7 @@ const UserRouter = require('./Routes/users.routers')
 const cookieParser = require('cookie-parser')
 const { ChangeStream } = require('mongodb')
 const path = require('path')
+const { GetAllBooks } = require('./Controllers/book.controllers')
 // app.use(express.static()) Static files to be serverd here!
 app.use(express.json())
 app.use(bodyParser.json())
@@ -27,8 +28,11 @@ app.set('views', path.resolve('./views'));
 app.use('/',HealthcheckRouter)
 app.use('/api/v1/library',BookRouter)
 app.use('/api/v1/library/user',UserRouter)
-app.use('/home',(req,res)=>{
-  res.render('home')
+app.use('/home',async (req,res)=>{
+  const books  = await GetAllBooks()
+  res.render('home',{
+    books:books
+  })
 })
 
 
