@@ -2,9 +2,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page </title>
+    <title>Mybooks</title>
     <style>
-        .books-grid {
+               .books-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 25px;
@@ -114,36 +114,6 @@
     flex: 1;
     text-decoration: none;
   }
-
-  .borrow-btn {
-    background-color: #3498db;
-    color: white;
-  }
-  .borrow-btn a {
-    text-decoration: none;
-  }
-
-  .borrow-btn:hover {
-    background-color: #2980b9;
-  }
-
-  .details-btn {
-    background-color: #f8f9fa;
-    color: #2c3e50;
-    border: 1px solid #dee2e6;
-  }
-
-  .details-btn:hover {
-    background-color: #e9ecef;
-  }
-
-  .no-books {
-    text-align: center;
-    padding: 40px;
-    color: #666;
-    font-size: 1.2em;
-  }
-
   @media (max-width: 768px) {
     .books-grid {
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -163,31 +133,32 @@
 </head>
 <body>
     <%- include('./partials/nav') %>
+
     <div class="books-grid">
         <% if (books && books.length > 0) { %>
-          <% books.forEach(book => { %>
+          <%books[0].MyUploads.forEach(upload => { %>
             <div class="book-card">
               <img 
-                src="<%= book.CoverImage || '/images/default-book-cover.jpg' %>" 
-                alt="<%= book.title %>"
+                src="<%= upload.CoverImage || '/images/default-book-cover.jpg' %>" 
+                alt="<%= upload.title %>"
                 class="book-cover"
               >
               <div class="book-info">
-                <h3 class="book-title"><%= book.title %></h3>
-                <p class="book-author">by <%= book.author %></p>
-                <p class="book-description"><%= book.description %></p>
+                <h3 class="book-title"><%= upload.title %></h3>
+                <p class="book-author">by <%= upload.author %></p>
+                <p class="book-description"><%= upload.description %></p>
                 
                 <div class="book-metadata">
-                  <span>Status: <%= book.isbn %></span>
-                  <span class="book-status <%= book.isAvailable ? 'status-available' : 'status-borrowed' %>">
-                    <%= book.isAvailable ? 'Available' : 'Borrowed' %>
+                  <span>Status: <%= upload.isbn %></span>
+                  <span class="book-status <%= upload.isAvailable ? 'status-available' : 'status-borrowed' %>">
+                    <%= upload.isAvailable ? 'Available' : 'Borrowed' %>
                   </span>
                 </div>
                 
                 <div class="book-actions">
-                  <% if (book.isAvailable) { %>
+                  <% if (upload.isAvailable) { %>
                     <button class="borrow-btn">
-                        <a href="<%- book.pdfLink %>" target="_blank" download class="borrow-btn">
+                        <a href="<%- upload.pdfLink %>" target="_blank" download class="borrow-btn">
                             Borrow
                           </a>
                   <% } %>
@@ -202,6 +173,7 @@
           </div>
         <% } %>
       </div>
-    <%- include('./partials/script') %>
+      <%- include('./partials/script') %>
+
 </body>
 </html>

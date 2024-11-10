@@ -11,6 +11,9 @@ const corsOptions = {
 };
 const verifyJwt = require('./Middlewares/auth.middleware')
 const Book = require('./Models/book.models')
+const User = require('./Models/user.models')
+const mongoose = require('mongoose')
+
 const {connect} = require('mongoose')
 const BookRouter = require('./Routes/books.router')
 const UserRouter = require('./Routes/users.routers')
@@ -54,6 +57,36 @@ app.use('/home',verifyJwt, async (req,res)=>{
   }
 })
 
+app.use('/mybooks',verifyJwt, async (req,res)=>{
+  const books = await User.aggregate([
+    {
+        $match:{
+            _id: new mongoose.Types.ObjectId(req.user._id)
+        }
+    },
+    {
+        $lookup:{
+            from:"books",
+            localField:'_id',
+            foreignField:'uploadedBy',
+            as:"MyUploads",
+        },
+        
+    },
+    {
+        $addFields: {
+            Downloadcount: { $size: '$MyUploads' }  // Adding download count field
+        }
+    }
+])
+if(!books){
+    throw new CustomApiError(
+        200,'User not found!'
+    )
+}
+console.log(books)
+return res.render('mybooks',{books,user:req.user})
+})
 
 
 
