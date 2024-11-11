@@ -7,7 +7,7 @@ const session = require('express-session');
 const BOOK = require('../Models/book.models');
 const USER = require('../Models/user.models');
 const JWT = require('jsonwebtoken')
-
+const Book = require('../Models/book.models')
 // Google OAuth strategy configuration
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
@@ -49,6 +49,7 @@ OauthRouter.get('/auth/google/callback',async (req, res, next) => {
     
     const fullName = req.user.displayName; // Extract the user's display name
     const Useremail = req.user._json.email; // Extract the user's email
+    const ProfileImage = req.user._json.picture // Extract the user's email
 
     console.log(`Name: ${fullName}`); // Log the user's name
     console.log(`Email: ${Useremail}`); // Log the user's email
@@ -60,18 +61,21 @@ OauthRouter.get('/auth/google/callback',async (req, res, next) => {
         username:fullName,
         password:"Auth2-Login",
         email:Useremail,
-        profileImg:"No Image"
+        profileImg:ProfileImage
     })
      console.log(user)
      const paylod = {
       _id:user._id,
   }
 
-  const token = JWT.sign(paylod,process.env.JWT_SECRETE,{
-      expiresIn:process.env.JWT_EXPIRY
+  const accessToken = JWT.sign(paylod,process.env.ACCESS_TOKEN_SECRETE,{
+      expiresIn:process.env.ACCESS_TOKEN_EXPIRY
   })
-     console.log(token)
-     return res.cookie('token', token).redirect('/api/v1/blog/allBlogs');
+  const refreshToken = JWT.sign(paylod,process.env.REFRESH_TOKEN_SECRETE,{
+      expiresIn:process.env.REFRESH_TOKEN_EXPIRY
+  })
+   
+     return res.cookie('accessToken', accessToken).cookie('refreshToken',refreshToken).redirect('/home');
     
     }
     
@@ -80,11 +84,14 @@ OauthRouter.get('/auth/google/callback',async (req, res, next) => {
       
   }
 
-  const token = JWT.sign(paylod,process.env.JWT_SECRETE,{
-      expiresIn:process.env.JWT_EXPIRY
-  })
-    console.log(token)
-    return res.cookie('token', token).redirect('/api/v1/blog/allBlogs');
+  const accessToken = JWT.sign(paylod,process.env.ACCESS_TOKEN_SECRETE,{
+    expiresIn:process.env.ACCESS_TOKEN_EXPIRY
+})
+const refreshToken = JWT.sign(paylod,process.env.REFRESH_TOKEN_SECRETE,{
+    expiresIn:process.env.REFRESH_TOKEN_EXPIRY
+})
+  
+    return res.cookie('accessToken', accessToken).cookie('refreshToken',refreshToken).redirect('/home');
   }
 );
 
