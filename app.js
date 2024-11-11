@@ -26,6 +26,7 @@ const cookieParser = require('cookie-parser')
 const { ChangeStream } = require('mongodb')
 const path = require('path')
 const { GetAllBooks } = require('./Controllers/book.controllers')
+const OauthRouter = require('./Routes/Oauth2.router')
 // app.use(express.static()) Static files to be serverd here!
 app.use(express.json())
 app.use(bodyParser.json())
@@ -38,6 +39,7 @@ app.set('views', path.resolve('./views'));
 app.use('/',HealthcheckRouter)
 app.use('/api/v1/library',BookRouter)
 app.use('/api/v1/library/user',UserRouter)
+app.use('/', OauthRouter);
 
 app.use(session({
   secret: process.env.SECRETE,
@@ -108,7 +110,7 @@ return res.render('mybooks',{books,user:req.user})
 
 
 
-const port = process.env.PORT ||5000
+const port = process.env.PORT ||3000
 
 
 
