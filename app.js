@@ -9,6 +9,11 @@ const corsOptions = {
   origin: 'http://127.0.0.1:5500', // Your frontend URL
   credentials: true, // Allow cookies and credentials
 };
+const passport = require('passport');
+const session = require('express-session');
+const {ApolloServer } = require('@apollo/server')
+const { expressMiddleware } = require('@apollo/server/express4')
+
 const verifyJwt = require('./Middlewares/auth.middleware')
 const Book = require('./Models/book.models')
 const User = require('./Models/user.models')
@@ -33,6 +38,12 @@ app.set('views', path.resolve('./views'));
 app.use('/',HealthcheckRouter)
 app.use('/api/v1/library',BookRouter)
 app.use('/api/v1/library/user',UserRouter)
+
+// Initialize Passport.js
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 app.use('/home',verifyJwt, async (req,res)=>{
   try {
     //Add the pagaination functionality
