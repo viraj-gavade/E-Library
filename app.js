@@ -39,9 +39,16 @@ app.use('/',HealthcheckRouter)
 app.use('/api/v1/library',BookRouter)
 app.use('/api/v1/library/user',UserRouter)
 
+app.use(session({
+  secret: process.env.SECRETE,
+  resave: false,
+  saveUninitialized: true
+}));
+
 // Initialize Passport.js
 app.use(passport.initialize());
 app.use(passport.session());
+
 
 
 app.use('/home',verifyJwt, async (req,res)=>{
