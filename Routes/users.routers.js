@@ -22,10 +22,10 @@ UserRouter.route('/signup').post(
     upload.single('profileImg'),registerUser).get((req,res)=>{
         res.render('signup')
     })
-UserRouter.route('/signin').post(loginUser).get((req,res)=>{
+UserRouter.route('/signin').post(verifyJwt,loginUser).get((req,res)=>{
     res.render('signin')
 })
-UserRouter.route('/logout').get(logoutUser)
+UserRouter.route('/signout').get(logoutUser)
 UserRouter.route('/change-password').patch(verifyJwt,changeUserPassword) 
 UserRouter.route('/change-email').patch(verifyJwt,changeUserEmail) 
 UserRouter.route('/change-username').patch(verifyJwt,changeUserUsername) 

@@ -137,20 +137,7 @@ const loginUser = asyncHandlers(async (req, res) => {
 });
 
 const logoutUser = asyncHandlers(async(req,res)=>{
-    await User.findByIdAndUpdate(req.user?._id,{
-        $set:{
-            refreshToken:null
-        }
-    },
-{
-    new:true
-})
-res.status(200).clearCookie('refreshToken',options).clearCookie('accessToken',options).json(
-    new customApiResponse(
-        200,
-        'User Logged Out Successfully!'
-    )
-)
+ return res.status(200).clearCookie('refreshToken',options).clearCookie('accessToken',options).redirect('signup')
 })
 
 

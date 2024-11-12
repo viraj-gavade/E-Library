@@ -178,7 +178,7 @@
       </li>
       <!-- Sign Out Button -->
       <li class="user-actions">
-        <button onclick="window.location.href='/api/v1/user/signout'">Sign Out</button>
+        <button onclick="window.location.href='/api/v1/library/user/signout'">Sign Out</button>
       </li>
     <% } else { %>
       <li class="user-actions">
@@ -223,7 +223,7 @@
     const formData = new FormData(addBookForm);
 
     try {
-      const response = await fetch('http://localhost:5000/api/v1/library/books', {
+      const response = await fetch('/api/v1/library/books', {
         method: 'POST',
         body: formData
       });
