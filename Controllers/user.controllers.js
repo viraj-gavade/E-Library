@@ -354,13 +354,9 @@ const getuserprofile = asyncHandlers(async(req,res)=>{
         )
     }
     const user = await User.findById(userId)
-    return res.status(200).json(
-        new customApiResponse(
-            200,
-            'User feteched Successfully!',
-            user
-        )
-    )
+    return res.status(200).render('Profile',{
+        user:user
+    })
 })
 
 const getUserAllBooks = asyncHandlers(async(req,res)=>{

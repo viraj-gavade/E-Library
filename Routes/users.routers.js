@@ -10,7 +10,8 @@ const {
     changeUserEmail,
     getUserAllBooks, 
     getUserDownloads, 
-    getBookDownloads
+    getBookDownloads,
+    getuserprofile
  } = require('../Controllers/user.controllers')
 const upload = require('../Middlewares/multer.middleware')
 const verifyJwt = require('../Middlewares/auth.middleware')
@@ -26,6 +27,7 @@ UserRouter.route('/signin').post(verifyJwt,loginUser).get((req,res)=>{
     res.render('signin')
 })
 UserRouter.route('/signout').get(logoutUser)
+UserRouter.route('/profile').get(verifyJwt,getuserprofile)
 UserRouter.route('/change-password').patch(verifyJwt,changeUserPassword) 
 UserRouter.route('/change-email').patch(verifyJwt,changeUserEmail) 
 UserRouter.route('/change-username').patch(verifyJwt,changeUserUsername) 

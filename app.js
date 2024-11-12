@@ -55,7 +55,7 @@ app.use('/api/v1/library/user', UserRouter);
 app.use('/', OauthRouter);
 
 // Protected route example
-app.use('/home',  async (req, res) => {
+app.use('/home', verifyJwt, async (req, res) => {
   try {
     const books = await Book.find({}).sort('title');
     if (books.length < 1) {
