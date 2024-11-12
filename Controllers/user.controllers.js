@@ -391,16 +391,9 @@ const getUserAllBooks = asyncHandlers(async(req,res)=>{
         )
     }
 
-    return res.status(200).json(
-        new customApiResponse(
-            200,
-            'User Uploads  fetched successfully',
-            {
-                downloads: books[0].MyUploads,
-                downloadCount: books[0].Downloadcount
-            }
-        )
-    );
+    return res.status(200).render('Mybooks',{
+        books:books
+    })
 })
 
 const getUserDownloads = asyncHandlers(async (req, res) => {
