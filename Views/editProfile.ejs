@@ -3,9 +3,317 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Profile</title>
+    <title>Profile Settings</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --success-bg: #dcfce7;
+            --success-text: #15803d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.5;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-description {
+            color: var(--text-secondary);
+        }
+
+        .tabs {
+            margin-bottom: 1.5rem;
+        }
+
+        .tab-list {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab-trigger {
+            background: none;
+            border: none;
+            padding: 0.75rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .tab-trigger.active {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 0.375rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .alert-success {
+            background-color: var(--success-bg);
+            color: var(--success-text);
+        }
+
+        .profile-picture-upload {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .picture-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: var(--bg-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .file-input-wrapper {
+            flex: 1;
+        }
+    </style>
 </head>
 <body>
-    <h1>This is the edit profile route </h1>
+    <%- include('./partials/nav') %>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">Profile Settings</h1>
+                <p class="card-description">Manage your account settings and preferences</p>
+            </div>
+
+            <div class="alert alert-success" id="successAlert"></div>
+
+            <div class="tabs">
+                <div class="tab-list">
+                    <button class="tab-trigger active" data-tab="password">
+                        <i class="fas fa-key"></i>
+                        Password
+                    </button>
+                    <button class="tab-trigger" data-tab="picture">
+                        <i class="fas fa-camera"></i>
+                        Picture
+                    </button>
+                    <button class="tab-trigger" data-tab="email">
+                        <i class="fas fa-envelope"></i>
+                        Email
+                    </button>
+                    <button class="tab-trigger" data-tab="username">
+                        <i class="fas fa-user"></i>
+                        Username
+                    </button>
+                </div>
+
+                <div class="tab-content active" id="password">
+                    <form onsubmit="handleSubmit(event, 'Password')">
+                        <div class="form-group">
+                            <label for="old_password">Current Password</label>
+                            <input type="password" id="old_password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="new_password">New Password</label>
+                            <input type="password" id="new_password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm_password">Confirm New Password</label>
+                            <input type="password" id="confirm_password" required>
+                        </div>
+                        <button type="submit">Update Password</button>
+                    </form>
+                </div>
+
+                <div class="tab-content" id="picture">
+                    <form onsubmit="handleSubmit(event, 'Profile picture')">
+                        <div class="form-group">
+                            <label>Upload New Picture</label>
+                            <div class="profile-picture-upload">
+                                <div class="picture-preview">
+                                    <i class="fas fa-camera"></i>
+                                </div>
+                                <div class="file-input-wrapper">
+                                    <input type="file" accept="image/*" required>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit">Update Picture</button>
+                    </form>
+                </div>
+
+                <div class="tab-content" id="email">
+                    <form onsubmit="handleSubmit(event, 'Email')">
+                        <div class="form-group">
+                            <label for="email">New Email Address</label>
+                            <input type="email" id="email" required>
+                        </div>
+                        <button type="submit">Update Email</button>
+                    </form>
+                </div>
+
+                <div class="tab-content" id="username">
+                    <form onsubmit="handleSubmit(event, 'Username')">
+                        <div class="form-group">
+                            <label for="username">New Username</label>
+                            <input type="text" id="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm_username">Confirm New Username</label>
+                            <input type="text" id="confirm_username" required>
+                        </div>
+                        <button type="submit">Update Username</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        document.querySelectorAll('.tab-trigger').forEach(trigger => {
+            trigger.addEventListener('click', () => {
+                // Remove active class from all triggers and contents
+                document.querySelectorAll('.tab-trigger').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked trigger and corresponding content
+                trigger.classList.add('active');
+                document.getElementById(trigger.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Form submission handling
+        function handleSubmit(event, formType) {
+            event.preventDefault();
+            
+            // Show success message
+            const alert = document.getElementById('successAlert');
+            alert.style.display = 'block';
+            alert.textContent = `${formType} updated successfully!`;
+
+            // Hide success message after 3 seconds
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 3000);
+
+            // Reset form
+            event.target.reset();
+        }
+
+        // File input preview
+        document.querySelector('input[type="file"]').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.querySelector('.picture-preview');
+                    preview.innerHTML = `<img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+        <%- include('./partials/script') %>
+
 </body>
 </html>

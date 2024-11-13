@@ -23,12 +23,14 @@ UserRouter.route('/signup').post(
     upload.single('profileImg'),registerUser).get((req,res)=>{
         res.render('signup')
     })
-UserRouter.route('/signin').post(verifyJwt,loginUser).get((req,res)=>{
+UserRouter.route('/signin').post(loginUser).get((req,res)=>{
     res.render('signin')
 })
 UserRouter.route('/signout').get(logoutUser)
-UserRouter.route('/edit-profile').get((req,res)=>{
-    res.render('editProfile')
+UserRouter.route('/edit-profile').get(verifyJwt,async(req,res)=>{
+    res.render('editProfile',{
+        user:req.user
+    })
 })
 UserRouter.route('/profile').get(verifyJwt,getuserprofile)
 UserRouter.route('/change-password').patch(verifyJwt,changeUserPassword) 
