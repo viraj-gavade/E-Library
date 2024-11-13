@@ -27,6 +27,9 @@ UserRouter.route('/signin').post(verifyJwt,loginUser).get((req,res)=>{
     res.render('signin')
 })
 UserRouter.route('/signout').get(logoutUser)
+UserRouter.route('/edit-profile').get((req,res)=>{
+    res.render('editProfile')
+})
 UserRouter.route('/profile').get(verifyJwt,getuserprofile)
 UserRouter.route('/change-password').patch(verifyJwt,changeUserPassword) 
 UserRouter.route('/change-email').patch(verifyJwt,changeUserEmail) 
