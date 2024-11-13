@@ -225,7 +225,7 @@
                 </div>
 
                 <div class="tab-content" id="picture">
-                    <form method="post" action="/api/v1/library/user/update-picture" enctype="multipart/form-data" onsubmit="handleSubmit(event, 'Profile picture')">
+                    <form method="post" action="/api/v1/library/user/change" enctype="multipart/form-data" onsubmit="handleSubmit(event, 'Profile picture')">
                         <div class="form-group">
                             <label>Upload New Picture</label>
                             <div class="profile-picture-upload">
@@ -252,7 +252,7 @@
                 </div>
 
                 <div class="tab-content" id="username">
-                    <form method="post" action="/api/v1/library/user/update-username" enctype="application/x-www-form-urlencoded" onsubmit="handleSubmit(event, 'Username')">
+                    <form method="post" action="/api/v1/library/user/change-username" enctype="application/x-www-form-urlencoded">
                         <div class="form-group">
                             <label for="username">New Username</label>
                             <input type="text" id="username" name="username" required>

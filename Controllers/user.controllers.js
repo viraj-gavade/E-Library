@@ -211,9 +211,7 @@ const changeUserPassword = asyncHandlers(async(req,res)=>{
       
         user.password = new_password
         await user.save({validateBeforeSave:false})
-        return res.status(200).render('Profile',{
-            user:req.user
-        })
+        return res.status(200).redirect('/api/v1/library/user/edit-profile')
     } catch (error) {
         console.log(error)
     }
@@ -333,13 +331,7 @@ const changeUserUsername = asyncHandlers(async(req,res)=>{
     }
     user.username=username
     await user.save({validateBeforeSave:false})
-    return res.status(200).json(
-        new customApiResponse(
-            200,
-            'Username changed successfully',
-            user.username
-        )
-    )
+    return res.status(200).redirect('/api/v1/library/user/edit-profile')
 })
 
 
