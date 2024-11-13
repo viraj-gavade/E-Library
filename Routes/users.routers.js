@@ -33,7 +33,7 @@ UserRouter.route('/edit-profile').get(verifyJwt,async(req,res)=>{
     })
 })
 UserRouter.route('/profile').get(verifyJwt,getuserprofile)
-UserRouter.route('/change-password').patch(verifyJwt,changeUserPassword) 
+UserRouter.route('/change-password').post(verifyJwt,changeUserPassword) 
 UserRouter.route('/change-email').patch(verifyJwt,changeUserEmail) 
 UserRouter.route('/change-username').patch(verifyJwt,changeUserUsername) 
 UserRouter.route('/change-profile-picture').patch(verifyJwt,upload.single('profileImg'),changeUserProfilePicture)    

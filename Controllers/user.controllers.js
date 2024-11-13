@@ -183,7 +183,9 @@ const refreshAccessTokenandRefreshToken = asyncHandlers(async(req,res)=>{
 
 const changeUserPassword = asyncHandlers(async(req,res)=>{
     try {
+        console.log(req.body)
         const {old_password,new_password,confirm_password} = req.body
+        console.log(old_password)
         const user  = await User.findById(req.user?._id)
         if(!user){
             throw new CustomApiError(
@@ -209,12 +211,9 @@ const changeUserPassword = asyncHandlers(async(req,res)=>{
       
         user.password = new_password
         await user.save({validateBeforeSave:false})
-        return res.status(200).json(
-            new customApiResponse(
-                200,
-                'Password Changed successfully!'
-            )
-        )
+        return res.status(200).render('Profile',{
+            user:req.user
+        })
     } catch (error) {
         console.log(error)
     }

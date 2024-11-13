@@ -207,25 +207,25 @@
                 </div>
 
                 <div class="tab-content active" id="password">
-                    <form onsubmit="handleSubmit(event, 'Password')">
+                    <form method="post" action="/api/v1/library/user/change-password" enctype="application/x-www-form-urlencoded">
                         <div class="form-group">
                             <label for="old_password">Current Password</label>
-                            <input type="password" id="old_password" required>
+                            <input type="password" id="old_password" name="old_password" required>
                         </div>
                         <div class="form-group">
                             <label for="new_password">New Password</label>
-                            <input type="password" id="new_password" required>
+                            <input type="password" id="new_password" name="new_password" required>
                         </div>
                         <div class="form-group">
                             <label for="confirm_password">Confirm New Password</label>
-                            <input type="password" id="confirm_password" required>
+                            <input type="password" id="confirm_password" name="confirm_password" required>
                         </div>
                         <button type="submit">Update Password</button>
                     </form>
                 </div>
 
                 <div class="tab-content" id="picture">
-                    <form onsubmit="handleSubmit(event, 'Profile picture')">
+                    <form method="post" action="/api/v1/library/user/update-picture" enctype="multipart/form-data" onsubmit="handleSubmit(event, 'Profile picture')">
                         <div class="form-group">
                             <label>Upload New Picture</label>
                             <div class="profile-picture-upload">
@@ -233,7 +233,7 @@
                                     <i class="fas fa-camera"></i>
                                 </div>
                                 <div class="file-input-wrapper">
-                                    <input type="file" accept="image/*" required>
+                                    <input type="file" accept="image/*" name="profile_picture" required>
                                 </div>
                             </div>
                         </div>
@@ -242,24 +242,24 @@
                 </div>
 
                 <div class="tab-content" id="email">
-                    <form onsubmit="handleSubmit(event, 'Email')">
+                    <form method="post" action="/api/v1/library/user/update-email" enctype="application/x-www-form-urlencoded" onsubmit="handleSubmit(event, 'Email')">
                         <div class="form-group">
                             <label for="email">New Email Address</label>
-                            <input type="email" id="email" required>
+                            <input type="email" id="email" name="email" required>
                         </div>
                         <button type="submit">Update Email</button>
                     </form>
                 </div>
 
                 <div class="tab-content" id="username">
-                    <form onsubmit="handleSubmit(event, 'Username')">
+                    <form method="post" action="/api/v1/library/user/update-username" enctype="application/x-www-form-urlencoded" onsubmit="handleSubmit(event, 'Username')">
                         <div class="form-group">
                             <label for="username">New Username</label>
-                            <input type="text" id="username" required>
+                            <input type="text" id="username" name="username" required>
                         </div>
                         <div class="form-group">
                             <label for="confirm_username">Confirm New Username</label>
-                            <input type="text" id="confirm_username" required>
+                            <input type="text" id="confirm_username" name="confirm_username" required>
                         </div>
                         <button type="submit">Update Username</button>
                     </form>
@@ -282,38 +282,20 @@
             });
         });
 
-        // Form submission handling
+        // Handle form submission
         function handleSubmit(event, formType) {
             event.preventDefault();
             
-            // Show success message
+            const formData = new FormData(event.target);
             const alert = document.getElementById('successAlert');
-            alert.style.display = 'block';
-            alert.textContent = `${formType} updated successfully!`;
 
-            // Hide success message after 3 seconds
+            // Simulate API request
             setTimeout(() => {
-                alert.style.display = 'none';
-            }, 3000);
-
-            // Reset form
-            event.target.reset();
+                alert.style.display = 'block';
+                alert.textContent = `${formType} updated successfully!`;
+                alert.classList.add('alert-success');
+            }, 1000);
         }
-
-        // File input preview
-        document.querySelector('input[type="file"]').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const preview = document.querySelector('.picture-preview');
-                    preview.innerHTML = `<img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
-                }
-                reader.readAsDataURL(file);
-            }
-        });
     </script>
-        <%- include('./partials/script') %>
-
 </body>
 </html>
