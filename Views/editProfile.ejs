@@ -225,7 +225,7 @@
                 </div>
 
                 <div class="tab-content" id="picture">
-                    <form method="post" action="/api/v1/library/user/change" enctype="multipart/form-data" onsubmit="handleSubmit(event, 'Profile picture')">
+                    <form method="post" action="/api/v1/library/user/change-profile-picture" enctype="multipart/form-data" >
                         <div class="form-group">
                             <label>Upload New Picture</label>
                             <div class="profile-picture-upload">
@@ -233,7 +233,7 @@
                                     <i class="fas fa-camera"></i>
                                 </div>
                                 <div class="file-input-wrapper">
-                                    <input type="file" accept="image/*" name="profile_picture" required>
+                                    <input type="file" accept="image/*" name="profileImg" required>
                                 </div>
                             </div>
                         </div>

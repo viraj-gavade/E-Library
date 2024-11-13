@@ -246,13 +246,8 @@ if(!user){
         'Unable to find and upate the profile picture of the user!'
     )
 }
-return res.status(200).json(
-    new customApiResponse(
-        200,
-        'Profile picture updated successfully!',
-        user
-    )
-)
+return res.status(200).redirect('/api/v1/library/user/edit-profile')
+
 
 })
 
