@@ -210,9 +210,7 @@
     <h1>eLibrary</h1>
     <ul>
       <li>
-        <div class="search-box">
-          <input type="text" placeholder="Search books...">
-        </div>
+        
       </li>
       <li><a href="/home">Browse</a></li>
       <% if (locals.user) { %>
@@ -309,6 +307,16 @@
         alert('Error adding book');
       }
     });
+    function searchBooks(query) {
+  fetch(`/api/v1/books/?search=${encodeURIComponent(query)}`)
+    .then(response => response.json())
+    .then(data => {
+      // Process the data and display the search results
+      console.log(data); // or update the UI with the data
+    })
+    .catch(error => console.error('Error:', error));
+}
+
   </script>
 </body>
 

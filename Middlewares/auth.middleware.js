@@ -9,10 +9,8 @@ const verifyJwt = asyncHandlers(async(req,res,next)=>{
     try {
         const token = req.cookies?.accessToken || req.header('Authorization')?.replace('Bearer ','')
         if(!token){
-            throw new CustomApiError(
-                401,
-                'Unauthorized Request'
-            )
+           
+            return res.redirect('/api/v1/library/user/signup')
         }
 
         const decodeToken = await jwt.verify(token,process.env.ACCESS_TOKEN_SECRETE)

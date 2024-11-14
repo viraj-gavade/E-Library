@@ -55,13 +55,13 @@ app.use('/api/v1/library/user', UserRouter);
 app.use('/', OauthRouter);
 
 // Protected route example
-app.use('/home', verifyJwt, async (req, res) => {
+app.use('/home',async (req, res) => {
   try {
     const books = await Book.find({}).sort('title');
     if (books.length < 1) {
       return res.status(200).json({ message: 'No books found!' });
     }
-    res.render('home', { books, user: req.user });
+    res.render('home', { books });
   } catch (error) {
     console.log(error);
   }
