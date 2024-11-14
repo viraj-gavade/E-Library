@@ -1,4 +1,5 @@
 const express = require('express')
+const Book = require('../Models/book.models')
 const 
 {
     GetAllBooks,
@@ -15,6 +16,7 @@ const
 
 const upload = require('../Middlewares/multer.middleware')
 const verifyJwt = require('../Middlewares/auth.middleware')
+const { findById } = require('../Models/book.models')
 
 const BookRouter = express.Router()
 
@@ -25,12 +27,24 @@ const BookRouter = express.Router()
 BookRouter.route('/books').get(GetAllBooks)
 BookRouter.route('/books/search').get(searchBook)
 
-BookRouter.route('/books/edit-book').get(verifyJwt,async(req,res)=>{
-    res.render('editbook',{
-        user:req.user
-    
-    })
-})
+BookRouter.route('/books/edit-book/:bookId').get(verifyJwt, async (req, res) => {
+    const { bookId } = req.params;
+  
+    try {
+      const book = await Book.findById(bookId); 
+      if (!book) {
+        return res.status(404).send("Book not found");
+      }
+      res.render('editbook', {
+        user: req.user,
+        book: book
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Server Error");
+    }
+  });
+  
 
 
 
@@ -40,7 +54,7 @@ BookRouter.route('/books/:bookId').patch(verifyJwt,UpdateBook)
 
 BookRouter.route('/books/:bookId').delete(verifyJwt,DeleteBook)
 
-BookRouter.route('/books/coverImage/:bookId').patch(verifyJwt,
+BookRouter.route('/books/coverImage/:bookId').post(verifyJwt,
     upload.single('CoverImage'),updatecoverImage)
 
 

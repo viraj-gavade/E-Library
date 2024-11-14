@@ -153,10 +153,11 @@
                   <button class="details-btn">Delete</button>
                 </div>
                 <div class="book-actions">
-                  <button class="details-btn" onclick="window.location.href='/api/v1/library/books/edit-book'">
-                    Edit
-                  </button>
+                  <a href="/api/v1/library/books/edit-book/<%= upload._id %>" class="edit-button">
+                    <button class="details-btn">Edit</button>
+                  </a>
                 </div>
+                
                 
               </div>
             </div>
