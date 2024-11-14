@@ -25,6 +25,14 @@ const BookRouter = express.Router()
 BookRouter.route('/books').get(GetAllBooks)
 BookRouter.route('/books/search').get(searchBook)
 
+BookRouter.route('/books/edit-book').get(verifyJwt,async(req,res)=>{
+    res.render('editbook',{
+        user:req.user
+    
+    })
+})
+
+
 
 BookRouter.route('/books/:bookId').get(GetSingleBook)
 
@@ -52,9 +60,6 @@ BookRouter.route('/books').post(verifyJwt,
     ]),UploadBook
 
 ) ///Middleware to upload book with the help of cloudinary
-
-BookRouter.route('/books/status/:bookId').get(verifyJwt,Toggleavaialablestatus
-)
 
 BookRouter.route('/books/download/:bookId').get(verifyJwt,DownloadBook)
 

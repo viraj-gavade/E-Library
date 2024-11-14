@@ -148,28 +148,22 @@
                 <p class="book-author">by <%= upload.author %></p>
                 <p class="book-description"><%= upload.description %></p>
                 
-                <div class="book-metadata">
-                  <span>Status: <%= upload.isbn %></span>
-                  <span class="book-status <%= upload.isAvailable ? 'status-available' : 'status-borrowed' %>">
-                    <%= upload.isAvailable ? 'Available' : 'Borrowed' %>
-                  </span>
-                </div>
                 
                 <div class="book-actions">
-                  <% if (upload.isAvailable) { %>
-                    <button class="borrow-btn">
-                        <a href="<%- upload.pdfLink %>" target="_blank" download class="borrow-btn">
-                            Borrow
-                          </a>
-                  <% } %>
-                  <button class="details-btn">Details</button>
+                  <button class="details-btn">Delete</button>
                 </div>
+                <div class="book-actions">
+                  <button class="details-btn" onclick="window.location.href='/api/v1/library/books/edit-book'">
+                    Edit
+                  </button>
+                </div>
+                
               </div>
             </div>
           <% }); %>
         <% } else { %>
           <div class="no-books">
-            <p>No books found in the library.</p>
+            <h1>>No books found in the library.</h1>
           </div>
         <% } %>
       </div>

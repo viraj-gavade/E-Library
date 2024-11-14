@@ -37,10 +37,8 @@ UserRouter.route('/change-password').post(verifyJwt,changeUserPassword)
 UserRouter.route('/change-email').post(verifyJwt,changeUserEmail) 
 UserRouter.route('/change-username').post(verifyJwt,changeUserUsername) 
 UserRouter.route('/change-profile-picture').post(verifyJwt,upload.single('profileImg'),changeUserProfilePicture)    
-UserRouter.route('/refresh').get(verifyJwt,refreshAccessTokenandRefreshToken)
 UserRouter.route('/mybooks').get(verifyJwt,getUserAllBooks)
-UserRouter.route('/downloads').get(verifyJwt,getUserDownloads)
-UserRouter.route('/downloads/:bookId').get(verifyJwt,getBookDownloads)
+
 
 
 

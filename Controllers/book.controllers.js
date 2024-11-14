@@ -325,43 +325,7 @@ const updatepdfLink = asyncHandlers(async(req,res)=>{
    }
 })
 
-const Toggleavaialablestatus = asyncHandlers(async(req,res)=>{
-    try {
-        const {bookId} = req.params
-        const book = await Book.findById(bookId)
-    
-        if(!book){
-            throw new CustomApiError(
-                402,
-                `There is no such book with id : ${bookId}`
-            )
-        }
-        book.available=!book.available
-        await book.save({validateBeforeSave:false})
-        if(book.available===true){
-            return res.status(200).json(
 
-                new customApiResponse(
-                    200,
-    
-                    'Book is available!'
-                )
-             )
-        }
-        return res.status(200).json(
-
-            new customApiResponse(
-                200,
-
-                'Book is not available!'
-            )
-         )
-
-        
-    } catch (error) {
-        console.log(error)
-    }
-})
 
 const DownloadBook = asyncHandlers(async(req,res)=>{
     try {
@@ -417,7 +381,6 @@ module.exports =
     DeleteBook,
     updatecoverImage,
     updatepdfLink,
-    Toggleavaialablestatus,
     searchBook,
     DownloadBook,
 }
