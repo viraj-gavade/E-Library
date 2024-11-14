@@ -50,7 +50,18 @@ BookRouter.route('/books/edit-book/:bookId').get(verifyJwt, async (req, res) => 
 
 BookRouter.route('/books/:bookId').get(GetSingleBook)
 
-BookRouter.route('/books/:bookId').patch(verifyJwt,UpdateBook)
+BookRouter.route('/books/update/:bookId').put(verifyJwt,
+    upload.fields([
+        {
+            name:'pdfLink',
+            maxCount:1
+        },
+        {
+            name:'CoverImage',
+            maxCount:1
+        }
+    ]),UpdateBook
+)
 
 BookRouter.route('/books/:bookId').delete(verifyJwt,DeleteBook)
 

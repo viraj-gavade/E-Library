@@ -89,6 +89,8 @@ const GetAllBooks = asyncHandlers( async (req,res)=>{
 
 const UpdateBook =asyncHandlers(  async (req,res)=>{
     try {
+        const {author , title  , publishedInYear , copies}  = req.body
+        console.log("Body",req.body)
         const { bookId } = req.params
         if(!bookId){
             throw new CustomApiError(
@@ -96,33 +98,40 @@ const UpdateBook =asyncHandlers(  async (req,res)=>{
                 `There is no such book with id : ${bookId}`
             )
         }
-        const { author , copies , title , publishedInYear } = req.body
-        const book = await Book.findByIdAndUpdate(bookId,{
-            author:author,
-            copies:copies,
-            title:title,
-            publishedInYear:publishedInYear,
-        },
-        {
-            new:true
-        })
-        if(!book){
-            return res.status(200).json(
-                new customApiResponse(
-                    501,
-                    `No book found please check the book id again`
-                )
-    
-            )
-        }
-        return res.status(200).json(
-            new customApiResponse(
-                200,
-                `Book details updated successfully!`,
-                book
-            )
-    
-        )
+
+       const coverImageLocalPath = req.files?.CoverImage?.[0]?.path || "ND";
+const BookPdfLocalPath = req.files?.pdfLink?.[0]?.path || "ND";
+
+console.log("Cover Image Path:", coverImageLocalPath);
+console.log("Book PDF Path:", BookPdfLocalPath);
+
+if(coverImageLocalPath && BookPdfLocalPath != "ND"){
+
+    var pdfLink = BookPdfLocalPath ? await uploadFile(BookPdfLocalPath) : null;
+    var CoverImage = coverImageLocalPath ? await uploadFile(coverImageLocalPath) : null;
+}
+console.log(pdfLink,CoverImage)
+const Existing_Book = await Book.findById(bookId);
+console.log(Existing_Book)
+if (!Existing_Book) {
+    throw new Error("Book not found");
+}
+
+
+const book = await Book.findByIdAndUpdate(
+    bookId,
+    {
+        author: author ?? Existing_Book.author,
+        copies: copies ?? Existing_Book.copies,
+        title: title ?? Existing_Book.title,
+        publishedInYear: publishedInYear ?? Existing_Book.publishedInYear,
+        pdfLink: pdfLink?.url ?? Existing_Book.pdfLink,        
+        CoverImage: CoverImage?.url ?? Existing_Book.CoverImage 
+    },
+    { new: true } 
+)
+       
+      return res.redirect('/api/v1/library/users/mybooks')
     
     } catch (error) {
         console.log(error)
