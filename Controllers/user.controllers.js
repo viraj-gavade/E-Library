@@ -342,6 +342,7 @@ const getuserprofile = asyncHandlers(async(req,res)=>{
 })
 
 const getUserAllBooks = asyncHandlers(async(req,res)=>{
+    console.log(req.user)
     const books = await User.aggregate([
         {
             $match:{
@@ -370,7 +371,8 @@ const getUserAllBooks = asyncHandlers(async(req,res)=>{
     }
 
     return res.status(200).render('Mybooks',{
-        books:books
+        books:books,
+        user:req.user
     })
 })
 
