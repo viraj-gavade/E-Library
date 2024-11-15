@@ -2,14 +2,9 @@ const express = require('express')
 const Book = require('../Models/book.models')
 const 
 {
-    GetAllBooks,
     UpdateBook,
     UploadBook,
     DeleteBook,
-    updatecoverImage,
-    updatepdfLink,
-    searchBook,
-    DownloadBook
 } = require('../Controllers/book.controllers')
 
 const upload = require('../Middlewares/multer.middleware')
@@ -21,9 +16,6 @@ const BookRouter = express.Router()
 
 
 //Main Routes
-
-BookRouter.route('/books').get(GetAllBooks)
-BookRouter.route('/books/search').get(searchBook)
 
 BookRouter.route('/books/edit-book/:bookId').get(verifyJwt, async (req, res) => {
     const { bookId } = req.params;
@@ -60,13 +52,6 @@ BookRouter.route('/books/update/:bookId').put(verifyJwt,
 
 BookRouter.route('/books/:bookId').delete(verifyJwt,DeleteBook)
 
-BookRouter.route('/books/coverImage/:bookId').post(verifyJwt,
-    upload.single('CoverImage'),updatecoverImage)
-
-
-BookRouter.route('/books/pdfLink/:bookId').patch(verifyJwt,upload.single('pdfLink'),updatepdfLink)
-
-
 BookRouter.route('/books').post(verifyJwt,
     upload.fields([
         {
@@ -80,8 +65,6 @@ BookRouter.route('/books').post(verifyJwt,
     ]),UploadBook
 
 ) ///Middleware to upload book with the help of cloudinary
-
-BookRouter.route('/books/download/:bookId').get(verifyJwt,DownloadBook)
 
 
 //Exporting the book router
