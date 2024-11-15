@@ -16,10 +16,7 @@ const verifyJwt = asyncHandlers(async(req,res,next)=>{
         const decodeToken = await jwt.verify(token,process.env.ACCESS_TOKEN_SECRETE)
         const user = await User.findById(decodeToken?._id).select('-password -refreshToken')
         if(!user){
-            throw new CustomApiError(
-                401,
-                'Inavlid access Token provided!'
-            )
+            return res.redirect('/api/v1/library/user/signup')
         }
         req.user = user
         next()
