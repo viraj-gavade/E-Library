@@ -323,10 +323,12 @@ const getUserAllBooks = asyncHandlers(async(req,res)=>{
             }
         }
     ])
-    console.log(books.MyUploads )
-    if (books.MyUploads === undefined ) {
-        return res.render('Mybooks', { books, user: req.user });
-      }
+     if(books[0].MyUploads.length > 0){
+        return res.status(200).render('Mybooks',{
+            books:books,
+            user:req.user
+        })
+     }
 
     return res.status(200).render('Mybooks',{
         books:books,
