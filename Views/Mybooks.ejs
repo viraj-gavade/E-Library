@@ -135,7 +135,7 @@
     <%- include('./partials/nav') %>
 
     <div class="books-grid">
-        <% if (books && books.length > 0) { %>
+        <% if (books && books.MyUploads !== undefined ) { %>
           <%books[0].MyUploads.forEach(upload => { %>
             <div class="book-card">
               <img 
@@ -166,7 +166,7 @@
           <% }); %>
         <% } else { %>
           <div class="no-books">
-            <h1>>No books found in the library.</h1>
+            <h1>You don't have any uploads</h1>
           </div>
         <% } %>
       </div>

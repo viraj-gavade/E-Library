@@ -170,7 +170,7 @@ const changeUserPassword = asyncHandlers(async(req,res)=>{
       
         user.password = new_password
         await user.save({validateBeforeSave:false})
-        return res.status(200).redirect('/api/v1/library/user/edit-profile')
+        return res.status(200).redirect('/api/v1/library/user/profile')
     } catch (error) {
         console.log(error)
     }
@@ -205,7 +205,7 @@ if(!user){
         'Unable to find and upate the profile picture of the user!'
     )
 }
-return res.status(200).redirect('/api/v1/library/user/edit-profile')
+return res.status(200).redirect('/api/v1/library/user/profile')
 
 
 })
@@ -236,7 +236,7 @@ const changeUserEmail = asyncHandlers(async(req,res)=>{
     }
     user.email=email
     await user.save({validateBeforeSave:false})
-    return res.status(200).redirect('/api/v1/library/user/edit-profile')
+    return res.status(200).redirect('/api/v1/library/user/profile')
 
 
 })
@@ -281,7 +281,7 @@ const changeUserUsername = asyncHandlers(async(req,res)=>{
     }
     user.username=username
     await user.save({validateBeforeSave:false})
-    return res.status(200).redirect('/api/v1/library/user/edit-profile')
+    return res.status(200).redirect('/api/v1/library/user/profile')
 })
 
 
@@ -323,11 +323,10 @@ const getUserAllBooks = asyncHandlers(async(req,res)=>{
             }
         }
     ])
-    if(!books){
-        throw new CustomApiError(
-            200,'User not found!'
-        )
-    }
+    console.log(books.MyUploads )
+    if (books.MyUploads === undefined ) {
+        return res.render('Mybooks', { books, user: req.user });
+      }
 
     return res.status(200).render('Mybooks',{
         books:books,
