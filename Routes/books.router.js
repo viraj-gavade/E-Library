@@ -3,20 +3,18 @@ const Book = require('../Models/book.models')
 const 
 {
     GetAllBooks,
-    GetSingleBook,
     UpdateBook,
     UploadBook,
     DeleteBook,
     updatecoverImage,
     updatepdfLink,
-    Toggleavaialablestatus,
     searchBook,
     DownloadBook
 } = require('../Controllers/book.controllers')
 
 const upload = require('../Middlewares/multer.middleware')
 const verifyJwt = require('../Middlewares/auth.middleware')
-const { findById } = require('../Models/book.models')
+
 
 const BookRouter = express.Router()
 
@@ -45,9 +43,6 @@ BookRouter.route('/books/edit-book/:bookId').get(verifyJwt, async (req, res) => 
     }
   });
   
-
-
-
 BookRouter.route('/books/:bookId').get(DeleteBook)
 
 BookRouter.route('/books/update/:bookId').put(verifyJwt,

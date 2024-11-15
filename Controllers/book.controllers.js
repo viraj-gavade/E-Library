@@ -35,58 +35,6 @@ const GetSingleBook =asyncHandlers(  async(req,res)=>{
     }
 })
 
-const searchBook = asyncHandlers(async (req, res) => {
-    try {
-      const { search, page = 1, limit = 10, sortBy = 'title', order = 'asc' } = req.query;
-      const sort = { [sortBy]: order === 'desc' ? -1 : 1 };
-      const offset = (parseInt(page, 10) - 1) * parseInt(limit, 10);
-  
-      let searchCriteria = {};
-      if (search) {
-        searchCriteria = {
-          $or: [
-            { title: { $regex: search, $options: 'i' } },
-            { author: { $regex: search, $options: 'i' } },
-            { genre: { $regex: search, $options: 'i' } },
-          ],
-        };
-      }
-  
-      const books = await Book.find(searchCriteria).sort(sort).skip(offset).limit(parseInt(limit, 10));
-  
-      if (books.length === 0) {
-        return res.status(200).json(
-          new customApiResponse(
-            200,
-            'No books found!'
-          )
-        );
-      }
-  
-      return res.status(200).json(
-        new customApiResponse(
-          200,
-          'Books found successfully!',
-          books
-        )
-      );
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json(
-        new customApiResponse(
-          500,
-          'An error occurred while searching for books.',
-          error.message
-        )
-      );
-    }
-  });
-
-const GetAllBooks = asyncHandlers( async (req,res)=>{
-
-  
-})
-
 const UpdateBook = asyncHandlers(async (req, res, next) => {
     try {
         const { author, title, publishedInYear, copies } = req.body;
@@ -137,7 +85,6 @@ const UpdateBook = asyncHandlers(async (req, res, next) => {
       console.log(error)
     }
 });
-
 
 const UploadBook =asyncHandlers(   async(req,res)=>{
    try {
@@ -202,7 +149,6 @@ const UploadBook =asyncHandlers(   async(req,res)=>{
    }
 })
 
-
 const DeleteBook = asyncHandlers( async(req,res)=>{
    try {
      const { bookId } = req.params
@@ -230,159 +176,13 @@ const DeleteBook = asyncHandlers( async(req,res)=>{
    }
 })
 
-const updatecoverImage = asyncHandlers(async(req,res)=>{
-    try {
-        const { bookId } = req.params
-        if(!bookId){
-            throw new CustomApiError(
-                401,
-                `   Invalid book Id : ${bookId}`
-            )
-        }
-        console.log(req.file)//Debuggging statement remove this in the final version
-        const coverImageLocalPath = req.file.path
-        const CoverImage = await uploadFile(coverImageLocalPath)
-        if(!CoverImage.url){
-            throw new CustomApiError(
-                500,
-                `Something went wrong while uploading the file on cloudinary`
-            )
-        }
-    
-        const book = await Book.findByIdAndUpdate(bookId,{
-            CoverImage:CoverImage.url
-        },
-    {
-        new:true
-    } 
-    ).select('-publishedInYear -pdfLink -copies -available -category -createdAt')
-    if(!book){
-        throw new CustomApiError(
-            501,
-            `Something went wrong unable to find the book to update`
-        )
-    }
-    
-    return res.status(200).json(
-        new customApiResponse(
-            200,
-            `Book coverImage Updated successfully!`,
-            book
-        )
-    )
-    } catch (error) {
-        console.log(error)
-    }
-})
-
-const updatepdfLink = asyncHandlers(async(req,res)=>{
-   try {
-     const { bookId } = req.params
-     if(!bookId){
-         throw new CustomApiError(
-             401, 
-             `   Invalid book Id : ${bookId}`
-         )
-     }
-     const BookPdfLocalPath = req.file.path
-
-     if(!BookPdfLocalPath){
-        return res.status(402).json(
-            customApiResponse(
-
-                402,
-                'Book Pdf Local Path Not Found!'
-            )
-        )
-     }
-     const pdfLink = await uploadFile(BookPdfLocalPath)
-     if(!pdfLink.url){
-         throw new CustomApiError(
-             500,
-             `Something went wrong while uploading the file on cloudinary`
-         )
-     }
- 
-     const book = await Book.findByIdAndUpdate(bookId,{
-         pdfLink:pdfLink.url
-     },
- {
-     new:true
- }
- ).select('-publishedInYear -CoverImage -copies -available -category -createdAt')
- if(!book){
-     throw new CustomApiError(
-         501,
-         `Something went wrong unable to find the book to update`
-     )
- }
- 
- return res.status(200).json(
-     new customApiResponse(
-         200,
-         `Book pdf link Updated successfully!`,
-         book
-     )
- )
-   } catch (error) {
-    console.log(error)
-   }
-})
-
-const DownloadBook = asyncHandlers(async(req,res)=>{
-    try {
-        const { bookId } = req.params
-        if(!bookId){
-            throw new CustomApiError(
-                401,
-                `There is no such book with Id : ${bookId}`
-            )
-        }
-        const book = await Book.findById(bookId).select('author title CoverImage pdfLink')
-        if(!book){
-            return res.status(200).json( new customApiResponse(
-                200,
-                `There is no such book with Id:${bookId}`)
-             )
-        }
-
-        const DownloadBook = await Download.create({
-            bookInfo:book._id,
-            downloadedBy:req.user._id
-        })
-
-        const checkdownload = await Download.findById(DownloadBook._id)
-        if(!checkdownload){
-            return res.status(500).json(
-                new customApiResponse(
-                    500,
-                    'Something went wrong while downloading the book!'
-                )
-            )
-        }
-        return res.status(200).json(
-            new customApiResponse(
-                200,
-                'Book downloaded successfully!',
-                book
-            )
-        )
-    } catch (error) {
-        console.log(error)
-    }
-})
 
 
 
 module.exports =
 {
-    GetAllBooks,
     GetSingleBook,
     UpdateBook,
     UploadBook,
     DeleteBook,
-    updatecoverImage,
-    updatepdfLink,
-    searchBook,
-    DownloadBook,
 }
