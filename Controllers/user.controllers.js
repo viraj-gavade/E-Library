@@ -140,47 +140,6 @@ const logoutUser = asyncHandlers(async(req,res)=>{
  return res.status(200).clearCookie('refreshToken',options).clearCookie('accessToken',options).redirect('signup')
 })
 
-
-
-const refreshAccessTokenandRefreshToken = asyncHandlers(async(req,res)=>{
-    const incomingRefreshToken = req.cookies?.refreshToken || req.body.refreshToken
-    if(!incomingRefreshToken){
-        throw new CustomApiError(
-            401,
-            'Unauthorized Request!'
-        )
-    }
-    const decodedToken =  await jwt.verify(incomingRefreshToken,process.env.REFRESH_TOKEN_SECRETE)
-     const user = await User.findById(decodedToken._id)
-     if(!user){
-        throw new CustomApiError(
-            403,
-            'Invalid refresh token'
-        )
-     }
-     if(incomingRefreshToken!==user.refreshToken){
-        throw new CustomApiError(
-            401,
-            'Refersh token is invalid or used!'
-        )
-     }
-
-     const { refreshToken , accessToken } = await generateAccessTokenAndRefreshToken(user?._id)
-
-     return res.status(200).cookie('accessToken',refreshToken).cookie('refreshToken',accessToken).json(
-        new customApiResponse(
-            200,
-            'Token refreshed successfully!',
-            {
-                accessToken:accessToken,
-                refreshToken:refreshToken
-            }
-        )
-     )
-
-})
-
-
 const changeUserPassword = asyncHandlers(async(req,res)=>{
     try {
         console.log(req.body)
@@ -376,103 +335,7 @@ const getUserAllBooks = asyncHandlers(async(req,res)=>{
     })
 })
 
-const getUserDownloads = asyncHandlers(async (req, res) => {
-    try {
-        const userId = req.user._id;
-        
-        // Validate that userId is a valid ObjectId
-        if (!mongoose.Types.ObjectId.isValid(userId)) {
-            throw new CustomApiError(400, 'Invalid user ID format');
-        }
 
-        const books = await User.aggregate([
-            {
-                $match: {
-                    _id: new mongoose.Types.ObjectId(userId)  // Correcting usage of ObjectId
-                }
-            },
-            {
-                $lookup: {
-                    from: "downloads",
-                    localField: '_id',  // Assuming you want to match by the user's _id
-                    foreignField: 'downloadedBy', // Assuming this is the field in 'downloads' that references the user
-                    as: "MyDownloads",
-                }
-            },
-            {
-                $addFields: {
-                    Downloadcount: { $size: '$MyDownloads' }  // Adding download count field
-                }
-            }
-        ]);
-
-        if (!books.length) {
-            throw new CustomApiError(404, 'No downloads found for the user!');
-        }
-
-        return res.status(200).json(
-            new customApiResponse(
-                200,
-                'User Downloads fetched successfully',
-                {
-                    downloads: books[0].MyDownloads,
-                    downloadCount: books[0].Downloadcount
-                }
-            )
-        );
-    } catch (error) {
-        console.error('Error fetching user downloads:', error);
-        res.status(error.statusCode || 500).json({
-            message: error.message || 'An error occurred while fetching downloads.'
-        });
-    }
-});
-
-
-const getBookDownloads = asyncHandlers(async (req, res) => {
-    const { bookId } = req.params;
-    console.log(bookId);
-    const books = await Book.aggregate([
-        {
-            $match: {
-                _id: new mongoose.Types.ObjectId(bookId)
-            }
-        },
-        {
-            $lookup: {
-                from: "downloads",
-                localField: '_id',
-                foreignField: 'bookInfo',
-                as: "BookDownloads",
-            }
-        },
-        {
-            $addFields: {
-                Downloadcount: {
-                    $size: '$BookDownloads' 
-                }
-            }
-        }
-    ]);
-
-    if (!books.length) {  
-        throw new CustomApiError(
-            404, 
-            'Book not found!'  
-        );
-    }
-
-    return res.status(200).json(
-        new customApiResponse(
-            200,
-            'Books Downloads fetched successfully',
-            {
-                downloads: books[0].BookDownloads,
-                downloadCount: books[0].Downloadcount
-            }
-        )
-    );
-});
 
 
 
@@ -481,13 +344,11 @@ module.exports ={
     registerUser,  
     loginUser,
     logoutUser,
-    refreshAccessTokenandRefreshToken,
     changeUserPassword,
     changeUserProfilePicture,
     changeUserEmail,
     changeUserUsername,
     getuserprofile,
     getUserAllBooks,
-    getUserDownloads,
-    getBookDownloads
+  
 }
