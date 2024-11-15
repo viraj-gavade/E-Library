@@ -195,7 +195,7 @@
                     
                     // Redirect after 2 seconds
                     setTimeout(() => {
-                        window.location.href = '/books'; // Adjust the redirect URL as needed
+                        window.location.href = '/api/v1/library/user/mybooks'; // Adjust the redirect URL as needed
                     }, 2000);
                 } else {
                     throw new Error(data.message || 'Failed to update book');

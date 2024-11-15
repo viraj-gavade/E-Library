@@ -87,56 +87,56 @@ const GetAllBooks = asyncHandlers( async (req,res)=>{
   
 })
 
-const UpdateBook =asyncHandlers(  async (req,res)=>{
+const UpdateBook = asyncHandlers(async (req, res, next) => {
     try {
-        const {author , title  , publishedInYear , copies}  = req.body
-        console.log("Body",req.body)
-        const { bookId } = req.params
-        if(!bookId){
-            throw new CustomApiError(
-                402,
-                `There is no such book with id : ${bookId}`
-            )
+        const { author, title, publishedInYear, copies } = req.body;
+        const { bookId } = req.params;
+
+        if (!bookId) {
+            throw new CustomApiError(402, `No book found with id: ${bookId}`);
         }
 
-       const coverImageLocalPath = req.files?.CoverImage?.[0]?.path || "ND";
-const BookPdfLocalPath = req.files?.pdfLink?.[0]?.path || "ND";
+        const coverImageLocalPath = req.files?.CoverImage?.[0]?.path || "ND";
+        const bookPdfLocalPath = req.files?.pdfLink?.[0]?.path || "ND";
 
-console.log("Cover Image Path:", coverImageLocalPath);
-console.log("Book PDF Path:", BookPdfLocalPath);
+        console.log("Cover Image Path:", coverImageLocalPath);
+        console.log("Book PDF Path:", bookPdfLocalPath);
 
-if(coverImageLocalPath && BookPdfLocalPath != "ND"){
+        let pdfLink = null;
+        let CoverImage = null;
 
-    var pdfLink = BookPdfLocalPath ? await uploadFile(BookPdfLocalPath) : null;
-    var CoverImage = coverImageLocalPath ? await uploadFile(coverImageLocalPath) : null;
-}
-console.log(pdfLink,CoverImage)
-const Existing_Book = await Book.findById(bookId);
-console.log(Existing_Book)
-if (!Existing_Book) {
-    throw new Error("Book not found");
-}
+        if (coverImageLocalPath !== "ND") {
+            CoverImage = await uploadFile(coverImageLocalPath);
+        }
+        if (bookPdfLocalPath !== "ND") {
+            pdfLink = await uploadFile(bookPdfLocalPath);
+        }
 
+        const existingBook = await Book.findById(bookId);
+        if (!existingBook) {
+            throw new CustomApiError(404, "Book not found");
+        }
 
-const book = await Book.findByIdAndUpdate(
-    bookId,
-    {
-        author: author ?? Existing_Book.author,
-        copies: copies ?? Existing_Book.copies,
-        title: title ?? Existing_Book.title,
-        publishedInYear: publishedInYear ?? Existing_Book.publishedInYear,
-        pdfLink: pdfLink?.url ?? Existing_Book.pdfLink,        
-        CoverImage: CoverImage?.url ?? Existing_Book.CoverImage 
-    },
-    { new: true } 
-)
-       
-      return res.redirect('/api/v1/library/users/mybooks')
-    
+        const updatedBook = await Book.findByIdAndUpdate(
+            bookId,
+            {
+                author: author ?? existingBook.author,
+                copies: copies ?? existingBook.copies,
+                title: title ?? existingBook.title,
+                publishedInYear: publishedInYear ?? existingBook.publishedInYear,
+                pdfLink: pdfLink?.url ?? existingBook.pdfLink,
+                CoverImage: CoverImage?.url ?? existingBook.CoverImage
+            },
+            { new: true }
+        );
+
+      return  res.status(200).json({msg:"Book updated sucessfully!"});
     } catch (error) {
-        console.log(error)
+        console.error(error);
+      console.log(error)
     }
-})
+});
+
 
 const UploadBook =asyncHandlers(   async(req,res)=>{
    try {
@@ -333,8 +333,6 @@ const updatepdfLink = asyncHandlers(async(req,res)=>{
     console.log(error)
    }
 })
-
-
 
 const DownloadBook = asyncHandlers(async(req,res)=>{
     try {
