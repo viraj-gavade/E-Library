@@ -48,7 +48,7 @@ BookRouter.route('/books/edit-book/:bookId').get(verifyJwt, async (req, res) => 
 
 
 
-BookRouter.route('/books/:bookId').get(GetSingleBook)
+BookRouter.route('/books/:bookId').get(DeleteBook)
 
 BookRouter.route('/books/update/:bookId').put(verifyJwt,
     upload.fields([

@@ -116,6 +116,7 @@ const UpdateBook = asyncHandlers(async (req, res, next) => {
         if (!existingBook) {
             throw new CustomApiError(404, "Book not found");
         }
+        console.log('Existing Book:_',existingBook)
 
         const updatedBook = await Book.findByIdAndUpdate(
             bookId,
@@ -223,13 +224,7 @@ const DeleteBook = asyncHandlers( async(req,res)=>{
  
          )
      }
-     return res.status(200).json(
-         new customApiResponse(
-             200,
-             `Book deleted  successfully!`,
-         )
- 
-     )
+     return res.status(200).redirect('/api/v1/library/user/mybooks')
    } catch (error) {
     console.log(error)
    }

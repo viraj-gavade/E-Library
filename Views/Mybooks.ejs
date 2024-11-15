@@ -150,7 +150,9 @@
                 
                 
                 <div class="book-actions">
-                  <button class="details-btn">Delete</button>
+                  <a href="/api/v1/library/books/<%= upload._id %>" class="edit-button">
+                    <button class="details-btn">Delete</button>
+                  </a>
                 </div>
                 <div class="book-actions">
                   <a href="/api/v1/library/books/edit-book/<%= upload._id %>" class="edit-button">
