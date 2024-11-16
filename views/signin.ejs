@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%- include('./partials/head') %>
-    <style>
+  <%- include('Partials/head') %>
+  <style>
         /* From Uiverse.io by nathann09 */ 
 .form {
   background: #f1f7fe;
@@ -102,7 +102,7 @@
     <title>Sign In</title>
 </head>
 <body>
-    <%- include('./partials/nav') %>
+  <%- include('Partials/nav') %>
     
   <div class="container">
     <form class="form" method="post" action="/api/v1/library/user/signin">
@@ -131,6 +131,6 @@
    </form>
 </div>
 
-    <%- include('./partials/script') %>
+<%- include('Partials/script') %>
 </body>
 </html>
