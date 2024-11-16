@@ -53,7 +53,9 @@ app.use(express.urlencoded({ extended: true }));
  * Sets up EJS templating engine and views directory
  */
 app.set('view engine', 'ejs');
-app.set('views', path.resolve('./views'));
+app.set('views', path.join(__dirname, 'views'));
+console.log('Views directory:', app.get('views'));
+
 
 /**
  * @description Session Configuration
