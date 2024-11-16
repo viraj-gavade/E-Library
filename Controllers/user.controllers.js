@@ -6,15 +6,26 @@ const customApiResponse = require('../utils/customApiResponse')
 const uploadFile = require('../utils/cloudinary')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
-  // Define cookie options
-  const options = {
+
+/**
+ * Configuration object for cookies
+ * Sets HTTP-only cookies that expire in 30 days
+ * TODO: Enable secure and sameSite options in production
+ */
+const options = {
     httpOnly: true,
     expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
     // secure: true, // Set to true in production
     // sameSite: 'Strict'
     path:'/'
-  };
+};
 
+/**
+ * Generates new access and refresh tokens for a user
+ * @param {string} userId - The ID of the user
+ * @returns {Promise<Object>} Object containing accessToken and refreshToken
+ * @throws {CustomApiError} If token generation fails
+ */
 const generateAccessTokenAndRefreshToken = async(userId)=>{
     try {
         const user =  await User.findById(userId)
@@ -33,9 +44,15 @@ const generateAccessTokenAndRefreshToken = async(userId)=>{
     }
 }
 
+/**
+ * Handles user registration
+ * Validates required fields, uploads profile picture to Cloudinary,
+ * checks for existing users, and creates new user record
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 const  registerUser = asyncHandlers(async(req,res)=>{
    const { username , password , email ,bio} = req.body
-
 
 //    console.log(req.file)
    if(!username || !password ||!email ){
@@ -85,6 +102,12 @@ return res.render('signin')
 
 })
 
+/**
+ * Handles user login
+ * Validates credentials, generates tokens, and sets cookies
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 const loginUser = asyncHandlers(async (req, res) => {
     const { username, email, password } = req.body;
 
@@ -130,16 +153,26 @@ const loginUser = asyncHandlers(async (req, res) => {
     // Find logged in user excluding password and refreshToken fields
     const loggedInUser = await User.findById(user._id).select('-password -refreshToken');
 
-  
-
     // Respond with user data and tokens
     return res.cookie('accessToken',accessToken).cookie('refreshToken',refreshToken).redirect('/home')
 });
 
+/**
+ * Handles user logout
+ * Clears authentication cookies and redirects to signup page
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 const logoutUser = asyncHandlers(async(req,res)=>{
  return res.status(200).clearCookie('refreshToken',options).clearCookie('accessToken',options).redirect('signup')
 })
 
+/**
+ * Handles password change
+ * Validates old password and confirms new password match
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 const changeUserPassword = asyncHandlers(async(req,res)=>{
     try {
         console.log(req.body)
@@ -176,7 +209,12 @@ const changeUserPassword = asyncHandlers(async(req,res)=>{
     }
 })
 
-
+/**
+ * Handles profile picture update
+ * Uploads new image to Cloudinary and updates user record
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 const changeUserProfilePicture = asyncHandlers(async(req,res)=>{
 
     const ProfilePictureLocalPath = req.file?.path
@@ -207,10 +245,14 @@ if(!user){
 }
 return res.status(200).redirect('/api/v1/library/user/profile')
 
-
 })
 
-
+/**
+ * Handles email update
+ * Validates new email and checks for existing users
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 const changeUserEmail = asyncHandlers(async(req,res)=>{
 
     const {email} = req.body
@@ -238,9 +280,14 @@ const changeUserEmail = asyncHandlers(async(req,res)=>{
     await user.save({validateBeforeSave:false})
     return res.status(200).redirect('/api/v1/library/user/profile')
 
-
 })
 
+/**
+ * Handles username update
+ * Validates new username and checks for existing users
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 const changeUserUsername = asyncHandlers(async(req,res)=>{
     const UserId = req.user?._id
     if(!UserId){
@@ -284,7 +331,12 @@ const changeUserUsername = asyncHandlers(async(req,res)=>{
     return res.status(200).redirect('/api/v1/library/user/profile')
 })
 
-
+/**
+ * Retrieves user profile
+ * Returns user data for profile page rendering
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 const getuserprofile = asyncHandlers(async(req,res)=>{
     const userId = req.user._id
 
@@ -300,6 +352,12 @@ const getuserprofile = asyncHandlers(async(req,res)=>{
     })
 })
 
+/**
+ * Retrieves all books uploaded by user
+ * Uses MongoDB aggregation to fetch books and calculate counts
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 const getUserAllBooks = asyncHandlers(async(req,res)=>{
     console.log(req.user)
     const books = await User.aggregate([
@@ -336,11 +394,6 @@ const getUserAllBooks = asyncHandlers(async(req,res)=>{
     })
 })
 
-
-
-
-
-
 module.exports ={
     registerUser,  
     loginUser,
@@ -351,5 +404,4 @@ module.exports ={
     changeUserUsername,
     getuserprofile,
     getUserAllBooks,
-  
 }
