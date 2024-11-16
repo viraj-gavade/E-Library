@@ -1,3 +1,9 @@
+/**
+ * @fileoverview OAuth Authentication Router
+ * Implements Google OAuth2.0 authentication flow with passport.js
+ * Handles user authentication, session management, and JWT token generation
+ */
+
 require('dotenv').config();
 const express = require('express');
 const OauthRouter = express.Router();
@@ -8,7 +14,12 @@ const BOOK = require('../Models/book.models');
 const USER = require('../Models/user.models');
 const JWT = require('jsonwebtoken')
 const Book = require('../Models/book.models')
-// Google OAuth strategy configuration
+
+/**
+ * @description Configure Google OAuth Strategy
+ * Uses environment variables for secure credential management
+ * Handles the OAuth2.0 authentication flow with Google
+ */
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
@@ -20,42 +31,64 @@ passport.use(new GoogleStrategy({
   })
 );
 
-// Serialize user info into session
+/**
+ * @description Passport Serialization
+ * Determines which data of the user object should be stored in the session
+ * @param {Object} user - User profile from Google
+ */
 passport.serializeUser((user, done) => {
   console.log('Serialize User:', user);
   done(null, user);
 });
 
-// Deserialize user info from session
+/**
+ * @description Passport Deserialization
+ * Retrieves user data from session
+ * @param {Object} user - Serialized user object from session
+ */
 passport.deserializeUser((user, done) => {
   console.log('Deserialize User:', user);
   done(null, user);
 });
 
-// Initiate Google OAuth flow
+/**
+ * @route GET /auth/google
+ * @description Initiates Google OAuth authentication flow
+ * Requests user profile and email scopes
+ */
 OauthRouter.get('/auth/google', (req, res, next) => {
   console.log('Initiating Google OAuth flow');
   next();
 }, passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-// Google OAuth callback route
+/**
+ * @route GET /auth/google/callback
+ * @description Handles the Google OAuth callback
+ * - Creates new user if not exists
+ * - Generates JWT tokens for authentication
+ * - Sets cookies and redirects to home page
+ */
 OauthRouter.get('/auth/google/callback',async (req, res, next) => {
   console.log('Google OAuth callback triggered');
   next();
 }, passport.authenticate('google', { failureRedirect: '/' }),
   async(req, res) => {
     console.log('Google OAuth Success - Redirecting to Profile');
-    console.log('Logged In User Profile:', req.user); // Log profile after successful authentication
+    console.log('Logged In User Profile:', req.user);
     
-    const fullName = req.user.displayName; // Extract the user's display name
-    const Useremail = req.user._json.email; // Extract the user's email
-    const ProfileImage = req.user._json.picture // Extract the user's email
+    // Extract user information from Google profile
+    const fullName = req.user.displayName;
+    const Useremail = req.user._json.email;
+    const ProfileImage = req.user._json.picture
 
-    console.log(`Name: ${fullName}`); // Log the user's name
-    console.log(`Email: ${Useremail}`); // Log the user's email
+    console.log(`Name: ${fullName}`);
+    console.log(`Email: ${Useremail}`);
 
+    // Check if user exists in database
     const Existing_User = await USER.findOne({email:Useremail})
     console.log(Existing_User)
+    
+    // If new user, create account and generate tokens
     if(!Existing_User){
       const user = await USER.create({
         username:fullName,
@@ -68,6 +101,7 @@ OauthRouter.get('/auth/google/callback',async (req, res, next) => {
       _id:user._id,
   }
 
+  // Generate JWT tokens for new user
   const accessToken = JWT.sign(paylod,process.env.ACCESS_TOKEN_SECRETE,{
       expiresIn:process.env.ACCESS_TOKEN_EXPIRY
   })
@@ -79,9 +113,9 @@ OauthRouter.get('/auth/google/callback',async (req, res, next) => {
     
     }
     
+    // For existing users, generate new tokens
     const paylod = {
       _id:Existing_User._id,
-      
   }
 
   const accessToken = JWT.sign(paylod,process.env.ACCESS_TOKEN_SECRETE,{
@@ -95,16 +129,23 @@ const refreshToken = JWT.sign(paylod,process.env.REFRESH_TOKEN_SECRETE,{
   }
 );
 
-// Debug route
+/**
+ * @route GET /signin
+ * @description Debug endpoint for testing authentication flow
+ */
 OauthRouter.get('/signin', (req, res) => {
   res.send("Debug Statement");
 });
 
-// Protected profile route
+/**
+ * @route GET /profile
+ * @description Protected route that requires authentication
+ * Renders user profile if authenticated, redirects to home if not
+ */
 OauthRouter.get('/profile', async (req, res) => {
   if (req.isAuthenticated()) {
     console.log('User is authenticated, rendering profile');
-    console.log('Authenticated User Profile:', req.user); // Log user profile info
+    console.log('Authenticated User Profile:', req.user);
     res.render('home', {
       user: req.user,
     });
@@ -114,4 +155,5 @@ OauthRouter.get('/profile', async (req, res) => {
   }
 });
 
+// Export the router for use in main application
 module.exports = OauthRouter;
