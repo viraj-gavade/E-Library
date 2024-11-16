@@ -5,7 +5,7 @@ const customApiResponse = require('../utils/customApiResponse'); // Custom respo
 const uploadFile = require('../utils/cloudinary'); // Utility to upload files to Cloudinary
 const User = require('../Models/user.models'); // Importing the User model
 const { default: mongoose } = require('mongoose'); // Importing mongoose for database interaction
-const Download = require('../Models/downloadBook.models'); // Importing the Download model
+
 
 // Handler to fetch details of a single book by its ID
 const GetSingleBook = asyncHandlers(async (req, res) => {
