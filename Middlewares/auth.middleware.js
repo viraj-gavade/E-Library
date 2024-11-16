@@ -1,7 +1,6 @@
 const User = require('../Models/user.models')
 const jwt = require('jsonwebtoken')
 const CustomApiError = require('../utils/customApiError')
-const customApiResponse = require('../utils/customApiResponse')
 const asyncHandlers = require('../utils/asyncHandler')
 
 
