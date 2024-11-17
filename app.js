@@ -95,6 +95,7 @@ app.use('/', OauthRouter);                  // OAuth authentication endpoints
  */
 app.use('/home', verifyJwt, async (req, res) => {
   try {
+    console.log(req.user)
     const books = await Book.find({}).sort('title');
     if (books.length < 1) {
       return res.render('home', { books, user: req.user });
