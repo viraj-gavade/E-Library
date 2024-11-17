@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>eLibrary</title>
+  <style>
+    /* General Reset */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      overflow-x: hidden;
+    }
+
+    /* Navbar Styles */
+    .navbar {
+      width: 100vw;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 40px;
+      background-color: #2c3e50;
+      color: white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar h1 {
+      font-size: 1.8em;
+      font-weight: 600;
+      color: #ecf0f1;
+      white-space: nowrap;
+    }
+
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .navbar a {
+      color: #ecf0f1;
+      text-decoration: none;
+      font-size: 1.1em;
+      transition: color 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .navbar a:hover {
+      color: #3498db;
+    }
+
+    .navbar .search-box {
+      display: flex;
+      align-items: center;
+      background: #34495e;
+      border-radius: 20px;
+      padding: 5px 15px;
+    }
+
+    .navbar .search-box input {
+      background: none;
+      border: none;
+      color: white;
+      padding: 5px 10px;
+      width: 180px;
+      outline: none;
+    }
+
+    .navbar .user-actions button {
+      padding: 8px 20px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      font-size: 1em;
+      white-space: nowrap;
+    }
+
+    .navbar .user-actions button:hover {
+      background-color: #2980b9;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background-color: white;
+      padding: 30px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 500px;
+      position: relative;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-title {
+      color: #2c3e50;
+      font-size: 1.5em;
+      font-weight: 600;
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 1.5em;
+      cursor: pointer;
+      color: #666;
+    }
+
+    /* Modal Form Styles */
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    form label {
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #34495e;
+    }
+
+    form input,
+    form textarea {
+      margin-bottom: 15px;
+      padding: 10px;
+      border: 1px solid #bdc3c7;
+      border-radius: 4px;
+      font-size: 1em;
+      width: 100%;
+    }
+
+    form button {
+      padding: 12px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1.1em;
+      transition: background-color 0.3s ease;
+    }
+
+    form button:hover {
+      background-color: #2980b9;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        padding: 15px;
+        gap: 15px;
+      }
+
+      .navbar ul {
+        width: 100%;
+        justify-content: center;
+        gap: 15px;
+      }
+
+      .navbar .search-box {
+        width: 100%;
+      }
+
+      .navbar .search-box input {
+        width: 100%;
+      }
+
+      .modal-content {
+        width: 95%;
+        padding: 20px;
+      }
+    }
+  </style>
+
+  <!-- Navbar HTML -->
+  <nav class="navbar">
+    <h1>eLibrary</h1>
+    <ul>
+      <li>
+        
+      </li>
+      <li><a href="/home">Browse</a></li>
+      <% if (locals.user) { %>
+        <li><a href="/api/v1/library/user/profile"><%= user.username %></a></li>
+        <li><a href="/api/v1/library/user/mybooks">My Books</a></li>
+        <li class="user-actions">
+          <button id="add-book-btn">Add Book</button>
+        </li>
+        <!-- Sign Out Button -->
+        <li class="user-actions">
+          <button onclick="window.location.href='/api/v1/library/user/signout'">Sign Out</button>
+        </li>
+      <% } else { %>
+        <li class="user-actions">
+          <a href="/api/v1/library/user/signin">Login</a>
+        </li>
+        <li class="user-actions">
+          <button onclick="window.location.href='/api/v1/library/user/signup'">Sign Up</button>
+        </li>
+      <% } %>
+    </ul>
+  </nav>
+
+  <!-- Modal for Adding Book -->
+  <div class="modal" id="addBookModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title">Add a New Book</span>
+        <button class="close-modal">&times;</button>
+      </div>
+      <form id="addBookForm">
+        <label for="bookTitle">Title:</label>
+        <input type="text" id="bookTitle" name="title" required><br>
+        <label for="bookAuthor">Author:</label>
+        <input type="text" id="bookAuthor" name="author" required><br>
+        <label for="bookYear">Year of Publication:</label>
+        <input type="number" id="bookYear" name="publishedInYear" required><br>
+        <label for="bookCover">Cover Image:</label>
+        <input type="file" id="bookCover" name="CoverImage" accept="image/*" required><br>
+        <label for="bookCover">Book Pdf:</label>
+        <input type="file" id="bookCover" name="pdfLink" accept="application/pdf" required><br>
+        <button type="submit">Add Book</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById('addBookModal');
+    const addBookBtn = document.getElementById('add-book-btn');
+    const closeBtn = document.querySelector('.close-modal');
+    const addBookForm = document.getElementById('addBookForm');
+
+    // Open modal
+    addBookBtn.addEventListener('click', () => {
+      modal.classList.add('active');
+    });
+
+    // Close modal function
+    const closeModal = () => {
+      modal.classList.remove('active');
+      addBookForm.reset();
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    addBookForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(addBookForm);
+
+      try {
+        const response = await fetch('/api/v1/library/books', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          alert('Book added successfully!');
+          closeModal();
+          window.location.reload();
+        } else {
+          alert(data.message || 'Error adding book');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error adding book');
+      }
+    });
+    function searchBooks(query) {
+  fetch(`/api/v1/books/?search=${encodeURIComponent(query)}`)
+    .then(response => response.json())
+    .then(data => {
+      // Process the data and display the search results
+      console.log(data); // or update the UI with the data
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+  </script>
+</body>
+
+</html>
