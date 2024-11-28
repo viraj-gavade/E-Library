@@ -1,87 +1,78 @@
-<h1 style="color: #333; font-family: Arial, sans-serif;">E-Library</h1>
+# E-Library
 
-<h2 style="color: #555;">Description</h2>
-<p style="font-family: Arial, sans-serif; line-height: 1.6;">E-Library is a digital platform designed for book lovers, allowing users to search, borrow, and manage a diverse collection of eBooks. The platform provides a user-friendly interface for both readers and administrators.</p>
+## Description
+E-Library is a digital platform designed for book lovers, allowing users to search, borrow, and manage a diverse collection of eBooks. The platform provides a user-friendly interface for both readers and administrators.
 
-<h2 style="color: #555;">Table of Contents</h2>
-<ul style="font-family: Arial, sans-serif;">
-    <li><a href="#features">Features</a></li>
-    <li><a href="#technologies-used">Technologies Used</a></li>
-    <li><a href="#installation">Installation</a></li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#api-documentation">API Documentation</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-</ul>
+## Live Demo
+🌐 [View Live Application](https://elibrary-89ecpy5h.b4a.run/home)
 
-<h2 id="features" style="color: #555;">Features</h2>
-<ul style="font-family: Arial, sans-serif;">
-    <li>User registration and authentication</li>
-    <li>Search and browse eBooks</li>
-    <li>Borrow and return functionality</li>
-    <li>User profile management</li>
-</ul>
+## Features
+- User registration and authentication
+- Search and browse eBooks
+- Borrow and return functionality
+- User profile management
 
-<h2 id="technologies-used" style="color: #555;">Technologies Used</h2>
-<ul style="font-family: Arial, sans-serif;">
-    <li>Node.js</li>
-    <li>Express.js</li>
-    <li>MongoDB</li>
-    <li>Mongoose</li>
-    <li>JSON Web Tokens (JWT)</li>
-    <li>Multer for file uploads</li>
-</ul>
+## Technologies Used
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JSON Web Tokens (JWT)
+- Multer for file uploads
 
-<h2 id="installation" style="color: #555;">Installation</h2>
-<ol style="font-family: Arial, sans-serif;">
-    <li>Clone the repository:<br>
-        <code>git clone https://github.com/viraj-gavade/E-Library.git</code>
-    </li>
-    <li>Navigate to the project directory:<br>
-        <code>cd E-Library</code>
-    </li>
-    <li>Install dependencies:<br>
-        <code>npm install</code>
-    </li>
-    <li>Set up environment variables (create a <code>.env</code> file):<br>
-        <code>DATABASE_URI=your_mongodb_uri<br>
-        JWT_SECRET=your_jwt_secret</code>
-    </li>
-</ol>
+## Installation
 
-<h2 id="usage" style="color: #555;">Usage</h2>
-<ol style="font-family: Arial, sans-serif;">
-    <li>Start the server:<br>
-        <code>npm start</code>
-    </li>
-    <li>Access the application at <code>http://localhost:PORT</code>, where <code>PORT</code> is your configured port.</li>
-</ol>
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/viraj-gavade/E-Library.git
+   ```
 
-<h2 id="api-documentation" style="color: #555;">API Documentation</h2>
-<p style="font-family: Arial, sans-serif;">For detailed API endpoints and usage, refer to the <a href="https://elibrary-89ecpy5h.b4a.run/">API Documentation</a>.</p>
+2. Navigate to the project directory:
+   ```bash
+   cd E-Library
+   ```
 
-<h2 id="contributing" style="color: #555;">Contributing</h2>
-<p style="font-family: Arial, sans-serif;">Contributions are welcome! Please follow these steps:</p>
-<ol style="font-family: Arial, sans-serif;">
-    <li>Fork the repository.</li>
-    <li>Create a new branch (<code>git checkout -b feature/YourFeature</code>).</li>
-    <li>Make your changes and commit them (<code>git commit -m 'Add some feature'</code>).</li>
-    <li>Push to the branch (<code>git push origin feature/YourFeature</code>).</li>
-    <li>Create a pull request.</li>
-</ol>
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-<h2 id="license" style="color: #555;">License</h2>
-<p style="font-family: Arial, sans-serif;">This project is licensed under the MIT License - see the <a href="LICENSE">LICENSE</a> file for details.</p>
+4. Set up environment variables in a `.env` file:
+   ```
+   DATABASE_URI=your_mongodb_uri
+   JWT_SECRET=your_jwt_secret
+   ```
 
-<h2 id="contact" style="color: #555;">Contact</h2>
-<p style="font-family: Arial, sans-serif;">Viraj Gavade<br>
-Email:  <a href="mailto:vrajgavade17@gmail.com">vrajgavade17@gmail.com</a><br>
-Instagram:  <a href="https://www.instagram.com/_viraj.js/">@_viraj.js</a><br>
-Twitter:  <a href="https://x.com/viraj_gavade">@viraj_gavade</a><br>
-GitHub: <a href="https://github.com/viraj-gavade">viraj-gavade</a></p>
+5. Start the application:
+   ```bash
+   npm start
+   ```
 
-<h2 id="acknowledgments" style="color: #555;">Acknowledgments</h2>
-<p style="font-family: Arial, sans-serif;">Thanks to the open-source community for their resources and libraries that helped build this project.</p>
+## Usage
+- Run the application and access it locally via `http://localhost:<PORT>`
+- Explore features such as book browsing, borrowing, and user profile management
 
+## API Documentation
+Detailed API endpoints and usage can be found at: [API Documentation](https://elibrary-89ecpy5h.b4a.run/api-docs)
+
+## Contributing
+Contributions are welcome! Follow these steps:
+
+1. Fork the repository
+2. Create a new branch (`git checkout -b feature/YourFeature`)
+3. Make your changes and commit them (`git commit -m 'Add some feature'`)
+4. Push to the branch (`git push origin feature/YourFeature`)
+5. Create a pull request
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Contact
+**Viraj Gavade**
+- Email: [vrajgavade17@gmail.com](mailto:vrajgavade17@gmail.com)
+- Instagram: [@_viraj.js](https://www.instagram.com/_viraj.js/)
+- Twitter: [@viraj_gavade](https://x.com/viraj_gavade)
+- GitHub: [viraj-gavade](https://github.com/viraj-gavade)
+
+## Acknowledgments
+Thanks to the open-source community for their resources and libraries that helped build this project.
